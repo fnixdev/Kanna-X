@@ -60,7 +60,7 @@ def add_link(website, link):
     SESSION.add(adder)
     SESSION.commit()
 
-def check_link():
+async def check_link():
     html = requests.get("https://github.com/fnixdev/Kanna-X/commits/master").content
     soup = bs(html, "html.parser")
     try:
@@ -70,20 +70,20 @@ def check_link():
             add_link(website, "*") 
         if link != get_link(website).link:
             add_link(website, link)
-            kannax.bot.send_message(Config.LOG_CHANNEL_ID, f"**Nova atualização disponível**\n\nPara atualizar, use o comando `{Config.CMD_TRIGGER}update -pull`.")
+            await kannax.bot.send_message(Config.LOG_CHANNEL_ID, f"**Nova atualização disponível**\n\nPara atualizar, use o comando `{Config.CMD_TRIGGER}update -pull`.")
     except:
         pass
 
-while True:
-    print("kek")
-    check_link()
-# async def main():
-    # while True:
-        # print("kek")
-        # await check_link()
-        # await asyncio.sleep(10)
+# while True:
+    # time.sleep(2)
+    # check_link()
+async def main():
+    while True:
+        print("kek")
+        await check_link()
+        await asyncio.sleep(10)
 
-# asyncio.run(main())
+asyncio.run(main())
 # loop = asyncio.get_event_loop()
 # asyncio.ensure_future(main())
 # loop.run_forever()
