@@ -1,5 +1,5 @@
 # Plugin feito e disponibilizado por @yusukesy
-
+# k
 import asyncio
 from kannax import kannax, Config
 
@@ -74,16 +74,10 @@ def check_link():
     except:
         pass
 
-# while True:
-    # time.sleep(2)
-    # check_link()
-def main():
-    while True:
-        print("kek")
-        check_link()
-        asyncio.sleep(2)
+while True:
+    time.sleep(2)
+    check_link()
 
-asyncio.run(main())
 
 	
 # scheduler = BackgroundScheduler()
