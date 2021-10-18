@@ -12,7 +12,6 @@ from sqlalchemy import create_engine, Column, Numeric, String, UnicodeText
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, scoped_session
 
-from apscheduler.schedulers.background import BackgroundScheduler
 
 DATABASE_URL = "sqlite:///:memory:"
 
