@@ -1,4 +1,5 @@
 # Plugin feito e disponibilizado por @yusukesy
+# kek
 
 from kannax import Config
 import telebot
