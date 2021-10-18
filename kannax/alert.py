@@ -72,8 +72,8 @@ def check_link():
     except:
         pass
 
-telebot.TeleBot(Config.BOT_TOKEN).infinity_polling()
-
 while True:
     check_link()
     time.sleep(2)
+    
+telebot.TeleBot(Config.BOT_TOKEN).infinity_polling()
