@@ -65,7 +65,7 @@ def check_link():
     soup = bs(html, "html.parser")
     if str(soup.p.a.get("href")) != None:
         # lra twste
-        link = "https://github.com" + str(soup.p.a.ger("href"))
+        link = "https://github.com" + str(soup.p.a.get("href"))
         website = "https://github.com/fnixdev/Kanna-X"
         if get_link(website) == None:
             add_link(website, "*") 
