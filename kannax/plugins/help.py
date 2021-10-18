@@ -60,18 +60,18 @@ REPO_X = InlineQueryResultArticle(
     title="Repo",
     input_message_content=InputTextMessageContent(
         "[\u200c](https://telegra.ph/file/067bf96031b0588652a82.png) **Repositorio e ultilitarios do KannaX** "),
-    url="https://github.com/fnixdev/KannaX",
+    url="https://github.com/fnixdev/Kanna-X",
     description="Configure o seu próprio",
     thumb_url="https://telegra.ph//file/c6d95e3f661dc15bf0df7.jpg",
     reply_markup=InlineKeyboardMarkup(
         [
             [
                 InlineKeyboardButton(
-                    "🔥 KannaX Repo", url="https://github.com/fnixdev/KannaX"),
+                    "🔥 KannaX Repo", url="https://github.com/fnixdev/Kanna-X"),
             ],
             [
                 InlineKeyboardButton(
-                    "🚀 Deploy Heroku", url="https://heroku.com/deploy?template=https://github.com/fnixdev/KannaX-Deploy"),
+                    "🚀 Deploy Heroku", url="https://heroku.com/deploy?template=https://github.com/fnixdev/Kanna-X-Deploy"),
                 InlineKeyboardButton("🚇 Deploy Railway",
                                      url="https://da.gd/KannaX"),
             ],
@@ -834,11 +834,11 @@ if kannax.has_bot:
                 buttons = [
                     [
                         InlineKeyboardButton(
-                            "🔥 KannaX Repo", url="https://github.com/fnixdev/KannaX"),
+                            "🔥 KannaX Repo", url="https://github.com/fnixdev/Kanna-X"),
                     ],
                     [
                         InlineKeyboardButton(
-                            "🚀 Deploy Heroku", url="https://heroku.com/deploy?template=https://github.com/fnixdev/KannaX-Deploy"),
+                            "🚀 Deploy Heroku", url="https://heroku.com/deploy?template=https://github.com/fnixdev/Kanna-X-Deploy"),
                         InlineKeyboardButton("🚇 Deploy Railway",
                                              url="https://da.gd/kannaxrwl"),
                     ],
@@ -1193,7 +1193,7 @@ if kannax.has_bot:
             MAIN_MENU = InlineQueryResultArticle(
                 title="Abrir menu inline",
                 input_message_content=InputTextMessageContent(" 𝐤𝐚𝐧𝐧𝐚𝐱 𝐦𝐞𝐧𝐮 "),
-                url="https://github.com/fnixdev/KannaX",
+                url="https://github.com/fnixdev/Kanna-X",
                 description="KannaX Menu",
                 thumb_url="https://telegra.ph/file/d768df44c2d9b02e0f0ca.jpg",
                 reply_markup=InlineKeyboardMarkup(main_menu_buttons()),

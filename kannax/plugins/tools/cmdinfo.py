@@ -66,7 +66,7 @@ async def see_info(message: Message):
     )
     if plugin_loc == "/xtra":
         extra_plugins = (
-            "https://github.com/fnixdev/KannaX-Plugins/blob/master/plugins/"
+            "https://github.com/fnixdev/Kanna-X-Plugins/blob/master/plugins/"
         )
         plugin_link = f"{extra_plugins}/{plugin_name}.py"
     elif plugin_loc == "/custom":

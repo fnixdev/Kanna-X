@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# GitHub Repository: https://github.com/fnixdev/KannaX
+# GitHub Repository: https://github.com/fnixdev/Kanna-X
 
 echo "Script de instalação do KannaX by fnixdev"
 
@@ -33,7 +33,7 @@ sudo apt install neofetch -y
 
 echo "Clonando Repositorio."
 cd ~
-sudo git clone https://github.com/fnixdev/KannaX.git
+sudo git clone https://github.com/fnixdev/Kanna-X.git
 cd KannaX
 
 echo "Instalando Requisitos do KannaX."

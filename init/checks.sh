@@ -47,7 +47,7 @@ _checkDefaultVars() {
         [PREFERRED_LANGUAGE]="pt"
         [DOWN_PATH]="downloads"
         [UPSTREAM_REMOTE]="upstream"
-        [UPSTREAM_REPO]="https://github.com/fnixdev/KannaX"
+        [UPSTREAM_REPO]="https://github.com/fnixdev/Kanna-X"
         [LOAD_UNOFFICIAL_PLUGINS]=true
         [CUSTOM_PLUGINS_REPO]=""
         [G_DRIVE_IS_TD]=true
@@ -146,7 +146,7 @@ _setupPlugins() {
 }
 
 _checkUnoffPlugins() {
-    _setupPlugins Xtra true $LOAD_UNOFFICIAL_PLUGINS https://github.com/fnixdev/KannaX-Plugins.git
+    _setupPlugins Xtra true $LOAD_UNOFFICIAL_PLUGINS https://github.com/fnixdev/Kanna-X-Plugins.git
 }
 
 _checkCustomPlugins() {

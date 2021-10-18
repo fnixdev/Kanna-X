@@ -2,9 +2,9 @@
 #
 # Copyright (C) 2020-2021 by fnixdev@Github, < https://github.com/fnixdev >.
 #
-# This file is part of < https://github.com/fnixdev/KannaX > project,
+# This file is part of < https://github.com/fnixdev/Kanna-X > project,
 # and is released under the "GNU v3.0 License Agreement".
-# Please see < https://github.com/fnixdev/KannaX/blob/master/LICENSE >
+# Please see < https://github.com/fnixdev/Kanna-X/blob/master/LICENSE >
 #
 # All rights reserved.
 

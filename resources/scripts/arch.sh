@@ -1,7 +1,7 @@
 #!/bin/bash
 # 
 # By @ffraanks
-# GitHub Repository: https://github.com/fnixdev/KannaX
+# GitHub Repository: https://github.com/fnixdev/Kanna-X
 
 echo "Script de instalação do KannaX by fnixdev"
 
@@ -44,7 +44,7 @@ sudo pacman -S \
 
 echo "Clonando Repositorio"
 cd $HOME
-git clone https://github.com/fnixdev/KannaX.git
+git clone https://github.com/fnixdev/Kanna-X.git
 cd KannaX
 
 echo "Instalando Requisitos do KannaX"

@@ -1,7 +1,7 @@
 # Copyright (C) 2020 by fnixdev@Github, < https://github.com/fnixdev >.
-# This file is part of < https://github.com/fnixdev/KannaX > project,
+# This file is part of < https://github.com/fnixdev/Kanna-X > project,
 # and is released under the "GNU v3.0 License Agreement".
-# Please see < https://github.com/fnixdev/KannaX/blob/master/LICENSE >
+# Please see < https://github.com/fnixdev/Kanna-X/blob/master/LICENSE >
 
 # KannaX Plugin for getting detailed stats of Covid Patients
 # Author: Sumanjay (https://github.com/cyberboysumanjay) (@cyberboysumanjay)

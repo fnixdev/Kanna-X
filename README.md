@@ -7,10 +7,10 @@
 </p>
 <p align="center">
 <a href="https://t.me/kannaxup"><img src="https://img.shields.io/badge/Join-Telegram%20Group-red.svg?style=flat-square&logo=Telegram"></a>
-<a href="https://github.com/fnixdev/KannaX/issues"><img alt="GitHub issues" src="https://img.shields.io/github/issues/fnixdev/KannaX?style=flat-square"></a>
-<a href="https://github.com/fnixdev/KannaX/blob/master/LICENSE"><img alt="GitHub license" src="https://img.shields.io/github/license/fnixdev/KannaX?style=flat-square"></a>
-<a href="https://github.com/fnixdev/KannaX/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/fnixdev/KannaX?style=flat-square"></a>
-<a href="https://github.com/fnixdev/KannaX/network"><img alt="GitHub forks" src="https://img.shields.io/github/forks/fnixdev/KannaX?style=flat-square"></a>
+<a href="https://github.com/fnixdev/Kanna-X/issues"><img alt="GitHub issues" src="https://img.shields.io/github/issues/fnixdev/Kanna-X?style=flat-square"></a>
+<a href="https://github.com/fnixdev/Kanna-X/blob/master/LICENSE"><img alt="GitHub license" src="https://img.shields.io/github/license/fnixdev/Kanna-X?style=flat-square"></a>
+<a href="https://github.com/fnixdev/Kanna-X/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/fnixdev/Kanna-X?style=flat-square"></a>
+<a href="https://github.com/fnixdev/Kanna-X/network"><img alt="GitHub forks" src="https://img.shields.io/github/forks/fnixdev/Kanna-X?style=flat-square"></a>
 </p>
 
 ## Disclaimer
@@ -37,7 +37,7 @@
 - Antes de tudo leia o [TUTORIAL](https://fnixdev.github.io/Kanna/)
 
 ### Heroku
-[​![Deploy](https://www.herokucdn.com/deploy/button.svg)​](https://heroku.com/deploy?template=https://github.com/fnixdev/KannaX-Deploy)
+[​![Deploy](https://www.herokucdn.com/deploy/button.svg)​](https://heroku.com/deploy?template=https://github.com/fnixdev/Kanna-X-Deploy)
 
 ### Railway
 
@@ -57,4 +57,4 @@
 * [AppleBot](https://github.com/applled/AppleBot)
 
 ### Direitos e Licensa
-[**GNU General Public License v3.0**](https://github.com/fnixdev/KannaX/blob/master/LICENSE)
+[**GNU General Public License v3.0**](https://github.com/fnixdev/Kanna-X/blob/master/LICENSE)

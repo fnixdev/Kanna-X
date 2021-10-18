@@ -3,7 +3,7 @@ version: "3.7"
 services:
   kannax:
       build:
-        context: https://github.com/fnixdev/KannaX.git#master
+        context: https://github.com/fnixdev/Kanna-X.git#master
       depends_on:
         - mongo
       restart: on-failure
