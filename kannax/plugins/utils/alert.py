@@ -1,6 +1,7 @@
 # Plugin feito e disponibilizado por @yusukesy
 
-from kannax import Config, logbot
+from kannax import Config
+import telebot
 
 import time
 
@@ -58,7 +59,7 @@ def add_link(website, link):
     SESSION.add(adder)
     SESSION.commit()
 
-async def check_link():
+def check_link():
     html = requests.get("https://github.com/fnixdev/Kanna-X/commits/master").content
     soup = bs(html, "html.parser")
     try:
@@ -68,10 +69,9 @@ async def check_link():
             add_link(website, "*") 
         if link != get_link(website).link:
             add_link(website, link)
-            await logbot.send_msg(Config.LOG_CHANNEL_ID, f"**Nova atualização disponível**\n\nPara atualizar, use o comando `{Config.CMD_TRIGGER}update -pull`.")
+            telebot.TeleBot(Config.BOT_TOKEN).send_message(Config.LOG_CHANNEL_ID, f"**Nova atualização disponível**\n\nPara atualizar, use o comando `{Config.CMD_TRIGGER}update -pull`.")
     except:
         pass
 
-scheduler = BackgroundScheduler()
-scheduler.add_job(check_link, "interval", seconds=1, max_instances=200)
-scheduler.start()
+while True:
+    
