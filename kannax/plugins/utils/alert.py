@@ -79,12 +79,8 @@ async def main():
         await check_link()
         await asyncio.sleep(2)
         
-loop = asyncio.get_event_loop()
-try:
-    asyncio.ensure_future(main())
-    loop.run_forever()
-except KeyboardInterrupt:
-    pass
+asyncio.ensure_future(main())
+asyncio.get_event_loop().run_forever()
 
 
 	
