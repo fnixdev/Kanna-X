@@ -1,17 +1,16 @@
 # Plugin feito e disponibilizado por @yusukesy
 # k
 import asyncio
-from kannax import kannax, Config
+from kannax import Config, logbot
 
 import time
 
 from bs4 import BeautifulSoup as bs
 import requests
 
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, Column, Numeric, String, UnicodeText
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, scoped_session
-from sqlalchemy import Column, Numeric, String, UnicodeText
 
 # from apscheduler.schedulers.background import BackgroundScheduler
 
@@ -70,7 +69,7 @@ async def check_link():
             add_link(website, "*") 
         if link != get_link(website).link:
             add_link(website, link)
-            await kannax.bot.send_message(Config.LOG_CHANNEL_ID, f"**Nova atualização disponível**\n\nPara atualizar, use o comando `{Config.CMD_TRIGGER}update -pull`.")
+            await logbot.send_msg(Config.LOG_CHANNEL_ID, f"**Nova atualização disponível**\n\nPara atualizar, use o comando `{Config.CMD_TRIGGER}update -pull`.")
     except:
         pass
 
