@@ -81,7 +81,7 @@ async def main():
     while True:
         print("kek")
         await check_link()
-        await asyncio.sleep(10)
+        await asyncio.sleep(2)
 
 asyncio.run(main())
 # loop = asyncio.get_event_loop()
