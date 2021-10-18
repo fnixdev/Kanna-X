@@ -74,4 +74,6 @@ def check_link():
         pass
 
 while True:
-    
+    print("kek")
+    check_link()
+    time.sleep(2)
