@@ -77,4 +77,4 @@ while True:
     check_link()
     time.sleep(2)
     
-telebot.TeleBot(Config.BOT_TOKEN).infinity_polling()
+# telebot.TeleBot(Config.BOT_TOKEN).infinity_polling()
