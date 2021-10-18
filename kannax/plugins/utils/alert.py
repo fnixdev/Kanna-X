@@ -1,6 +1,5 @@
 # Plugin feito e disponibilizado por @yusukesy
 
-import asyncio
 from kannax import Config, logbot
 
 import time
@@ -12,7 +11,7 @@ from sqlalchemy import create_engine, Column, Numeric, String, UnicodeText
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, scoped_session
 
-# from apscheduler.schedulers.background import BackgroundScheduler
+from apscheduler.schedulers.background import BackgroundScheduler
 
 DATABASE_URL = "sqlite:///:memory:"
 
@@ -59,7 +58,7 @@ def add_link(website, link):
     SESSION.add(adder)
     SESSION.commit()
 
-def check_link():
+async def check_link():
     html = requests.get("https://github.com/fnixdev/Kanna-X/commits/master").content
     soup = bs(html, "html.parser")
     try:
@@ -69,20 +68,10 @@ def check_link():
             add_link(website, "*") 
         if link != get_link(website).link:
             add_link(website, link)
-            logbot.send_msg(Config.LOG_CHANNEL_ID, f"**Nova atualização disponível**\n\nPara atualizar, use o comando `{Config.CMD_TRIGGER}update -pull`.")
+            await logbot.send_msg(Config.LOG_CHANNEL_ID, f"**Nova atualização disponível**\n\nPara atualizar, use o comando `{Config.CMD_TRIGGER}update -pull`.")
     except:
         pass
 
-def main():
-    while True:
-        check_link()
-        time.sleep(2)
-        
-asyncio.ensure_future(main())
-asyncio.get_event_loop().run_forever()
-
-
-	
-# scheduler = BackgroundScheduler()
-# scheduler.add_job(check_link, "interval", seconds=1, max_instances=200)
-# scheduler.start()
+scheduler = BackgroundScheduler()
+scheduler.add_job(check_link, "interval", seconds=1, max_instances=200)
+scheduler.start()
