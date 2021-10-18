@@ -59,7 +59,7 @@ def add_link(website, link):
     SESSION.add(adder)
     SESSION.commit()
 
-async def check_link():
+def check_link():
     html = requests.get("https://github.com/fnixdev/Kanna-X/commits/master").content
     soup = bs(html, "html.parser")
     try:
@@ -69,13 +69,13 @@ async def check_link():
             add_link(website, "*") 
         if link != get_link(website).link:
             add_link(website, link)
-            await logbot.send_msg(Config.LOG_CHANNEL_ID, f"**Nova atualização disponível**\n\nPara atualizar, use o comando `{Config.CMD_TRIGGER}update -pull`.")
+            logbot.send_msg(Config.LOG_CHANNEL_ID, f"**Nova atualização disponível**\n\nPara atualizar, use o comando `{Config.CMD_TRIGGER}update -pull`.")
     except:
         pass
 
 async def main():
     while True:
-        await check_link()
+        check_link()
         await asyncio.sleep(2)
         
 asyncio.ensure_future(main())
