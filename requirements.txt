@@ -6,7 +6,7 @@ cowpy>=1.1.0
 dnspython>=2.0.0
 gitpython>=3.1.11
 gdshortener
-apscheduler
+pyTelegramBotAPI
 google-api-python-client>=1.12.8
 google-auth-httplib2>=0.0.4
 google-auth-oauthlib>=0.4.2
