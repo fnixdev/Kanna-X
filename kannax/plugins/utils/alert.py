@@ -1,5 +1,5 @@
 # Plugin feito e disponibilizado por @yusukesy
-# kek 
+
 import asyncio
 from kannax import kannax, Config
 
