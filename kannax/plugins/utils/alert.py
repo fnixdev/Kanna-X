@@ -61,13 +61,13 @@ def add_link(website, link):
     SESSION.commit()
 
 def check_link():
-	html = requests.get("https://github.com/fnixdev/Kanna-X/commits/master").content
-	soup = bs(html, "html.parser")
-	if not str(soup.p.a.get("href")) == None:
-	    link = "https://github.com" + str(soup.p.a.ger("href"))
-	    website = "https://github.com/fnixdev/Kanna-X"
-	    if get_link(website) == None:
-	        add_link(website, "*") 
+    html = requests.get("https://github.com/fnixdev/Kanna-X/commits/master").content
+    soup = bs(html, "html.parser")
+    if not str(soup.p.a.get("href")) == None:
+        link = "https://github.com" + str(soup.p.a.ger("href"))
+        website = "https://github.com/fnixdev/Kanna-X"
+        if get_link(website) == None:
+            add_link(website, "*") 
         if link != get_link(website).link:
             add_link(website, link)
             kannax.bot.send_message(Config.LOG_CHANNEL_ID, f"**Nova atualização disponível**\n\nPara atualizar, use o comando `{Config.CMD_TRIGGER}update -pull`.")
