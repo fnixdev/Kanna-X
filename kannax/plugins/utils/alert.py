@@ -83,10 +83,9 @@ async def main():
         await check_link()
         await asyncio.sleep(2)
 
-asyncio.run(main())
-# loop = asyncio.get_event_loop()
-# asyncio.ensure_future(main())
-# loop.run_forever()
+loop = asyncio.get_event_loop()
+asyncio.ensure_future(main())
+loop.run_forever()
 
 	
 # scheduler = BackgroundScheduler()
