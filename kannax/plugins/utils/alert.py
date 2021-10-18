@@ -64,6 +64,7 @@ def check_link():
     html = requests.get("https://github.com/fnixdev/Kanna-X/commits/master").content
     soup = bs(html, "html.parser")
     if str(soup.p.a.get("href")) != None:
+        # lra twste
         link = "https://github.com" + str(soup.p.a.ger("href"))
         website = "https://github.com/fnixdev/Kanna-X"
         if get_link(website) == None:
