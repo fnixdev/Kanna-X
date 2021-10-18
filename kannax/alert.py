@@ -73,6 +73,7 @@ def check_link():
         pass
 
 while True:
+    print("oi")
     check_link()
     time.sleep(2)
     
