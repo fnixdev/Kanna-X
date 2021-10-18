@@ -69,7 +69,7 @@ def check_link():
 		add_link(website, "*") 
 	if link != get_link(website).link:
 		add_link(website, link)
-		kannax.bot.send_message(Config.LOG_CHANNEL, f"**Nova atualização disponível**\n\nPara atualizar, use o comando `{Config.CMD_TRIGGER}update -pull`.")
+		kannax.bot.send_message(Config.LOG_CHANNEL_ID, f"**Nova atualização disponível**\n\nPara atualizar, use o comando `{Config.CMD_TRIGGER}update -pull`.")
 
 while True:
     print("kek")
