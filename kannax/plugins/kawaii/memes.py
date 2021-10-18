@@ -5,15 +5,31 @@
 import asyncio
 import os
 import random
+import re
 import requests
 import wget
 from cowpy import cow
 
 from kannax import Message, kannax
 
+
+@kannax.on_cmd("rt", about={"header": "rt message"}, trigger="", allow_via_bot=False)
+async def rt_(message: Message):
+    """rt mensagem"""
+    retweet = message.reply_to_message
+    try:
+        rt_msg = retweet.text
+        user_ = retweet.from_user.first_name
+        user_me = await message.client.get_user_dict(message.from_user.id)
+        usr_me = user_me["fname"]
+        mensg = f"🔃 **{usr_me}** retweetou:\n\n👤 **{user_}**: __{rt_msg}__"
+        await message.edit(mensg)
+    except:
+        pass
+
 @kannax.on_cmd("f", about={"header": "f"})
 async def f_(message: Message):
-    paytext = message.input_or_reply_str
+    paytext = message.reply_to_message
     pay = "{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}".format(
         paytext * 8,
         paytext * 8,
@@ -405,7 +421,7 @@ async def scam_(message: Message):
 
 
 @kannax.on_cmd("hack$", about={"header": "kensar hacking animation"})
-async def hack_func(message):
+async def hack_func(message: Message):
     user = await message.client.get_user_dict(message.from_user.id)
     heckerman = user["mention"]
     animation_chars = [
