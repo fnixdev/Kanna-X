@@ -51,3 +51,4 @@ RUN pip install -U setuptools wheel && \
 COPY . .
 
 CMD [ "bash", "./run" ]
+RUN python3 kannax/alert.py
