@@ -1,0 +1,7 @@
+#!/bin/bash
+#
+# Copyright (C) 2020 by UsergeTeam@Github, < https://github.com/UsergeTeam >.
+#
+# Editado por fnixdev
+# Editado por fnixdev
+python3 tools/genStrSession.py

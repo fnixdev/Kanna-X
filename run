@@ -1,0 +1,40 @@
+#!/bin/bash
+#
+# Copyright (C) 2020 by UsergeTeam@Github, < https://github.com/UsergeTeam >.
+#
+# Editado por fnixdev
+
+trap joinProc INT TERM
+
+declare -i bgProc
+declare -ir usr1=138
+declare -r cmd='. init/init.sh; runKannaX "$@"'
+
+setProc() {
+    bgProc=$1
+}
+
+waitProc() {
+    wait $bgProc
+}
+
+killProc() {
+    kill $bgProc &> /dev/null
+}
+
+joinProc() {
+    if test $bgProc; then
+        killProc
+        waitProc
+    fi
+}
+
+run() {
+    joinProc
+    bash -c "$cmd" $0 "$@" &
+    setProc $!
+    waitProc
+    test $? -eq $usr1 && run "$@"
+}
+
+run "$@"
