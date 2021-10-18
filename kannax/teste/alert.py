@@ -1,8 +1,10 @@
 # Plugin feito e disponibilizado por @yusukesy
 
-from kannax import Config, logbot
+from kannax import Config, kannax
 
 import time
+
+import asyncio
 
 from bs4 import BeautifulSoup as bs
 import requests
@@ -11,7 +13,6 @@ from sqlalchemy import create_engine, Column, Numeric, String, UnicodeText
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, scoped_session
 
-from apscheduler.schedulers.background import BackgroundScheduler
 
 DATABASE_URL = "sqlite:///:memory:"
 
@@ -68,10 +69,13 @@ async def check_link():
             add_link(website, "*") 
         if link != get_link(website).link:
             add_link(website, link)
-            await logbot.send_msg(Config.LOG_CHANNEL_ID, f"**Nova atualização disponível**\n\nPara atualizar, use o comando `{Config.CMD_TRIGGER}update -pull`.")
+            await kannax.bot.send_message(Config.LOG_CHANNEL_ID, f"**Nova atualização disponível**\n\nPara atualizar, use o comando `{Config.CMD_TRIGGER}update -pull`.")
     except:
         pass
 
-scheduler = BackgroundScheduler()
-scheduler.add_job(check_link, "interval", seconds=1, max_instances=200)
-scheduler.start()
+async def main():
+    while True:
+        await check_link()
+        await asyncio.sleep(2)
+    
+asyncio.get_event_loop().run_until_complete(main())
