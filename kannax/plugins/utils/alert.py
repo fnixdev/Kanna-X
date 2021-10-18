@@ -60,7 +60,7 @@ def add_link(website, link):
     SESSION.add(adder)
     SESSION.commit()
 
-async def def check_link():
+async def check_link():
     html = requests.get("https://github.com/fnixdev/Kanna-X/commits/master").content
     soup = bs(html, "html.parser")
     try:
