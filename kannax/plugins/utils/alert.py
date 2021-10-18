@@ -63,7 +63,7 @@ def add_link(website, link):
 def check_link():
     html = requests.get("https://github.com/fnixdev/Kanna-X/commits/master").content
     soup = bs(html, "html.parser")
-    if str(soup.p.a) != None:
+    try:
         # lra twste
         link = "https://github.com" + str(soup.p.a.get("href"))
         website = "https://github.com/fnixdev/Kanna-X"
@@ -72,6 +72,8 @@ def check_link():
         if link != get_link(website).link:
             add_link(website, link)
             kannax.bot.send_message(Config.LOG_CHANNEL_ID, f"**Nova atualização disponível**\n\nPara atualizar, use o comando `{Config.CMD_TRIGGER}update -pull`.")
+    except:
+        pass
 
 while True:
     print("kek")
