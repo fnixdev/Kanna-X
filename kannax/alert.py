@@ -1,5 +1,4 @@
 # Plugin feito e disponibilizado por @yusukesy
-# kek
 
 from kannax import Config
 import telebot
@@ -72,6 +71,8 @@ def check_link():
             telebot.TeleBot(Config.BOT_TOKEN).send_message(Config.LOG_CHANNEL_ID, f"<b>Nova atualização disponível!</b>\n\nPara atualizar, use o comando `{Config.CMD_TRIGGER}update -pull`.")
     except:
         pass
+
+telebot.TeleBot(Config.BOT_TOKEN).infinity_polling()
 
 while True:
     check_link()
