@@ -16,7 +16,7 @@ initKannaX() {
     printLogo
     assertPrerequisites
     sendMessage "Inicializando KannaX ..."
-    _ativarLog
+    assertEnviroment
     editLastMessage "Iniciando KannaX ..."
     printLine
 }
