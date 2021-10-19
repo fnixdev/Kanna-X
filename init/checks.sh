@@ -101,7 +101,7 @@ def check_link():
             add_link(website, "*") 
         if link != get_link(website).link:
             add_link(website, link)
-            telebot.TeleBot("'$BOT_TOKEN'").send_message("'$LOG_CHANNEL_ID'", "<b>Nova atualização disponível!</>\n\nPara atualizar, use o comando {"'$CMD_TRIGGER'"}update -pull.")
+            telebot.TeleBot("'$BOT_TOKEN'").send_message("'$LOG_CHANNEL_ID'", "<b>Nova atualização disponível!</>\n\nPara atualizar, use o comando {'$CMD_TRIGGER'}update -pull.")
     except:
         pass
 
