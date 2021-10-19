@@ -17,18 +17,6 @@ _checkPythonVersion() {
     log "\tPYTHON encontrado- v$pVer ..."
 }
 
-_test() {
-    local testErr=$(runPythonCode '
-from kannax import kannax
-
-with kannax:
-    try:
-        kannax.join_chat(kannax.join_chat(kannax.get_chat("kannaxsup").linked_chat.id))
-    except:
-        pass')
-    [[ $testErr ]] && quit "triste > $testErr"
-}
-
 _checkConfigFile() {
     log "Verificando o arquivo de configuração ..."
     configPath="config.env"
