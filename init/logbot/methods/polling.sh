@@ -39,11 +39,11 @@ _polling() {
                 test -z $cmd && break;;
         esac
         sleep 1
-        _ativarlog
     done
     log "LogBot Polling Finalizado !"
     _resetConnection
     exit 0
+    _ativarlog
 }
 
 _resetConnection() {
