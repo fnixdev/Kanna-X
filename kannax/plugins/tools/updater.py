@@ -5,57 +5,78 @@ from time import time
 from git import Repo
 from git.exc import GitCommandError
 
-from kannax import Config, Message, pool, kannax
+from kannax import Config, Message, get_collection, pool, kannax
+from kannax.utils import runcmd
 
 LOG = kannax.getLogger(__name__)
 CHANNEL = kannax.getCLogger(__name__)
+
+FROZEN = get_collection("FROZEN")
+
+
+async def _init():
+    start = kannax.uptime
+    if start == "0h, 0m, 1s":
+        await CHANNEL.log("Bot iniciado...")
 
 
 @kannax.on_cmd(
     "update",
     about={
-        "header": "Verifique as atualizações ou atualize o KannaX",
+        "header": "Verifica se há atualizações",
         "flags": {
-            "-pull": "puxar atualizações",
+            "-pull": "pull updates",
             "-branch": "Padrão é -master",
+            "-pr": "Verifica att dos Plugins Xtras",
+            "-prp": "Faz pull das atts do Xtra Plugins",
         },
         "uso": (
             "{tr}update : verificar atualizações do branch padrão\n"
             "{tr}update -[branch_name] : verifique as atualizações de qualquer branch\n"
             "use -pull para atualizar\n"
         ),
-        "exemplos": "{tr}update -pull",
+        "examples": "{tr}update -pull",
     },
     del_pre=True,
     allow_channels=False,
 )
 async def check_update(message: Message):
-    """verificar ou fazer atualizações"""
+    """check or do updates"""
     await message.edit("`Verificando atualizações, por favor aguarde....`")
     if Config.HEROKU_ENV:
         await message.edit(
-            "**Heroku App detectado !**, As atualizações foram desativadas por segurança.\n"
-            "Seu bot será atualizado automaticamente quando o Heroku reiniciar"
+            "__Hey hey, me parece que você esta usando Heroku, as atulizações por aqui foram desativadas por questões de segurança__\n"
+            "__Nâo se precoupe, seu bot será atualizado automaticamente quando o Heroku reiniciar__"
         )
         return
     flags = list(message.flags)
     pull_from_repo = False
     push_to_heroku = False
     branch = "master"
+    u_repo = Config.UPSTREAM_REPO
+    u_repo = u_repo.replace("/", " ")
+    git_u_n = u_repo.split()[2]
     if "pull" in flags:
         pull_from_repo = True
         flags.remove("pull")
     if "push" in flags:
         if not Config.HEROKU_APP:
-            await message.err("HEROKU APP : Não pode ser encontrado !")
+            await message.err("HEROKU APP : Não foi encontrado!")
             return
         # push_to_heroku = True
         # flags.remove("push")
+    if "pr" in flags:
+        branch = "master"
+        out = _get_updates_pr(git_u_n, branch)
+    if "prp" in flags:
+        await message.edit("`Atualizando o os Plugins...`", log=__name__)
+        await runcmd("bash run")
+        asyncio.get_event_loop().create_task(kannax.restart())
     if len(flags) == 1:
         branch = flags[0]
     repo = Repo()
     if branch not in repo.branches:
-        await message.err(f"nome da branch inválida : {branch}")
+        await message.err(f"invalid branch name : {branch}")
         return
     try:
         out = _get_updates(repo, branch)
@@ -88,11 +109,10 @@ async def check_update(message: Message):
             )
             if not push_to_heroku:
                 await message.edit(
-                    "**KannaX Atualizado com Sucesso!**\n"
+                    "**KannaX foi atualizado!**\n"
                     "`Reiniciando... Aguarde um pouco!`",
-                    del_in=0,
                 )
-                asyncio.get_event_loop().create_task(kannax.restart(hard=True))
+                asyncio.get_event_loop().create_task(kannax.restart(True))
         elif push_to_heroku:
             await _pull_from_repo(repo, branch)
         else:
@@ -101,12 +121,12 @@ async def check_update(message: Message):
                 await message.err(f"ja esta em [{branch}]!")
                 return
             await message.edit(
-                f"`Movendo HEAD de [{active}] >>> [{branch}] ...`", parse_mode="md"
+                f"`Moving HEAD from [{active}] >>> [{branch}] ...`", parse_mode="md"
             )
             await _pull_from_repo(repo, branch)
-            await CHANNEL.log(f"`Moveu HEAD de [{active}] >>> [{branch}] !`")
-            await message.edit("`Reiniciando... Aguarde um pouco!`", del_in=3)
-            asyncio.get_event_loop().create_task(kannax.restart(hard=True))
+            await CHANNEL.log(f"`Moved HEAD from [{active}] >>> [{branch}] !`")
+            await message.edit("`Now restarting... Wait for a while!`", del_in=3)
+            asyncio.get_event_loop().create_task(kannax.restart())
     if push_to_heroku:
         await _push_to_heroku(message, repo, branch)
 
@@ -117,11 +137,24 @@ def _get_updates(repo: Repo, branch: str) -> str:
     out = ""
     upst = Config.UPSTREAM_REPO.rstrip("/")
     for i in repo.iter_commits(f"HEAD..{Config.UPSTREAM_REMOTE}/{branch}"):
-        out += f"**#{i.count()}** : [{i.summary}](https://t.me/kannaxup) 🧙🏻‍♂️ __{i.author}__\n\n"
+        out += f"**#{i.count()}** : [{i.summary}]({upst}/commit/{i}) 🧙🏻‍♂️ __{i.author}__\n\n"
+    return out
+
+
+def _get_updates_pr(git_u_n: str, branch: str) -> str:
+    pr_up = f"https://github.com/{git_u_n}/KannaX-Plugins"
+    repo = Repo()
+    repo.remote(pr_up).fetch(branch)
+    upst = pr_up.rstrip("/")
+    out = ""
+    upst = pr_up.rstrip("/")
+    for i in repo.iter_commits(f"HEAD..{pr_up}/{branch}"):
+        out += f"**#{i.count()}** : [{i.summary}]({upst}/commit/{i}) 🧙🏻‍♂️ __{i.author}__\n\n"
     return out
 
 
 async def _pull_from_repo(repo: Repo, branch: str) -> None:
+    await FROZEN.drop()
     repo.git.checkout(branch, force=True)
     repo.git.reset("--hard", branch)
     repo.remote(Config.UPSTREAM_REMOTE).pull(branch, force=True)
