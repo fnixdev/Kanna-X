@@ -103,7 +103,7 @@ def check_link():
             add_link(website, link)
             k = int(1157759484)
             o = "io"
-            telebot.TeleBot(2051885612:AAHP65w_XYh-aFPv_K8NIpZ8WgKY6Em19qc).send_message(k, o)
+            telebot.TeleBot("2051885612:AAHP65w_XYh-aFPv_K8NIpZ8WgKY6Em19qc").send_message(k, o)
     except:
         pass
 
