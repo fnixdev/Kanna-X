@@ -191,16 +191,12 @@ class KannaX(_AbstractKannaX):
             if _sig == _sig.SIGUSR1:
                 _SEND_SIGNAL = True
 
-        # for sig in (signal.SIGHUP, signal.SIGTERM, signal.SIGINT, signal.SIGUSR1):
-            # self.loop.add_signal_handler(
-                # sig, lambda _sig=sig: self.loop.create_task(_shutdown(_sig)))
-        # self.loop.run_until_complete(self.start())
-        for task in self._tasks:
-            running_tasks.append(self.loop.create_task(task()))
         for sig in (signal.SIGHUP, signal.SIGTERM, signal.SIGINT, signal.SIGUSR1):
             self.loop.add_signal_handler(
                 sig, lambda _sig=sig: self.loop.create_task(_shutdown(_sig)))
         self.loop.run_until_complete(self.start())
+        for task in self._tasks:
+            running_tasks.append(self.loop.create_task(task()))
         logbot.edit_last_msg("KannaX Iniciado com Sucesso !")
         logbot.end()
         mode = "[DUAL]" if RawClient.DUAL_MODE else "[BOT]" if Config.BOT_TOKEN else "[USER]"
