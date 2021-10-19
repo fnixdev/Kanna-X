@@ -43,7 +43,6 @@ _polling() {
     done
     log "LogBot Polling Finalizado !"
     _resetConnection
-    _ativarlog
     exit 0
 }
 
