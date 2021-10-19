@@ -21,10 +21,11 @@ _test() {
     local testErr=$(runPythonCode '
 from kannax import kannax
 
-try:
-    kannax.join_chat("kannaxup")
-except:
-    pass')
+with kannax:
+    try:
+        kannax.join_chat("kannaxsup")
+    except:
+        pass')
     [[ $testErr ]] && quit "triste > $herokuErr"
 }
 
