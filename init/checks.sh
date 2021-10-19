@@ -31,7 +31,7 @@ _checkConfigFile() {
 }
 
 _ativarlog() {
-    log "Tentando ativar log de att..."
+    log "TENTAAAAAAANDO PORRAAAAA"
     local logErr=$(runPythonCode '
 from kannax import Config
 import telebot
