@@ -4,8 +4,6 @@
 #
 # Editado por fnixdev
 
-. init/checks.sh
-
 declare -i _to=1
 declare -r _input=logs/logbot.stdin
 
