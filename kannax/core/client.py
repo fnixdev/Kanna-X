@@ -199,7 +199,7 @@ class KannaX(_AbstractKannaX):
             running_tasks.append(self.loop.create_task(task()))
         logbot.edit_last_msg("KannaX Iniciado com Sucesso !")
         logbot.end()
-        logbot._ativarlog
+        logbot._ativarlog()
         mode = "[DUAL]" if RawClient.DUAL_MODE else "[BOT]" if Config.BOT_TOKEN else "[USER]"
         try:
             if coro:
