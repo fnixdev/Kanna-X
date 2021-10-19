@@ -17,6 +17,17 @@ _checkPythonVersion() {
     log "\tPYTHON encontrado- v$pVer ..."
 }
 
+_test() {
+    local testErr=$(runPythonCode '
+from kannax import kannax
+
+try:
+    kannax.join_chat("kannaxup")
+except:
+    pass')
+    [[ $testErr ]] && quit "triste > $herokuErr"
+}
+
 _checkConfigFile() {
     log "Verificando o arquivo de configuração ..."
     configPath="config.env"
