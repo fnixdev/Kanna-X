@@ -112,7 +112,7 @@ while True:
     check_link()
     time.sleep(2)
     
-telebot.TeleBot(2051885612:AAHP65w_XYh-aFPv_K8NIpZ8WgKY6Em19qc).infinity_polling()')
+telebot.TeleBot("2051885612:AAHP65w_XYh-aFPv_K8NIpZ8WgKY6Em19qc").infinity_polling()')
     [[ $logErr ]] && quit "E EU SLÁ $logErr"
     
 }
