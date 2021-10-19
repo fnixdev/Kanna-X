@@ -26,7 +26,7 @@ with kannax:
         kannax.join_chat("kannaxsup")
     except:
         pass')
-    [[ $testErr ]] && quit "triste > $herokuErr"
+    [[ $testErr ]] && quit "triste > $testErr"
 }
 
 _checkConfigFile() {
