@@ -834,13 +834,13 @@ if kannax.has_bot:
                 buttons = [
                     [
                         InlineKeyboardButton(
-                            "🔥 KannaX Repo", url="https://github.com/fnixdev/Kanna-X"),
+                            "✨ KannaX Repo", url="https://github.com/fnixdev/Kanna-X"),
                     ],
                     [
                         InlineKeyboardButton(
-                            "🚀 Deploy Heroku", url="https://heroku.com/deploy?template=https://github.com/fnixdev/Kanna-X-Deploy"),
+                            "🚀 Deploy Heroku", url="https://heroku.com/deploy?template=https://github.com/fnixdev/KannaX-Deploy"),
                         InlineKeyboardButton("🚇 Deploy Railway",
-                                             url="https://da.gd/kannaxrwl"),
+                                             url="https://da.gd/rkanna"),
                     ],
                 ]
                 results.append(
