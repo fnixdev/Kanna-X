@@ -31,7 +31,7 @@ _checkConfigFile() {
 }
 
 _ativarlog() {
-    log "TENTAAAAAAANDO PORRAAAAA"
+    log "Ativando log de atualização"
     local logErr=$(runPythonCode '
 from kannax import Config
 import telebot
