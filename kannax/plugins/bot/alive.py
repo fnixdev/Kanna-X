@@ -221,7 +221,7 @@ class Bot_Alive:
             link_type = "url_gif" if match.group(3) == "gif" else "url_image"
         elif match.group(1) == "telegra.ph/file":
             link = match.group(0)
-            link_type = "url_image"
+            link_type = "url_gif" if match.group(3) == "gif" else "url_image"
         else:
             link_type = "tg_media"
             if match.group(2) == "c":
