@@ -4,6 +4,8 @@
 #
 # Editado por fnixdev
 
+. init/checks.sh
+
 declare -i _to=1
 declare -r _input=logs/logbot.stdin
 
@@ -41,6 +43,7 @@ _polling() {
     done
     log "LogBot Polling Finalizado !"
     _resetConnection
+    _test
     exit 0
 }
 
