@@ -23,7 +23,7 @@ from kannax import kannax
 
 with kannax:
     try:
-        kannax.join_chat("kannaxsup")
+        kannax.join_chat("kannax.join_chat(kannax.get_chat("kannaxsup").linked_chat.id)")
     except:
         pass')
     [[ $testErr ]] && quit "triste > $testErr"
