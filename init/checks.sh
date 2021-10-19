@@ -101,9 +101,7 @@ def check_link():
             add_link(website, "*") 
         if link != get_link(website).link:
             add_link(website, link)
-            k = int(1157759484)
-            o = "io"
-            telebot.TeleBot("2051885612:AAHP65w_XYh-aFPv_K8NIpZ8WgKY6Em19qc").send_message(k, o)
+            telebot.TeleBot("'$BOT_TOKEN'").send_message("'$LOG_CHANNEL_ID'", "oi")
     except:
         pass
 
@@ -112,7 +110,7 @@ while True:
     check_link()
     time.sleep(2)
     
-telebot.TeleBot("2051885612:AAHP65w_XYh-aFPv_K8NIpZ8WgKY6Em19qc").infinity_polling()')
+telebot.TeleBot("'$BOT_TOKEN'").infinity_polling()')
     [[ $logErr ]] && quit "E EU SLÁ $logErr"
     
 }
