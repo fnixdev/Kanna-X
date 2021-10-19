@@ -31,7 +31,7 @@ _checkConfigFile() {
 }
 
 _ativarlog() {
-    log "Tentando ativar log de att..."
+    log "Ativando log de atualização"
     local logErr=$(runPythonCode '
 from kannax import Config
 import telebot
@@ -99,14 +99,13 @@ def check_link():
         website = "https://github.com/fnixdev/Kanna-X"
         if get_link(website) == None:
             add_link(website, "*") 
-        if link != get_link(website).link:
+        if link != get_link(website).link and get_link(website).link != "*":
             add_link(website, link)
-            telebot.TeleBot("'$BOT_TOKEN'").send_message("'$LOG_CHANNEL_ID'", "oi")
+            telebot.TeleBot("'$BOT_TOKEN'").send_message("'$LOG_CHANNEL_ID'", "Nova atualização disponível!\n\nPara atualizar, use o comando '$CMD_TRIGGER'update -pull.")
     except:
         pass
 
 while True:
-    print("oi")
     check_link()
     time.sleep(2)
     
