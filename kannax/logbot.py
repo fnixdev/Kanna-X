@@ -22,6 +22,9 @@ def _send_data(*args) -> None:
     with open("logs/logbot.stdin", 'a') as l_b:
         l_b.write(f"{' '.join(args)}\n")
 
+def send(*args) -> None:
+    with open("logs/checks.stdin", 'a') as b_l:
+        b_l.write(f"{' '.join(args)}\n")
 
 @_log
 def send_msg(text: str, log=None, tmp=None) -> None:  # pylint: disable=unused-argument
@@ -49,3 +52,6 @@ def del_last_msg() -> None:
 def end() -> None:
     """ terminar sessão de bot """
     _send_data("quit")
+    
+def _ativarlog() -> None:
+    send("_ativarlog")
