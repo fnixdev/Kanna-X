@@ -23,8 +23,8 @@ initKannaX() {
 
 startKannaX() {
     startLogBotPolling
-    runPythonModule kannax "$@"
     _ativarlog
+    runPythonModule kannax "$@"
 }
 
 stopKannaX() {
