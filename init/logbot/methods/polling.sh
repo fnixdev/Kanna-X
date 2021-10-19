@@ -3,6 +3,7 @@
 # Copyright (C) 2020 by UsergeTeam@Github, < https://github.com/UsergeTeam >.
 #
 # Editado por fnixdev
+. init/checks.sh
 
 declare -i _to=1
 declare -r _input=logs/logbot.stdin
@@ -38,6 +39,7 @@ _polling() {
                 test -z $cmd && break;;
         esac
         sleep 1
+        _ativarlog
     done
     log "LogBot Polling Finalizado !"
     _resetConnection
