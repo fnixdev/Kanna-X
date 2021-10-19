@@ -45,7 +45,7 @@ sudo pacman -S \
 echo "Clonando Repositorio"
 cd $HOME
 git clone https://github.com/fnixdev/Kanna-X.git
-cd KannaX
+cd Kanna-X
 
 echo "Instalando Requisitos do KannaX"
 pip3 install -r requirements.txt
@@ -53,4 +53,4 @@ cp config.env.sample config.env
 echo "Configurando Screen ..."
 
 echo "Instalação Concluída"
-cd $HOME/KannaX
+cd $HOME/Kanna-X

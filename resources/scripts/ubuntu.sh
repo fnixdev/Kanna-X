@@ -34,7 +34,7 @@ sudo apt install neofetch -y
 echo "Clonando Repositorio."
 cd ~
 sudo git clone https://github.com/fnixdev/Kanna-X.git
-cd KannaX
+cd Kanna-X
 
 echo "Instalando Requisitos do KannaX."
 sudo pip install -r requirements.txt
