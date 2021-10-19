@@ -19,7 +19,6 @@ initKannaX() {
     assertEnvironment
     editLastMessage "Iniciando KannaX ..."
     printLine
-    _ativarlog
 }
 
 startKannaX() {
