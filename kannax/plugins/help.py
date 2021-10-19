@@ -504,8 +504,10 @@ if kannax.has_bot:
             if string == "fnix":
                 owner = [
                     [
-                        InlineKeyboardButton(text="🧙🏻‍♂️  ᴄᴏɴᴛᴀᴛᴏ", url="https://t.me/fnixdev"),
-                        InlineKeyboardButton(text="💭  sᴛᴀᴛᴜs", callback_data="status_alive"),
+                        InlineKeyboardButton(
+                            text="🧙🏻‍♂️  ᴄᴏɴᴛᴀᴛᴏ", url="https://t.me/fnixdev"),
+                        InlineKeyboardButton(
+                            text="💭  sᴛᴀᴛᴜs", callback_data="status_alive"),
                     ]
                 ]
                 results.append(
@@ -893,7 +895,6 @@ if kannax.has_bot:
                         reply_markup=InlineKeyboardMarkup(buttons),
                     )
                 )
-
 
             if str_y[0] == "spoiler":
                 if not os.path.exists(f"{Config.CACHE_PATH}/spoiler_db.json"):
