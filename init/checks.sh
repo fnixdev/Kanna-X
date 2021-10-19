@@ -101,7 +101,7 @@ def check_link():
             add_link(website, "*") 
         if link != get_link(website).link:
             add_link(website, link)
-            telebot.TeleBot("'$BOT_TOKEN'").send_message("'$LOG_CHANNEL_ID'", "oi")
+            telebot.TeleBot("'$BOT_TOKEN'").send_message("'$LOG_CHANNEL_ID'", "io")
     except:
         pass
 
