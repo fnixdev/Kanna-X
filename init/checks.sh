@@ -256,6 +256,6 @@ assertEnvironment() {
     _checkUpstreamRepo
     _checkUnoffPlugins
     _checkCustomPlugins
-    _ativarlog
     _flushMessages
+    _ativarlog
 }
