@@ -31,7 +31,7 @@ class Restart(RawClient):  # pylint: disable=missing-class-docstring
         await self.stop()
         if update_req:
             _LOG.info(_LOG_STR, "Instalando Requirements...")
-            os.system(  
+            os.system(
                 "pip3 install -U pip && pip3 install -U -r requirements.txt")
             _LOG.info(_LOG_STR, "Requirements Instalado !")
         if hard:
