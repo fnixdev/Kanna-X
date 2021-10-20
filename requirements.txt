@@ -50,6 +50,6 @@ ruamel.yaml==0.17.2
 ujson>=4.0.1
 youtube-search-python==1.4.2
 youtube_search
-git+https://github.com/yt-dlp/yt-dlp.giit
+git+https://github.com/yt-dlp/yt-dlp.git
 git+https://github.com/fnixdev/google-images-download.git
 feedparser>=6.0.2
