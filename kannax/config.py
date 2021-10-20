@@ -49,7 +49,7 @@ class Config:
     CUSTOM_PACK_NAME = os.environ.get("CUSTOM_PACK_NAME")
     INSTA_ID = os.environ.get("INSTA_ID")
     INSTA_PASS = os.environ.get("INSTA_PASS")
-    UPSTREAM_REPO = ("https://github.com/fnixdev/Kanna-X")
+    UPSTREAM_REPO = os.environ.get("UPSTREAM_REPO")
     UPSTREAM_REMOTE = os.environ.get("UPSTREAM_REMOTE")
     SPAM_WATCH_API = os.environ.get("SPAM_WATCH_API")
     CURRENCY_API = os.environ.get("CURRENCY_API")
