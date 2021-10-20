@@ -49,5 +49,7 @@ git+https://github.com/Nekos-life/Async-nekos.life-wrapper
 ruamel.yaml==0.17.2
 ujson>=4.0.1
 youtube-search-python==1.4.2
+youtube_search
+yt_dlp
 git+https://github.com/fnixdev/google-images-download.git
 feedparser>=6.0.2
