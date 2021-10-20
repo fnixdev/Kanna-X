@@ -189,12 +189,12 @@ async def loll(message: Message):
     await message.edit(out_str)
 
 
-@kannax.on_cmd("(k|K)$", about={"header": "KKKKKKKK"}, trigger="", allow_via_bot=False)
+@kannax.on_cmd("(k|K)$", about={"header": "KKKKKKKKKKKKKKKKKKKK"}, trigger="", allow_via_bot=False)
 async def kkk_(message: Message):
     """KK"""
     K = "K "
     for _ in range(4):
-        K = K[:-1] + "KKKKKKK"
+        K = K[:-1] + "KKKKKKKKKKKKKKKKKKK"
         await message.try_to_edit(K)
 
 
