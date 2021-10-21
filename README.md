@@ -37,7 +37,7 @@
 - Antes de tudo leia o [TUTORIAL](https://fnixdev.github.io/Kanna/)
 
 ### Heroku
-[​![Deploy](https://www.herokucdn.com/deploy/button.svg)​](https://heroku.com/deploy?template=https://github.com/fnixdev/Kanna-X-Deploy)
+[​![Deploy](https://www.herokucdn.com/deploy/button.svg)​](https://heroku.com/deploy?template=https://github.com/fnixdev/KannaX-Deploy)
 
 ### Railway
 
