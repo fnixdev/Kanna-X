@@ -63,7 +63,6 @@ REPO_X = InlineQueryResultArticle(
     url="https://github.com/fnixdev/Kanna-X",
     description="Configure o seu próprio",
     thumb_url="https://telegra.ph//file/c6d95e3f661dc15bf0df7.jpg",
-    photo_url="https://telegra.ph/file/067bf96031b0588652a82.png",
     reply_markup=InlineKeyboardMarkup(
         [
             [
