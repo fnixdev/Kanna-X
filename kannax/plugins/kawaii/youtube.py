@@ -1,4 +1,5 @@
-# Plugin para baixar musicas usando yt by @fnixdev
+# Plugin by https://github.com/RioProjectX/Rio-Music
+# Ported for KannaX by @fnixdev
 
 from __future__ import unicode_literals
 import asyncio
@@ -9,18 +10,20 @@ import aiofiles
 import aiohttp
 import requests
 import yt_dlp
+import wget
 from random import randint
 from urllib.parse import urlparse
 from pyrogram.errors import FloodWait, MessageNotModified
 from pyrogram.types import Message
 from yt_dlp import YoutubeDL
 from youtube_search import YoutubeSearch
+from youtubesearchpython import SearchVideos
 
 from kannax import kannax, Message
 from kannax.utils import time_formatter, humanbytes
 
 LOGGER = kannax.getLogger(__name__)
-
+DURATION_LIMIT = int("60")
 
 @kannax.on_cmd(
     "song",
@@ -83,7 +86,7 @@ async def song_(message: Message):
     except Exception as e:
         print(e)
 
-
+#Def principais
 async def progress(current, total, message, start, type_of_ps, file_name=None):
     now = time.time()
     diff = now - start
@@ -183,3 +186,92 @@ is_downloading = False
 def time_to_seconds(time):
     stringt = str(time)
     return sum(int(x) * 60 ** i for i, x in enumerate(reversed(stringt.split(":"))))
+
+
+@kannax.on_cmd(
+    "video",
+    about={
+        "header": "Video Download",
+        "description": "Baixe videos usando ytdl",
+        "uso": "{tr}video [nome / reply msg / link]",
+    },
+)
+async def video_(message: Message):
+    global is_downloading
+    await message.edit("`Processando...`")
+    if is_downloading:
+        await message.reply_text(
+            "`Outro download em andamento, tente novamente mais tarde`"
+        )
+        return
+    s_video = message.input_or_reply_str
+    if not s_video:
+        await message.edit("`Syntax error`")
+        return
+    search = SearchVideos(f"{s_video}", offset=1, mode="dict", max_results=1)
+    mi = search.result()
+    mio = mi["search_result"]
+    mo = mio[0]["link"]
+    thum = mio[0]["title"]
+    fridayz = mio[0]["id"]
+    thums = mio[0]["channel"]
+    kekme = f"https://img.youtube.com/vi/{fridayz}/hqdefault.jpg"
+    await asyncio.sleep(0.6)
+    url = mo
+    sedlyf = wget.download(kekme)
+    opts = {
+        "format": "best",
+        "addmetadata": True,
+        "key": "FFmpegMetadata",
+        "prefer_ffmpeg": True,
+        "geo_bypass": True,
+        "nocheckcertificate": True,
+        "postprocessors": [{"key": "FFmpegVideoConvertor", "preferedformat": "mp4"}],
+        "outtmpl": "%(id)s.mp4",
+        "logtostderr": False,
+        "quiet": True,
+    }
+    try:
+        is_downloading = True
+        with yt_dlp.YoutubeDL(opts) as ytdl:
+            infoo = ytdl.extract_info(url, False)
+            duration = round(infoo["duration"] / 60)
+
+            if duration > DURATION_LIMIT:
+                await message.edit(
+                    f"`Vídeos com mais de {DURATION_LIMIT} minutos não são permitidos, os vídeos que você deseja baixar têm {duration} minutes**"
+                )
+                is_downloading = False
+                return
+            ytdl_data = ytdl.extract_info(url, download=True)
+
+    except Exception:
+        is_downloading = False
+        return
+
+    c_time = time.time()
+    file_stark = f"{ytdl_data['id']}.mp4"
+    capy = f"**Título ➠** [{thum}]({mo}) \n**Canal ➠ ** {thums}"
+    await message.client.send_video(
+        message.chat.id,
+        video=open(file_stark, "rb"),
+        duration=int(ytdl_data["duration"]),
+        file_name=str(ytdl_data["title"]),
+        thumb=sedlyf,
+        caption=capy,
+        supports_streaming=True,
+        progress=progress,
+        progress_args=(
+            message,
+            c_time,
+            f"`Uploading {s_video}`",
+            file_stark,
+        ),
+    )
+    await message.delete()
+    is_downloading = False
+    for files in (sedlyf, file_stark):
+        if files and os.path.exists(files):
+            os.remove(files)
+
+
