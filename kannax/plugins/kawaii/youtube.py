@@ -1,6 +1,9 @@
 # Plugin by https://github.com/RioProjectX/Rio-Music
 # Ported for KannaX by @fnixdev
 
+"""novo plugin para ytdl"""
+
+
 from __future__ import unicode_literals
 import asyncio
 import math
@@ -14,7 +17,7 @@ import wget
 from random import randint
 from urllib.parse import urlparse
 from pyrogram.errors import FloodWait, MessageNotModified
-from pyrogram.types import Message
+
 from yt_dlp import YoutubeDL
 from youtube_search import YoutubeSearch
 from youtubesearchpython import SearchVideos
@@ -34,6 +37,7 @@ DURATION_LIMIT = int("60")
     },
 )
 async def song_(message: Message):
+  """baixa musicas do yt"""
     query = message.input_or_reply_str
     ydl_opts = {"format": "bestaudio[ext=m4a]"}
     await message.edit("`Processando...`")
@@ -168,7 +172,6 @@ def get_file_extension_from_url(url):
     return basename.split(".")[-1]
 
 
-# Funtion To Download Song
 async def download_song(url):
     song_name = f"{randint(6969, 6999)}.mp3"
     async with aiohttp.ClientSession() as session:
@@ -197,6 +200,7 @@ def time_to_seconds(time):
     },
 )
 async def video_(message: Message):
+  """baixa videos do youtube"""
     global is_downloading
     await message.edit("`Processando...`")
     if is_downloading:
