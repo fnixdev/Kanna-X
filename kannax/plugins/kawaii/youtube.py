@@ -28,6 +28,7 @@ from kannax.utils import time_formatter, humanbytes
 LOGGER = kannax.getLogger(__name__)
 DURATION_LIMIT = int("60")
 
+
 @kannax.on_cmd(
     "song",
     about={
@@ -37,7 +38,7 @@ DURATION_LIMIT = int("60")
     },
 )
 async def song_(message: Message):
-  """baixa musicas do yt"""
+    """baixa musicas do yt"""
     query = message.input_or_reply_str
     ydl_opts = {"format": "bestaudio[ext=m4a]"}
     await message.edit("`Processando...`")
@@ -90,7 +91,9 @@ async def song_(message: Message):
     except Exception as e:
         print(e)
 
-#Def principais
+# Def principais
+
+
 async def progress(current, total, message, start, type_of_ps, file_name=None):
     now = time.time()
     diff = now - start
@@ -200,7 +203,7 @@ def time_to_seconds(time):
     },
 )
 async def video_(message: Message):
-  """baixa videos do youtube"""
+    """baixa videos do youtube"""
     global is_downloading
     await message.edit("`Processando...`")
     if is_downloading:
@@ -277,5 +280,3 @@ async def video_(message: Message):
     for files in (sedlyf, file_stark):
         if files and os.path.exists(files):
             os.remove(files)
-
-
