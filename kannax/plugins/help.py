@@ -59,21 +59,18 @@ SAVED_SETTINGS = get_collection("CONFIGS")
 REPO_X = InlineQueryResultArticle(
     title="Repo",
     input_message_content=InputTextMessageContent(
-        "[\u200c](https://telegra.ph/file/067bf96031b0588652a82.png) **Repositorio e ultilitarios do KannaX** "),
+        "**Repositorio e ultilitarios do KannaX**"),
     url="https://github.com/fnixdev/Kanna-X",
     description="Configure o seu próprio",
     thumb_url="https://telegra.ph//file/c6d95e3f661dc15bf0df7.jpg",
+    photo_url="https://telegra.ph/file/067bf96031b0588652a82.png",
     reply_markup=InlineKeyboardMarkup(
         [
             [
                 InlineKeyboardButton(
                     "🔥 KannaX Repo", url="https://github.com/fnixdev/Kanna-X"),
-            ],
-            [
                 InlineKeyboardButton(
                     "🚀 Deploy Heroku", url="https://heroku.com/deploy?template=https://github.com/fnixdev/Kanna-X-Deploy"),
-                InlineKeyboardButton("🚇 Deploy Railway",
-                                     url="https://da.gd/KannaX"),
             ],
         ]
     )
@@ -836,13 +833,9 @@ if kannax.has_bot:
                 buttons = [
                     [
                         InlineKeyboardButton(
-                            "✨ KannaX Repo", url="https://github.com/fnixdev/Kanna-X"),
-                    ],
-                    [
+                            "🔥 KannaX Repo", url="https://github.com/fnixdev/Kanna-X"),
                         InlineKeyboardButton(
-                            "🚀 Deploy Heroku", url="https://heroku.com/deploy?template=https://github.com/fnixdev/KannaX-Deploy"),
-                        InlineKeyboardButton("🚇 Deploy Railway",
-                                             url="https://da.gd/rkanna"),
+                            "🚀 Deploy Heroku", url="https://heroku.com/deploy?template=https://github.com/fnixdev/Kanna-X-Deploy"),
                     ],
                 ]
                 results.append(

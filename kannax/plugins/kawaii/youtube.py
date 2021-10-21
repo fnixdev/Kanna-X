@@ -246,7 +246,7 @@ async def video_(message: Message):
 
             if duration > DURATION_LIMIT:
                 await message.edit(
-                    f"`Vídeos com mais de {DURATION_LIMIT} minutos não são permitidos, os vídeos que você deseja baixar têm {duration} minutes**"
+                    f"`Vídeos com mais de {DURATION_LIMIT} minutos não são permitidos, os vídeos que você deseja baixar têm {duration} minutos`"
                 )
                 is_downloading = False
                 return
