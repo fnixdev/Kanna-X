@@ -11,8 +11,8 @@ from kannax import Message, kannax
     "reg",
     about={
         "header": "SetUser Lastfm",
-        "descrição": "Define seu usuario lastfm (faça primeiro antes de usar ln)",
-        "uso": "{tr}reg [username]",
+        "description": "Define seu usuario lastfm (faça primeiro antes de usar ln)",
+        "usage": "{tr}reg [username]",
     },
 )
 async def ln_user_(message: Message):
@@ -33,8 +33,8 @@ async def ln_user_(message: Message):
     "ln",
     about={
         "header": "Scrobble Lastfm",
-        "descrição": "Oque você esta ouvindo agora",
-        "uso": "{tr}ln",
+        "description": "Oque você esta ouvindo agora",
+        "usage": "{tr}ln",
     },
 )
 async def ln_last_(message: Message):

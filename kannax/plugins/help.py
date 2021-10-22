@@ -116,7 +116,7 @@ async def helpme(message: Message) -> None:
             )
         ):
             commands = plugins[key].enabled_commands
-            out_str = f"""<b><u>(<code>{len(commands)}</code>) Comando(s) Disponivel</u></b>
+            out_str = f"""<b><u>(<code>{len(commands)}</code>) Comando(s)</u></b>
 
 <b>Plugin:</b>  <code>{key}</code>
 <b>Doc:</b>  <code>{plugins[key].doc}</code>\n\n"""

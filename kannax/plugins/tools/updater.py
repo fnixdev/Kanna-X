@@ -30,7 +30,7 @@ async def _init():
             "-pr": "Verifica att dos Plugins Xtras",
             "-prp": "Faz pull das atts do Xtra Plugins",
         },
-        "uso": (
+        "usage": (
             "{tr}update : verificar atualizações do branch padrão\n"
             "{tr}update -[branch_name] : verifique as atualizações de qualquer branch\n"
             "use -pull para atualizar\n"

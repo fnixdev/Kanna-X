@@ -34,7 +34,7 @@ DURATION_LIMIT = int("60")
     about={
         "header": "Music Download",
         "description": "Baixe musicas usando ytdl",
-        "uso": "{tr}song [nome / reply msg / link]",
+        "usage": "{tr}song [nome / reply msg / link]",
     },
 )
 async def song_(message: Message):
@@ -199,7 +199,7 @@ def time_to_seconds(time):
     about={
         "header": "Video Download",
         "description": "Baixe videos usando ytdl",
-        "uso": "{tr}video [nome / reply msg / link]",
+        "usage": "{tr}video [nome / reply msg / link]",
     },
 )
 async def video_(message: Message):
