@@ -194,7 +194,7 @@ async def kkk_(message: Message):
     """KK"""
     K = "K "
     for _ in range(4):
-        K = K[:-1] + "KKKKKKKKKKKKKKKKKKK"
+        K = K[:-1] + "KKKKKKKKKKK"
         await message.try_to_edit(K)
 
 
