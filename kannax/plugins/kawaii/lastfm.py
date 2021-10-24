@@ -67,7 +67,7 @@ async def last_fm_pic_(message: Message):
         "method": "track.getInfo",
         "track": song_name,
         "artist": artist_name,
-        "user": Config.LASTFM_USERNAME, 
+        "user": Config.LASTFM_USERNAME,
         "api_key": Config.LASTFM_API_KEY,
         "format": "json",
     }
@@ -83,7 +83,9 @@ async def last_fm_pic_(message: Message):
     # tags of the given track
     for tags in get_track["toptags"]["tag"]:
         get_tags += f"#{tags['name']}  "
-    await message.edit(f"{img}" + rep + get_tags + scrobbler_, parse_mode="html")
+    await message.send_photo(chat_id=message.chat.id,
+                             photo=img,
+                             caption=rep + get_tags + scrobbler_, parse_mode="html")
 
 
 @kannax.on_cmd(
@@ -245,6 +247,7 @@ async def recs(query, typ, lim):
     return await resp(params)
 
 USERNAME = Config.LASTFM_USERNAME
+
 
 @kannax.on_cmd(
     "compat",
