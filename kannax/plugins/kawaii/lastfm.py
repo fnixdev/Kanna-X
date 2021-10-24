@@ -62,7 +62,7 @@ async def last_fm_pic_(message: Message):
         return await message.err("API LastFm inativa", del_in=5)
     get_track = view_data_["track"]
     get_scrob = int(get_track["userplaycount"]) + 1
-    scrobbler_ = f"\n<b>🎵 {get_scrob} Scrobbles</b>"
+    scrobbler_ = f"\n\n<b>🎵 {get_scrob} Scrobbles</b>"
     await message.edit(f"<a href={image}>\u200c</a>" + rep + scrobbler_, parse_mode="html")
 
 
