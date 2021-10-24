@@ -10,7 +10,6 @@
 import aiohttp
 from kannax import Config, Message, kannax
 from kannax.utils import get_response, rand_array
-import rapidjson as json
 
 API = "http://ws.audioscrobbler.com/2.0"
 
@@ -37,7 +36,6 @@ PIC_URL = [
 )
 async def last_fm_pic_(message: Message):
     """now playing"""
-    await message.edit("`Processando..`")
     if not await check_lastfmvar(message):
         return
     params = {
