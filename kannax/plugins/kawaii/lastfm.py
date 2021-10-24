@@ -9,11 +9,9 @@
 
 import aiohttp
 from kannax import Config, Message, kannax
-from kannax.utils import get_response, rand_array
+from kannax.utils import get_response
 
 API = "http://ws.audioscrobbler.com/2.0"
-
-# In Case Song Does't have any Album Art.
 
 
 @kannax.on_cmd(
@@ -65,11 +63,7 @@ async def last_fm_pic_(message: Message):
     get_track = view_data_["track"]
     get_scrob = int(get_track["userplaycount"]) + 1
     scrobbler_ = f"\n<b>🎵 {get_scrob} Scrobbles</b>"
-    get_tags = "\n"
-    # tags of the given track
-    for tags in get_track["toptags"]["tag"]:
-        get_tags += f"#{tags['name']}  "
-    await message.edit(f"<a href={image}>\u200c</a>" + rep + get_tags + scrobbler_, parse_mode="html")
+    await message.edit(f"<a href={image}>\u200c</a>" + rep + scrobbler_, parse_mode="html")
 
 
 @kannax.on_cmd(
