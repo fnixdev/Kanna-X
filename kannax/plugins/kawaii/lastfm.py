@@ -77,7 +77,7 @@ async def last_fm_pic_(message: Message):
     except ValueError:
         return await message.err("API LastFm inativa", del_in=5)
     get_track = view_data_["track"]
-    get_scrob = get_track["userplaycount"]
+    get_scrob = int(get_track["userplaycount"] + 1)
     scrobbler_ = f"\n<b>🎶 {get_scrob} Scrobbles</b>"
     img = (
         (get_track["album"]["image"][3].get("#text"))
