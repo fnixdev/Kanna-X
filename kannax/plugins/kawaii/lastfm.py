@@ -78,7 +78,7 @@ async def last_fm_pic_(message: Message):
     get_track = view_data_["track"]
     get_scrob = int(get_track["userplaycount"]) + 1
     scrobbler_ = f"\n<b>🎶 {get_scrob} Scrobbles</b>"
-    img = get_track["album"]["image"][3].get("#text")
+    img = get_track["album"]["image"][2].get("#text")
     get_tags = "\n"
     # tags of the given track
     for tags in get_track["toptags"]["tag"]:
