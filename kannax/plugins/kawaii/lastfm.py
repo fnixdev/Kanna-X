@@ -59,6 +59,7 @@ async def last_fm_pic_(message: Message):
     song_ = recent_song[0]
     song_name = song_["name"]
     artist_name = song_["artist"]["name"]
+    image = recent_song["image"][3].get("#text")
     rep += f"\n<b>🎶 Musica:</b>  <i>{song_name}</i>\n<b>👥 Artista:</b>  <i>{artist_name}</i>"
     if song_["loved"] != "0":
         rep += " (♥️ loved)"
@@ -67,7 +68,7 @@ async def last_fm_pic_(message: Message):
         "method": "track.getInfo",
         "track": song_name,
         "artist": artist_name,
-        "user": Config.LASTFM_USERNAME,
+        "user": Config.LASTFM_USERNAME, 
         "api_key": Config.LASTFM_API_KEY,
         "format": "json",
     }
@@ -78,16 +79,11 @@ async def last_fm_pic_(message: Message):
     get_track = view_data_["track"]
     get_scrob = int(get_track["userplaycount"]) + 1
     scrobbler_ = f"\n<b>🎶 {get_scrob} Scrobbles</b>"
-    img = get_track["album"]["image"][2].get("#text")
     get_tags = "\n"
     # tags of the given track
     for tags in get_track["toptags"]["tag"]:
         get_tags += f"#{tags['name']}  "
-    cap = rep + get_tags + scrobbler_
-    await message.send_photo(chat_id=message.chat.id,
-                             photo=img,
-                             caption=cap,
-                             parse_mode="html")
+    await message.edit(f"<a href={image}>\u200c</a>" + rep + get_tags + scrobbler_, parse_mode="html")
 
 
 @kannax.on_cmd(
@@ -249,7 +245,6 @@ async def recs(query, typ, lim):
     return await resp(params)
 
 USERNAME = Config.LASTFM_USERNAME
-
 
 @kannax.on_cmd(
     "compat",
