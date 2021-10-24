@@ -10,6 +10,7 @@
 import aiohttp
 from kannax import Config, Message, kannax
 from kannax.utils import get_response, rand_array
+import rapidjson as json
 
 API = "http://ws.audioscrobbler.com/2.0"
 
@@ -79,11 +80,7 @@ async def last_fm_pic_(message: Message):
     get_track = view_data_["track"]
     get_scrob = int(get_track["userplaycount"]) + 1
     scrobbler_ = f"\n<b>🎶 {get_scrob} Scrobbles</b>"
-    img = (
-        (get_track["album"]["image"][3].get("#text"))
-        if get_track.get("album")
-        else rand_array(PIC_URL)
-    )
+    img = get_track["album"]["image"][3].get("#text")
     get_tags = "\n"
     # tags of the given track
     for tags in get_track["toptags"]["tag"]:
