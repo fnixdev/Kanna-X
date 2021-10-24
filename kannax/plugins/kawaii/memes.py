@@ -13,6 +13,26 @@ from cowpy import cow
 from kannax import Message, kannax
 
 
+@kannax.on_cmd("fds", about={"header": "fodase?"})
+async def fds_(message: Message):
+    out_str = f"""
+F
+     O
+　　 O
+　　　O
+　　　 o
+ₒ ᵒ 。   o
+ᵒ ₒ °ₒ  ᵒ
+　 ˚
+　°
+　•
+　 .
+　　.   
+           da-se?
+    """
+    await message.edit(out_str)
+
+
 @kannax.on_cmd("rt", about={"header": "rt message"}, trigger="", allow_via_bot=False)
 async def rt_(message: Message):
     """rt mensagem"""
@@ -194,7 +214,7 @@ async def kkk_(message: Message):
     """KK"""
     K = "K "
     for _ in range(4):
-        K = K[:-1] + "KKKKKKKKKKKKKKKKKKK"
+        K = K[:-1] + "KKKKKKKKKKK"
         await message.try_to_edit(K)
 
 
