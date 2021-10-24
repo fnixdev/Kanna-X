@@ -36,7 +36,7 @@ PIC_URL = [
 )
 async def last_fm_pic_(message: Message):
     """now playing"""
-    await message.delete()
+    await message.edit("`Processando..`")
     if not await check_lastfmvar(message):
         return
     params = {
@@ -60,7 +60,7 @@ async def last_fm_pic_(message: Message):
     song_ = recent_song[0]
     song_name = song_["name"]
     artist_name = song_["artist"]["name"]
-    rep += f"\n<b>🎶 Musica:</b>  <i><a href={song_['url']}>{song_name}</a></i>\n<b>👥 Artista:</b>  <i><a href={song_['artist']['url']}>{artist_name}</a></i>"
+    rep += f"\n<b>🎶 Musica:</b>  <i>{song_name}</i>\n<b>👥 Artista:</b>  <i>{artist_name}</i>"
     if song_["loved"] != "0":
         rep += " (♥️ loved)"
     # Trying to Fetch Album of the track
