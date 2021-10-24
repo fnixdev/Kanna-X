@@ -82,7 +82,7 @@ async def last_fm_pic_(message: Message):
     get_tags = "\n"
     # tags of the given track
     for tags in get_track["toptags"]["tag"]:
-        get_tags += f"<a href={tags['url']}>#{tags['name']}</a>  "
+        get_tags += f"#{tags['name']}  "
     await message.edit(f"<a href={img}>\u200c</a>" + rep + get_tags + scrobbler_, parse_mode="html")
 
 
