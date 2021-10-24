@@ -14,24 +14,10 @@ from kannax.utils import get_response, rand_array
 API = "http://ws.audioscrobbler.com/2.0"
 
 # In Case Song Does't have any Album Art.
-PIC_URL = [
-    "https://telegra.ph/file/537e854be068680f1c05f.gif",
-    "https://telegra.ph/file/e7b9dd5fe10f5e435a5b4.gif",
-    "https://telegra.ph/file/d99d3afb149c922e57f58.gif",
-    "https://telegra.ph/file/645a84a1430c6f6f0e679.gif",
-    "https://telegra.ph/file/0f649b59da301c9c3d7ae.gif",
-    "https://telegra.ph/file/5a00d9e2aeb2e45d85113.gif",
-    "https://telegra.ph/file/871528bb25aacde193827.gif",
-    "https://telegra.ph/file/4c50cdd484cc3b96a34ba.gif",
-    "https://telegra.ph/file/8b70856135c3bf0250f88.gif",
-    "https://telegra.ph/file/32b1e620f4eede44c74a0.gif",
-    "https://telegra.ph/file/5d33b0371712a12160894.gif",
-    "https://telegra.ph/file/a9b53a1940493e586cba5.gif",
-]
 
 
 @kannax.on_cmd(
-    "lastfm",
+    "(lastfm|lt)",
     about={"header": "Mostra o que você esta ouvindo no momento"},
 )
 async def last_fm_pic_(message: Message):
@@ -68,7 +54,7 @@ async def last_fm_pic_(message: Message):
         "method": "track.getInfo",
         "track": song_name,
         "artist": artist_name,
-        "user": Config.LASTFM_USERNAME, 
+        "user": Config.LASTFM_USERNAME,
         "api_key": Config.LASTFM_API_KEY,
         "format": "json",
     }
@@ -78,7 +64,7 @@ async def last_fm_pic_(message: Message):
         return await message.err("API LastFm inativa", del_in=5)
     get_track = view_data_["track"]
     get_scrob = int(get_track["userplaycount"]) + 1
-    scrobbler_ = f"\n<b>🎶 {get_scrob} Scrobbles</b>"
+    scrobbler_ = f"\n<b>🎵 {get_scrob} Scrobbles</b>"
     get_tags = "\n"
     # tags of the given track
     for tags in get_track["toptags"]["tag"]:
@@ -245,6 +231,7 @@ async def recs(query, typ, lim):
     return await resp(params)
 
 USERNAME = Config.LASTFM_USERNAME
+
 
 @kannax.on_cmd(
     "compat",
