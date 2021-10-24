@@ -83,7 +83,7 @@ async def last_fm_pic_(message: Message):
     # tags of the given track
     for tags in get_track["toptags"]["tag"]:
         get_tags += f"#{tags['name']}  "
-    await message.edit(f"<a href={img}>\u200c</a>" + rep + get_tags + scrobbler_, parse_mode="html")
+    await message.edit(f"{img}" + rep + get_tags + scrobbler_, parse_mode="html")
 
 
 @kannax.on_cmd(
