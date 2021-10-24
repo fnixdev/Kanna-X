@@ -56,7 +56,7 @@ async def last_fm_pic_(message: Message):
     recent_song = view_data["recenttracks"]["track"]
     if len(recent_song) == 0:
         return await message.err("Nenhuma trilha recente encontrada", del_in=5)
-    rep = f"<i><b><a href=https://www.last.fm/user/{Config.LASTFM_USERNAME}>{Config.LASTFM_USERNAME}</a> atualmente está ouvindo:</b></i>\n"
+    rep = f"<i><b>{Config.LASTFM_USERNAME} atualmente está ouvindo:</b></i>\n"
     song_ = recent_song[0]
     song_name = song_["name"]
     artist_name = song_["artist"]["name"]
