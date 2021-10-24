@@ -59,7 +59,7 @@ async def last_fm_pic_(message: Message):
     song_ = recent_song[0]
     song_name = song_["name"]
     artist_name = song_["artist"]["name"]
-    image = recent_song.get("image")[3].get("#text")
+    image = recent_song["image"][3]["#text"]
     rep += f"\n<b>🎶 Musica:</b>  <i>{song_name}</i>\n<b>👥 Artista:</b>  <i>{artist_name}</i>"
     if song_["loved"] != "0":
         rep += " (♥️ loved)"
