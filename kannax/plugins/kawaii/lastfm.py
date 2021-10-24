@@ -83,9 +83,11 @@ async def last_fm_pic_(message: Message):
     # tags of the given track
     for tags in get_track["toptags"]["tag"]:
         get_tags += f"#{tags['name']}  "
+    cap = rep + get_tags + scrobbler_
     await message.send_photo(chat_id=message.chat.id,
                              photo=img,
-                             caption=rep + get_tags + scrobbler_, parse_mode="html")
+                             caption=cap,
+                             parse_mode="html")
 
 
 @kannax.on_cmd(
