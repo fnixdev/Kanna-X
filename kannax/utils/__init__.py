@@ -16,7 +16,9 @@ from .functions import (
 from .kanna_utils import (
     capitaled,
     report_user,
-    time_date_diff
+    time_date_diff,
+    get_response,
+    full_name
 )
 from .progress import progress
 from .sys_tools import SafeDict, get_import_path, secure_text, terminate
