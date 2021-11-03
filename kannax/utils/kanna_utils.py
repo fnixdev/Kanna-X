@@ -1,4 +1,5 @@
 
+from typing import Union
 from pyrogram.raw.functions.account import ReportPeer
 from pyrogram.raw.types import (
     InputPeerUserFromMessage,
