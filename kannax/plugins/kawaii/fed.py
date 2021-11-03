@@ -58,7 +58,7 @@ async def f_stat(message: Message):
 
 
 
-@userge.on_cmd(
+@kannax.on_cmd(
     "fbanstat",
     about={
         "header": "check fedban details",
@@ -84,7 +84,7 @@ async def fban_stat(message: Message):
             user = message.from_user.id
         fed_id = split[0]
     try:
-        user_ = await userge.get_users(user)
+        user_ = await kannax.get_users(user)
     except BaseException:
         await message.edit(
             f"<b>ERROR:</b> The given user `{user}` is not valid...", del_in=5
@@ -94,7 +94,7 @@ async def fban_stat(message: Message):
     user_id = user_.id
     bot_ = "@missrose_bot"
     try:
-        query_ = await userge.send_message(bot_, f"!fbanstat {user_id} {fed_id}")
+        query_ = await kannax.send_message(bot_, f"!fbanstat {user_id} {fed_id}")
     except YouBlockedUser:
         await message.err("Unblock @MissRose_bot first...")
         return
