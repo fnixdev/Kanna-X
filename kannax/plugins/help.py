@@ -987,6 +987,16 @@ if kannax.has_bot:
                                             reply_markup=buttonsx,
                                         )
                                     )
+                                else:
+                                    results.append(
+                                        InlineQueryResultCachedDocument(
+                                            title=textx,
+                                            file_id=media_data,
+                                            caption=textx,
+                                            description="Inline Button",
+                                            reply_markup=buttonsx,
+                                        )
+                                    )
                             else:
                                 results.append(
                                     InlineQueryResultArticle(
