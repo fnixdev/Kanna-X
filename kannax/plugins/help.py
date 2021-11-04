@@ -668,7 +668,35 @@ if kannax.has_bot:
                                     reply_markup=buttons,
                                 )
                             )
-
+                        elif _media_type == "tg_media":
+                            c_file_id = Bot_Alive.get_bot_cached_fid()
+                            if c_file_id is None:
+                                try:
+                                    c_file_id = get_file_id(
+                                        await kannax.bot.get_messages(
+                                            _media_url[0], _media_url[1]
+                                        )
+                                    )
+                                except Exception as b_rr:
+                                    await CHANNEL.log(str(b_rr))
+                            if Bot_Alive.is_photo(c_file_id):
+                                results.append(
+                                    InlineQueryResultCachedPhoto(
+                                        file_id=c_file_id,
+                                        caption=alive_info,
+                                        reply_markup=buttons,
+                                    )
+                                )
+                            else:
+                                results.append(
+                                    InlineQueryResultCachedDocument(
+                                        title="KannaX",
+                                        file_id=c_file_id,
+                                        caption=alive_info,
+                                        description="ALIVE",
+                                        reply_markup=buttons,
+                                    )
+                                )
 
             if string == "geass":
                 results.append(
@@ -691,6 +719,16 @@ if kannax.has_bot:
                             InlineQueryResultCachedPhoto(
                                 file_id=cnote.get("file_id"),
                                 caption=cnote.get("caption"),
+                                reply_markup=cnote.get("buttons"),
+                            )
+                        )
+                    elif type_ == "media":
+                        results.append(
+                            InlineQueryResultCachedDocument(
+                                title="Inline Note",
+                                file_id=cnote.get("file_id"),
+                                caption=cnote.get("caption"),
+                                description=f"#{note_data[0]}",
                                 reply_markup=cnote.get("buttons"),
                             )
                         )

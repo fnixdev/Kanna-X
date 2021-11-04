@@ -219,9 +219,18 @@ class Bot_Alive:
         if match.group(1) == "i.imgur.com":
             link = match.group(0)
             link_type = "url_gif" if match.group(3) == "gif" else "url_image"
-        else match.group(1) == "telegra.ph/file":
+        elif match.group(1) == "telegra.ph/file":
             link = match.group(0)
             link_type = "url_gif" if match.group(3) == "gif" else "url_image"
+        else:
+            link_type = "tg_media"
+            if match.group(2) == "c":
+                chat_id = int("-100" + str(match.group(3)))
+                message_id = match.group(4)
+            else:
+                chat_id = match.group(2)
+                message_id = match.group(3)
+            link = [chat_id, int(message_id)]
         return link_type, link
 
     @staticmethod
