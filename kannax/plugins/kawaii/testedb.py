@@ -49,11 +49,11 @@ async def view_del_ani(message: Message):
     media = ""
     async for link in SAVED.find():
         media += f"{link['link']}"
-        if media:
-            if "-d" in message.flags:
-                await SAVED.drop()
-                await message.edit("`Alive Media excluída!`")
-            if "-v" in message.flags:
-                await message.edit(media)
-        else:
-            await message.err("`Alive Media não está definida.`")
+    if media:
+        if "-d" in message.flags:
+            await SAVED.drop()
+            await message.edit("`Alive Media excluída!`")
+        if "-v" in message.flags:
+            await message.edit(media)
+    else:
+        await message.err("`Alive Media não está definida.`")
