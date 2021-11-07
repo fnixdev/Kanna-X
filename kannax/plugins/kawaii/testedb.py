@@ -51,4 +51,4 @@ async def view_del_ani(message: Message):
         await SAVED.delete_one({"_id": "ALIVE_MEDIA"})
         await message.edit("`Alive Media excluida com sucesso`")
     if "-v" in message.flags:
-        await message.edit(template["anime_data"])
+        await message.edit(template["alive_data"])
