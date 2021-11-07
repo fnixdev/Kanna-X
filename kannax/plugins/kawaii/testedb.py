@@ -28,3 +28,27 @@ async def ani_save_template(message: Message):
         {"_id": "ALIVE_MEDIA"}, {"$set": {"media_data": text}}, upsert=True
     )
     await message.edit("Alive Media definido com sucesso")
+
+
+@kannax.on_cmd(
+    "vtest",
+    about={
+        "header": "Anime Media Settings",
+        "flags": {"-d": "Delete test", "-v": "Ver test"},
+        "usage": "{tr}anitemp [A valid flag]",
+    },
+)
+async def view_del_ani(message: Message):
+    """View or Delete Alive Media"""
+    if not message.flags:
+        await message.err("Flag Required")
+        return
+    template = await SAVED.find_one({"_id": "ALIVE_MEDIA"})
+    if not template:
+        await message.err("`Nenhuma media salva`")
+        return
+    if "-d" in message.flags:
+        await SAVED.delete_one({"_id": "ALIVE_MEDIA"})
+        await message.edit("`Alive Media excluida com sucesso`")
+    if "-v" in message.flags:
+        await message.edit(template["anime_data"])
