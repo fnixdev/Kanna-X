@@ -18,7 +18,7 @@ async def _init():
         "header": "apenas teste",
     },
 )
-async def ani_save_template(message: Message):
+async def ani_save_media_alive(message: Message):
     """Set Media DB"""
     text = message.input_or_reply_str
     if not text:
@@ -35,7 +35,6 @@ async def ani_save_template(message: Message):
     about={
         "header": "Anime Media Settings",
         "flags": {"-d": "Delete test", "-v": "Ver test"},
-        "usage": "{tr}anitemp [A valid flag]",
     },
 )
 async def view_del_ani(message: Message):
@@ -43,8 +42,8 @@ async def view_del_ani(message: Message):
     if not message.flags:
         await message.err("Flag Required")
         return
-    template = await SAVED.find_one({"_id": "ALIVE_MEDIA"})
-    if not template:
+    media_alive = await SAVED.find_one({"_id": "ALIVE_MEDIA"})
+    if not media_alive:
         await message.err("`Nenhuma media salva`")
         return
     if "-d" in message.flags:
