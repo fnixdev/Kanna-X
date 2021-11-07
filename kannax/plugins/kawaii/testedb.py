@@ -20,14 +20,18 @@ async def _init():
 )
 async def ani_save_media_alive(message: Message):
     """Set Media DB"""
-    text = message.input_or_reply_str
-    if not text:
+    link = message.input_or_reply_str
+    if not link:
         await message.err("Invalid Syntax")
         return
-    await SAVED.update_one(
-        {"_id": "ALIVE_MEDIA"}, {"$set": {"media_data": text}}, upsert=True
-    )
-    await message.edit("Alive Media definido com sucesso")
+    try:
+        await SAVED.update_one(
+            {"_id": "ALIVE_MEDIA"}, {"$set": {"link": link}}, upsert=True
+        )
+    except Exception as e:
+        await message.edit(f"Ocorre um erro\n\n{e}")
+    else:
+        await message.edit("Alive Media definido com sucesso")
 
 
 @kannax.on_cmd(
@@ -42,12 +46,14 @@ async def view_del_ani(message: Message):
     if not message.flags:
         await message.err("Flag Required")
         return
-    media_alive = await SAVED.find_one({"_id": "ALIVE_MEDIA"})
-    if not media_alive:
-        await message.err("`Nenhuma media salva`")
-        return
-    if "-d" in message.flags:
-        await SAVED.delete_one({"_id": "ALIVE_MEDIA"})
-        await message.edit("`Alive Media excluida com sucesso`")
-    if "-v" in message.flags:
-        await message.edit(media_alive["alive_data"])
+    media = ""
+    async for link in SAVED.find():
+        media += f"{link['link']}"
+        if media:
+            if "-d" in message.flags:
+                await SAVED.drop()
+                await message.edit("`Alive Media excluída!`")
+            if "-v" in message.flags:
+                await message.edit(media)
+        else:
+            await message.err("`Alive Media não está definida.`")
