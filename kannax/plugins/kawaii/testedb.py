@@ -31,7 +31,7 @@ async def ani_save_media_alive(message: Message):
     except Exception as e:
         await message.edit(f"Ocorre um erro\n\n{e}")
     else:
-        await message.edit("Alive Media definido com sucesso")
+        await message.edit("Alive Media definida com sucesso")
 
 
 @kannax.on_cmd(
