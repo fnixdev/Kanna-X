@@ -54,6 +54,8 @@ _CATEGORY = {
 }
 # Database
 SAVED_SETTINGS = get_collection("CONFIGS")
+SAVED = get_collection("ALIVE_DB")
+
 REPO_X = InlineQueryResultArticle(
     title="Repo",
     input_message_content=InputTextMessageContent(
@@ -75,6 +77,10 @@ REPO_X = InlineQueryResultArticle(
 
 
 async def _init() -> None:
+    global ALIVE_MEDIA  # pylint: disable=global-statement
+    link = await SAVED.find_one({"_id": "ALIVE_MEDIA"})
+    if link:
+        ALIVE_MEDIA = link["link"]
     data = await SAVED_SETTINGS.find_one({"_id": "CURRENT_CLIENT"})
     if data:
         Config.USE_USER_FOR_CLIENT_CHECKS = bool(data["is_user"])

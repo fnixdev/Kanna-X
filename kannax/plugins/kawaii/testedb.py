@@ -5,9 +5,10 @@ SAVED = get_collection("TESTE_DB")
 
 async def _init():
     global ALIVE_MEDIA  # pylint: disable=global-statement
-    media_alive = await SAVED.find_one({"_id": "ALIVE_MEDIA"})
-    if media_alive:
-        ALIVE_MEDIA = media_alive["media_data"]
+    link = await SAVED.find_one({"_id": "ALIVE_MEDIA"})
+    if link:
+        ALIVE_MEDIA = link["link"]
+
 
 @kannax.on_cmd(
     "settest",
