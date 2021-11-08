@@ -24,7 +24,7 @@ async def ani_save_media_alive(message: Message):
     """Set Media DB"""
     replied = message.reply_to_message
     query = message.input_str
-    if not link or replied:
+    if not query or replied:
         await message.err("Invalid Syntax")
         return 
     if replied.media:
