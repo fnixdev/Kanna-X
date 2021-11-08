@@ -38,7 +38,7 @@ async def ani_save_media_alive(message: Message):
     "vtest",
     about={
         "header": "Alive Media Settings",
-        "flags": {"-d": "Delete test", "-v": "Ver test"},
+        "flags": {"-d": "Delete test", "-v": "Ver test", "-a": "Send Animation"},
     },
 )
 async def view_del_ani(message: Message):
@@ -55,5 +55,9 @@ async def view_del_ani(message: Message):
             await message.edit("`Alive Media excluída!`")
         if "-v" in message.flags:
             await message.edit(media)
+        if "-a" in message.flags:
+            await message.client.send_animation(
+                  chat_id=message.chat.id,
+                  animation=media)
     else:
         await message.err("`Alive Media não está definida.`")
