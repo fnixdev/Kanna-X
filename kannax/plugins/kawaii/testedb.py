@@ -3,6 +3,8 @@
 
 from kannax import Message, get_collection, kannax
 from kannax.utils import media_to_image
+from kannax.plugins.utils.telegraph import upload_media_
+
 
 SAVED = get_collection("TESTE_DB")
 
@@ -20,7 +22,8 @@ async def _init():
 )
 async def ani_save_media_alive(message: Message):
     """Set Media DB"""
-    link = message.input_or_reply_str
+    replied = message.reply_to_message
+    link = message.input_str
     if not link:
         await message.err("Invalid Syntax")
         return
