@@ -1,6 +1,6 @@
 #
 #
-
+from telegraph import upload_file
 from kannax import Message, get_collection, kannax
 from kannax.utils import media_to_image
 from kannax.plugins.utils.telegraph import upload_media_
