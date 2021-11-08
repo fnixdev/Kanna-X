@@ -9,7 +9,7 @@ from pyrogram.errors import BadRequest, FloodWait, Forbidden, MediaEmpty
 from pyrogram.file_id import PHOTO_TYPES, FileId
 from pyrogram.types import CallbackQuery, InlineKeyboardButton, InlineKeyboardMarkup
 
-from kannax import Config, Message, get_version, kannax, get_collection
+from kannax import Config, Message, get_version, kannax
 from kannax.core.ext import RawClient
 from kannax.utils import get_file_id, rand_array
 
@@ -17,16 +17,13 @@ _ALIVE_REGEX = comp_regex(
     r"http[s]?://(i\.imgur\.com|telegra\.ph/file|t\.me)/(\w+)(?:\.|/)(gif|mp4|jpg|png|jpeg|[0-9]+)(?:/([0-9]+))?"
 )
 _USER_CACHED_MEDIA, _BOT_CACHED_MEDIA = None, None
-SAVED = get_collection("ALIVE_DB")
+
 LOGGER = kannax.getLogger(__name__)
 
 async def _init() -> None:
-    global _USER_CACHED_MEDIA, _BOT_CACHED_MEDIA, ALIVE_MEDIA # pylint: disable=global-statement
-    link = await SAVED.find_one({"_id": "ALIVE_MEDIA"})
-    if link:
-        ALIVE_MEDIA = link["link"]
-    if ALIVE_MEDIA and ALIVE_MEDIA.lower() != "false":
-        am_type, am_link = await Bot_Alive.check_media_link(ALIVE_MEDIA.strip())
+    global _USER_CACHED_MEDIA, _BOT_CACHED_MEDIA
+    if Config.ALIVE_MEDIA and Config.ALIVE_MEDIA.lower() != "false":
+        am_type, am_link = await Bot_Alive.check_media_link(Config.ALIVE_MEDIA.strip())
         if am_type and am_type == "tg_media":
             try:
                 if Config.HU_STRING_SESSION:
@@ -42,28 +39,6 @@ async def _init() -> None:
                     )
             except Exception as b_rr:
                 LOGGER.debug(b_rr)
-
-
-@kannax.on_cmd(
-    "setalive",
-    about={
-        "header": "apenas teste",
-    },
-)
-async def save_media_alive(message: Message):
-    """Set Media DB"""
-    link = message.input_or_reply_str
-    if not link:
-        await message.err("`Alzheimer é complicado, mas não esqueça de me dar um link.`")
-        return
-    try:
-        await SAVED.update_one(
-            {"_id": "ALIVE_MEDIA"}, {"$set": {"link": link}}, upsert=True
-        )
-    except Exception as e:
-        await message.edit(f"Ocorreu um erro\n\n{e}")
-    else:
-        await message.edit("`Alive Media definida com sucesso`")
 
 
 @kannax.on_cmd("alive", about={"header": "Just For Fun"}, allow_channels=False)
@@ -121,7 +96,7 @@ async def send_alive_message(message: Message) -> None:
             "    <code>|</code>    "
             "👥  <a href='https://t.me/fnixdev'><b>ꜱᴜᴘᴏʀᴛᴇ</b></a>"
         )
-    if not ALIVE_MEDIA:
+    if not Config.ALIVE_MEDIA:
         await client.send_animation(
             chat_id,
             animation=Bot_Alive.alive_default_imgs(),
@@ -129,7 +104,7 @@ async def send_alive_message(message: Message) -> None:
             reply_markup=reply_markup,
         )
         return
-    url_ = ALIVE_MEDIA.strip()
+    url_ = Config.ALIVE_MEDIA.strip()
     if url_.lower() == "false":
         await client.send_message(
             chat_id,
@@ -138,7 +113,7 @@ async def send_alive_message(message: Message) -> None:
             disable_web_page_preview=True,
         )
     else:
-        type_, media_ = await Bot_Alive.check_media_link(ALIVE_MEDIA)
+        type_, media_ = await Bot_Alive.check_media_link(Config.ALIVE_MEDIA)
         if type_ == "url_gif":
             await client.send_animation(
                 chat_id,
