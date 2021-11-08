@@ -18,16 +18,27 @@ async def _init():
 )
 async def ani_save_media_alive(message: Message):
     """Set Media DB"""
-    link = message.input_or_reply_str
-    if not link:
+    query = message.input_str
+    reply = message.reply_to_message
+    if not query and reply:
         await message.err("Invalid Syntax")
         return
-    try:
+    if reply.media:
+        path = reply.download()
+        fk = upload_file(path)
+        for x in fk:
+            url = "https://telegra.ph" + x
         await SAVED.update_one(
-            {"_id": "ALIVE_MEDIA"}, {"$set": {"link": link}}, upsert=True
+            {"_id": "ALIVE_MEDIA"}, {"$set": {"link": url}}, upsert=True
         )
-    except Exception as e:
-        await message.edit(f"Ocorre um erro\n\n{e}")
+        await message.edit("Alive Media definida com sucesso")
+        return
+    elif query:
+        link = query
+        await SAVED.update_one(
+                        {"_id": "ALIVE_MEDIA"}, {"$set": {"link": link}}, upsert=True
+        )
+        await message.edit("Alive Media definida com sucesso")
     else:
         await message.edit("Alive Media definida com sucesso")
 
@@ -45,6 +56,7 @@ async def view_del_ani(message: Message):
         await message.err("Flag Required")
         return
     media = ""
+    msg = "ᴏɪ ᴍᴇsᴛʀᴇ, ᴋᴀɴɴᴀx ɪ'ᴛs ᴀʟɪᴠᴇ"
     async for link in SAVED.find():
         media += f"{link['link']}"
     if media:
@@ -56,6 +68,7 @@ async def view_del_ani(message: Message):
         if "-a" in message.flags:
             await message.client.send_animation(
                   chat_id=message.chat.id,
-                  animation=media)
+                  animation=media,
+                  caption=msg)
     else:
         await message.err("`Alive Media não está definida.`")
