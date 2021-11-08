@@ -1,10 +1,5 @@
-#
-#
-from telegraph import upload_file
 from kannax import Message, get_collection, kannax
 from kannax.utils import media_to_image
-from kannax.plugins.utils.telegraph import upload_media_
-
 
 SAVED = get_collection("TESTE_DB")
 
@@ -12,36 +7,28 @@ async def _init():
     global ALIVE_MEDIA  # pylint: disable=global-statement
     media_alive = await SAVED.find_one({"_id": "ALIVE_MEDIA"})
     if media_alive:
-        ALIVE_MEDIA = media_alive["link"]
+        ALIVE_MEDIA = media_alive["media_data"]
 
 @kannax.on_cmd(
-    "setalive",
+    "settest",
     about={
         "header": "apenas teste",
     },
 )
 async def ani_save_media_alive(message: Message):
     """Set Media DB"""
-    replied = message.reply_to_message
-    query = message.input_str
-    if replied.media:
-        path = replied.download()
-        fk = upload_file(path)
-        for x in fk:
-          link = "https://telegra.ph" + x
+    link = message.input_or_reply_str
+    if not link:
+        await message.err("Invalid Syntax")
+        return
+    try:
         await SAVED.update_one(
             {"_id": "ALIVE_MEDIA"}, {"$set": {"link": link}}, upsert=True
-            )
-        await message.edit("Alive Media definida com sucesso")
-        return
-    elif query:
-        await SAVED.update_one(
-            {"_id": "ALIVE_MEDIA"}, {"$set": {"link": query}}, upsert=True
-         )
-        await message.edit("Alive Media definida com sucesso")
-        return
+        )
+    except Exception as e:
+        await message.edit(f"Ocorre um erro\n\n{e}")
     else:
-        await message.err("Algo deu errado")
+        await message.edit("Alive Media definida com sucesso")
 
 
 @kannax.on_cmd(
