@@ -28,7 +28,7 @@ async def ani_save_media_alive(message: Message):
         await message.err("Invalid Syntax")
         return 
     if replied.media:
-        path = reply.download()
+        path = replied.download()
         fk = upload_file(path)
         for x in fk:
           link = "https://telegra.ph" + x
