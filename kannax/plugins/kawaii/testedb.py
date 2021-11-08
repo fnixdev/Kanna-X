@@ -25,17 +25,14 @@ async def ani_save_media_alive(message: Message):
         await message.err("Invalid Syntax")
         return
     if replied:
-        path = replied.download()
-        fk = upload_file(path)
-        for x in fk:
-            url = "https://telegra.ph" + x
+        url = await upload_media_(message)
         await SAVED.update_one(
             {"_id": "ALIVE_MEDIA"}, {"$set": {"link": url}}, upsert=True
         )
         await message.edit("Alive Media definida com sucesso")
         return
     elif query:
-        link = await upload_media_(message)
+        link = query
         await SAVED.update_one(
                         {"_id": "ALIVE_MEDIA"}, {"$set": {"link": link}}, upsert=True
         )
