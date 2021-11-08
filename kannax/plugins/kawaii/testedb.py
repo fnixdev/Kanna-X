@@ -15,7 +15,7 @@ async def _init():
         ALIVE_MEDIA = media_alive["link"]
 
 @kannax.on_cmd(
-    "settest",
+    "setalive",
     about={
         "header": "apenas teste",
     },
@@ -23,18 +23,27 @@ async def _init():
 async def ani_save_media_alive(message: Message):
     """Set Media DB"""
     replied = message.reply_to_message
-    link = message.input_str
-    if not link:
+    query = message.input_str
+    if not link or replied:
         await message.err("Invalid Syntax")
         return
-    try:
+    if replied:
+      try:
+        link = await upload_media_(message)
         await SAVED.update_one(
             {"_id": "ALIVE_MEDIA"}, {"$set": {"link": link}}, upsert=True
         )
-    except Exception as e:
+         await message.edit("Alive Media definida com sucesso")
+      except Exception as e:
         await message.edit(f"Ocorre um erro\n\n{e}")
+    elif query:
+      try:
+        await SAVED.update_one(
+            {"_id": "ALIVE_MEDIA"}, {"$set": {"link": query}}, upsert=True
+        )
+         await message.edit("Alive Media definida com sucesso")
     else:
-        await message.edit("Alive Media definida com sucesso")
+        await message.err("Algo de errado aconteceu")
 
 
 @kannax.on_cmd(
