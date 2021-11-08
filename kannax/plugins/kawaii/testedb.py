@@ -1,5 +1,6 @@
 from kannax import Message, get_collection, kannax
 from kannax.utils import media_to_image
+from telegraph import upload_file
 
 SAVED = get_collection("TESTE_DB")
 
@@ -23,7 +24,7 @@ async def ani_save_media_alive(message: Message):
     if not query and reply:
         await message.err("Invalid Syntax")
         return
-    if reply.media:
+    if reply:
         path = reply.download()
         fk = upload_file(path)
         for x in fk:
