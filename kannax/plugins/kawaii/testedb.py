@@ -26,23 +26,22 @@ async def ani_save_media_alive(message: Message):
     query = message.input_str
     if not link or replied:
         await message.err("Invalid Syntax")
-        return
-    if replied:
-      try:
-        link = await upload_media_(message)
+          return
+    if replied.media:
+        path = reply.download()
+        fk = upload_file(path)
+        for x in fk:
+          link = "https://telegra.ph" + x
         await SAVED.update_one(
             {"_id": "ALIVE_MEDIA"}, {"$set": {"link": link}}, upsert=True
-        )
-        return
+            )
         await message.edit("Alive Media definida com sucesso")
-      except Exception as e:
-        await message.edit(f"Ocorre um erro\n\n{e}")
-    elif query:
-      try:
-        await SAVED.update_one(
+          return
+    else:
+      await SAVED.update_one(
             {"_id": "ALIVE_MEDIA"}, {"$set": {"link": query}}, upsert=True
         )
-        await message.edit("Alive Media definida com sucesso")
+      await message.edit("Alive Media definida com sucesso")
         return
 
 
