@@ -24,9 +24,6 @@ async def ani_save_media_alive(message: Message):
     """Set Media DB"""
     replied = message.reply_to_message
     query = message.input_str
-    if not query or replied:
-        await message.err("Invalid Syntax")
-        return 
     if replied.media:
         path = replied.download()
         fk = upload_file(path)
@@ -37,12 +34,14 @@ async def ani_save_media_alive(message: Message):
             )
         await message.edit("Alive Media definida com sucesso")
         return
-    else:
-      await SAVED.update_one(
+    elif query:
+        await SAVED.update_one(
             {"_id": "ALIVE_MEDIA"}, {"$set": {"link": query}}, upsert=True
-        )
-      await message.edit("Alive Media definida com sucesso")
-      return
+         )
+        await message.edit("Alive Media definida com sucesso")
+        return
+    else:
+        await message.err("Algo deu errado")
 
 
 @kannax.on_cmd(
