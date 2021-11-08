@@ -33,6 +33,7 @@ async def ani_save_media_alive(message: Message):
         await SAVED.update_one(
             {"_id": "ALIVE_MEDIA"}, {"$set": {"link": link}}, upsert=True
         )
+        return
         await message.edit("Alive Media definida com sucesso")
       except Exception as e:
         await message.edit(f"Ocorre um erro\n\n{e}")
@@ -42,8 +43,7 @@ async def ani_save_media_alive(message: Message):
             {"_id": "ALIVE_MEDIA"}, {"$set": {"link": query}}, upsert=True
         )
         await message.edit("Alive Media definida com sucesso")
-    else:
-        await message.err("Algo de errado aconteceu")
+        return
 
 
 @kannax.on_cmd(
