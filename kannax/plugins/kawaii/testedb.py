@@ -1,5 +1,5 @@
 from kannax import Message, get_collection, kannax
-from kannax.utils import media_to_image
+from telegraph import upload_file
 
 SAVED = get_collection("TESTE_DB")
 
@@ -18,18 +18,23 @@ async def _init():
 )
 async def ani_save_media_alive(message: Message):
     """Set Media DB"""
-    link = message.input_or_reply_str
-    if not link:
-        await message.err("Invalid Syntax")
-        return
-    try:
+    query = message.input_str
+    replied = message.reply_to_message
+    if replied:
+        file = await kannax.download_media(replied)
+        iurl = upload_file(file)
+        media = f"https://telegra.ph{iurl[0]}"
         await SAVED.update_one(
-            {"_id": "ALIVE_MEDIA"}, {"$set": {"link": link}}, upsert=True
+            {"_id": "ALIVE_MEDIA"}, {"$set": {"link": media}}, upsert=True
         )
-    except Exception as e:
-        await message.edit(f"Ocorre um erro\n\n{e}")
+        await message.edit("`Alive Media definida com sucesso!`")
+    elif query:
+        await SAVED.update_one(
+                        {"_id": "ALIVE_MEDIA"}, {"$set": {"link": query}}, upsert=True
+        )
+        await message.edit("`Alive Media definida com sucesso!`")
     else:
-        await message.edit("Alive Media definida com sucesso")
+        await message.err("Invalid Syntax")
 
 
 @kannax.on_cmd(
@@ -45,6 +50,7 @@ async def view_del_ani(message: Message):
         await message.err("Flag Required")
         return
     media = ""
+    msg = "ᴏɪ ᴍᴇsᴛʀᴇ, ᴋᴀɴɴᴀx ɪ'ᴛs ᴀʟɪᴠᴇ"
     async for link in SAVED.find():
         media += f"{link['link']}"
     if media:
@@ -56,6 +62,7 @@ async def view_del_ani(message: Message):
         if "-a" in message.flags:
             await message.client.send_animation(
                   chat_id=message.chat.id,
-                  animation=media)
+                  animation=media,
+                  caption=msg)
     else:
         await message.err("`Alive Media não está definida.`")

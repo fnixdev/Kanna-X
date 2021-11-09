@@ -1204,3 +1204,4 @@ if kannax.has_bot:
                 cache_time=1,
                 switch_pm_text=f"Apenas meu mestre pode acessar isso",
                 switch_pm_parameter="start",
+            )
