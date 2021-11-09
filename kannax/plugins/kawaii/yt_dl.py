@@ -127,6 +127,7 @@ async def video(message: Message):
         time.sleep(2)
         await message.delete()
         return
+    await message.edit("`Processando...`")
     result = search_music(video)
     if result == []:
         await message.edit("`Não foi possível encontrar o vídeo.`")
