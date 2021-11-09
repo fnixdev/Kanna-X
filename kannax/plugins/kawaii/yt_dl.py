@@ -1,4 +1,5 @@
 import os
+import time
 
 import requests
 from pytube import YouTube
@@ -64,10 +65,15 @@ async def song(message: Message):
     music = message.input_or_reply_str
     if not music:
         await message.edit("`Vou baixar o vento?!`")
+        time.sleep(2)
+        await message.delete()
         return
+    await message.edit("`Processando...`")
     result = search_music(music)
     if result == []:
         await message.edit("`Não foi possível encontrar a música.`")
+        time.sleep(2)
+        await message.delete()
         return
     link = get_link(result)
     duration, dur = get_duration(result)
@@ -78,6 +84,8 @@ async def song(message: Message):
     except Exception as e:
         await message.edit("`Não foi possível baixar a música.`")
         print(str(e))
+        time.sleep(2)
+        await message.delete()
     else:
         if os.path.exists(f"./kannax/xcache/{thumb}"):
             caption = f"""
@@ -93,9 +101,12 @@ async def song(message: Message):
                     thumb=f"./kannax/xcache/{thumb}",
                     duration=dur,
                 )
+                await message.delete()
             except Exception as e:
                 await message.edit("`Não foi possível enviar a música.`")
                 print(str(e))
+                time.sleep(2)
+                await message.delete()
             finally:
                 os.remove(f"./kannax/xcache/{filename}")
                 os.remove(f"./kannax/xcache/{thumb}")
@@ -113,10 +124,14 @@ async def video(message: Message):
     video = message.input_or_reply_str
     if not video:
         await message.edit("`Vou baixar o vento?!`")
+        time.sleep(2)
+        await message.delete()
         return
     result = search_music(video)
     if result == []:
         await message.edit("`Não foi possível encontrar o vídeo.`")
+        time.sleep(2)
+        await message.delete()
         return
     link = get_link(result)
     m, filename = get_filename(result)
@@ -125,6 +140,8 @@ async def video(message: Message):
     except Exception as e:
         await message.edit("`Não foi possível baixar o video.`")
         print(str(e))
+        time.sleep(2)
+        await message.delete()
     else:
         caption = f"**Título ➠** __[{result[0]['title']}]({link})__\n**Canal ➠** __{result[0]['channel']}__"
         try:
@@ -132,8 +149,11 @@ async def video(message: Message):
                 video=f"./kannax/xcache/{filename}",
                 caption=caption,
             )
+            await message.delete()
         except Exception as e:
             await message.reply("`Não foi possível enviar o vídeo.`")
             print(str(e))
+            time.sleep(2)
+            await message.delete()
         finally:
             os.remove(f"./kannax/xcache/{filename}")
