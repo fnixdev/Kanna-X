@@ -56,7 +56,7 @@ def down_video(link, filename):
 
 
 @kannax.on_cmd(
-    "(song"|"music)",
+    "(song|music)",
     about={
         "header": "Music Downloader",
         "description": "Baixe músicas usando o pytube. ;-;",
