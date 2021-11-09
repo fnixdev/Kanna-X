@@ -83,6 +83,7 @@ class Config:
     DISABLED_ALL = False
     DISABLED_CHATS: Set[int] = set()
     ALLOWED_COMMANDS: Set[str] = set()
+    TRUSTED_SUDO_USERS: Set[int] = set()
     ANTISPAM_SENTRY = False
     SPAM_PROTECTION = False
     RUN_DYNO_SAVER = False
