@@ -53,7 +53,7 @@ def down_video(link, filename):
 
 
 @kannax.on_cmd(
-    "song",
+    "music",
     about={
         "header": "Music Downloader",
         "description": "Baixe músicas usando o pytube. ;-;",
@@ -102,7 +102,7 @@ async def song(message: Message):
 
 
 @kannax.on_cmd(
-    "video",
+    "vid",
     about={
         "header": "Video Downloader",
         "description": "Baixe vídeos usando o pytube. ;-;",
