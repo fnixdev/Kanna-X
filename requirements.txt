@@ -28,6 +28,7 @@ pySmartDL>=1.3.4
 python-dotenv>=0.15.0
 pytz>=2020.4
 PyPDF2
+pytube
 rarfile>=4.0
 removebg>=0.4
 requests>=2.25.0
