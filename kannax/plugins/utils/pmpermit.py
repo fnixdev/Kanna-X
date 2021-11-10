@@ -41,7 +41,7 @@ async def _init() -> None:
     _blockPmMsg = await SAVED_SETTINGS.find_one({"_id": "CUSTOM BLOCKPM MESSAGE"})
     if _blockPmMsg:
         blocked_message = _blockPmMsg.get("data")
-    _pmMedia = await SAVED.find_one({"_id": "PM_MEDIA"})
+    _pmMedia = await SAVED_SETTINGS.find_one({"_id": "PM_MEDIA"})
     if _pmMedia:
       pm_media = _pmMedia.get("data")
 
