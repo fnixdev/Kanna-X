@@ -6,6 +6,7 @@
 
 import asyncio
 from typing import Dict
+from telegraph import upload_file
 
 from kannax import Config, Message, filters, get_collection, kannax
 from kannax.utils import SafeDict, rand_array
