@@ -316,7 +316,7 @@ async def uninvitedPmHandler(message: Message):
                 del_in=5,
             )
     else:
-        anim = get_media()
+        anim = await get_media()
         pmCounter.update({message.from_user.id: 1})
         PMPERMIT_MSG[message.from_user.id] = (
             await kannax.send_message(message.chat.id, anim)
