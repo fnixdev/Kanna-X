@@ -15,6 +15,8 @@ CHANNEL = kannax.getCLogger(__name__)
 SAVED_SETTINGS = get_collection("CONFIGS")
 ALLOWED_COLLECTION = get_collection("PM_PERMIT")
 PMPERMIT_MSG = {}
+SAVED = get_collection()
+
 
 
 pmCounter: Dict[int, int] = {}
@@ -41,6 +43,9 @@ async def _init() -> None:
     _blockPmMsg = await SAVED_SETTINGS.find_one({"_id": "CUSTOM BLOCKPM MESSAGE"})
     if _blockPmMsg:
         blocked_message = _blockPmMsg.get("data")
+    _pmMedia = await SAVED.find_one({"_id": "PM_MEDIA"})
+    if _pmMedia:
+      pm_media = _pmMedia.get("data")
 
 
 @kannax.on_cmd(
@@ -122,6 +127,36 @@ async def get_id(message: Message):
         except Exception as e:
             await message.err(str(e))
     return userid
+
+
+@kannax.on_cmd(
+    "setpmmsg",
+    about={
+        "header": "Define uma mensagem de PM_Block",
+        "description": "Voçê pode mudar a mensagem padrão com esse comando",
+        "flags": {"-r": "reseta para o padrão"},
+    },
+    allow_channels=False,
+)
+async def ani_save_pm_media(message: Message):
+    """set pm media"""
+    query = message.input_str
+    replied = message.reply_to_message
+    if replied:
+        file = await kannax.download_media(replied)
+        iurl = upload_file(file)
+        media = f"https://telegra.ph{iurl[0]}"
+        await SAVED.update_one(
+            {"_id": "PM_MEDIA"}, {"$set": {"data": media}}, upsert=True
+        )
+        await message.edit("`Pm Media definida com sucesso!`")
+    elif query:
+        await SAVED.update_one(
+                        {"_id": "PM_MEDIA"}, {"$set": {"data": query}}, upsert=True
+        )
+        await message.edit("`Pm Media definida com sucesso!`")
+    else:
+        await message.err("Invalid Syntax")
 
 
 @kannax.on_cmd(
@@ -282,7 +317,8 @@ async def uninvitedPmHandler(message: Message):
                 del_in=5,
             )
     else:
-        anim = rand_array(PMGIF)
+        #
+        anim = get_media(anim)
         pmCounter.update({message.from_user.id: 1})
         PMPERMIT_MSG[message.from_user.id] = (
             await kannax.send_animation(
@@ -292,6 +328,19 @@ async def uninvitedPmHandler(message: Message):
         await asyncio.sleep(1)
         await CHANNEL.log(f"#NOVA_MENSAGEM\n{user_dict['mention']} enviou uma mensagem para você")
 
+
+async def get_media(message: Message):
+    anim = None
+    _pmfindmedia = await SAVED_SETTINGS.find_one({"_id": PM_MEDIA})
+    if _pmfindmedia is None:
+        anim = rand_array(PMGIF)
+    else:
+        media = ""
+        async for link in SAVED_SETTINGS.find():
+            media += f"{link['data']}"
+        anim = media
+    return anim
+    
 
 @kannax.on_filters(
     ~allowAllFilter & filters.outgoing & filters.private & ~Config.ALLOWED_CHATS,
