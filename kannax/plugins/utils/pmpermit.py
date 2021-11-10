@@ -335,10 +335,7 @@ async def get_media(message: Message):
     if _pmfindmedia is None:
         anim = rand_array(PMGIF)
     else:
-        media = ""
-        async for link in SAVED_SETTINGS.find():
-            media += f"{link['data']}"
-        anim = media
+        anim = _pmfindmedia["data"]
     return anim
     
 
