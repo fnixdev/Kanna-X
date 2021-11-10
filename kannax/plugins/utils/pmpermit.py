@@ -145,12 +145,12 @@ async def ani_save_pm_media(message: Message):
         file = await kannax.download_media(replied)
         iurl = upload_file(file)
         media = f"https://telegra.ph{iurl[0]}"
-        await SAVED.update_one(
+        await SAVED_SETTINGS.update_one(
             {"_id": "PM_MEDIA"}, {"$set": {"data": media}}, upsert=True
         )
         await message.edit("`Pm Media definida com sucesso!`")
     elif query:
-        await SAVED.update_one(
+        await SAVED_SETTINGS.update_one(
                         {"_id": "PM_MEDIA"}, {"$set": {"data": query}}, upsert=True
         )
         await message.edit("`Pm Media definida com sucesso!`")
