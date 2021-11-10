@@ -153,6 +153,8 @@ async def ani_save_pm_media(message: Message):
         await SAVED_SETTINGS.update_one(
                         {"_id": "PM_MEDIA"}, {"$set": {"data": query}}, upsert=True
         )
+        data = await SAVED_SETTINGS.find_one({"_id": "PM_MEDIA"})
+        await message.reply(data['data'])
         await message.edit("`Pm Media definida com sucesso!`")
     else:
         await message.err("Invalid Syntax")
