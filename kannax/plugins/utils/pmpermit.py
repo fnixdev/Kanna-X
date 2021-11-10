@@ -153,8 +153,6 @@ async def ani_save_pm_media(message: Message):
         await SAVED_SETTINGS.update_one(
                         {"_id": "PM_MEDIA"}, {"$set": {"data": query}}, upsert=True
         )
-        data = await SAVED_SETTINGS.find_one({"_id": "PM_MEDIA"})
-        await message.reply(data['data'])
         await message.edit("`Pm Media definida com sucesso!`")
     else:
         await message.err("Invalid Syntax")
@@ -321,16 +319,16 @@ async def uninvitedPmHandler(message: Message):
         anim = get_media()
         pmCounter.update({message.from_user.id: 1})
         PMPERMIT_MSG[message.from_user.id] = (
-            await kannax.send_animation(
-                message.chat.id, animation=anim, caption=noPmMessage
-            )
+            await kannax.send_message(message.chat.id, anim)
+            # await kannax.send_animation(
+                # message.chat.id, animation=anim, caption=noPmMessage
+            # )
         ).message_id
         await asyncio.sleep(1)
         await CHANNEL.log(f"#NOVA_MENSAGEM\n{user_dict['mention']} enviou uma mensagem para você")
 
 
 async def get_media():
-    anim = None
     _pmfindmedia = await SAVED_SETTINGS.find_one({"_id": "PM_MEDIA"})
     if _pmfindmedia is None:
         anim = rand_array(PMGIF)
