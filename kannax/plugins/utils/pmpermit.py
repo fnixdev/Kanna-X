@@ -15,8 +15,6 @@ CHANNEL = kannax.getCLogger(__name__)
 SAVED_SETTINGS = get_collection("CONFIGS")
 ALLOWED_COLLECTION = get_collection("PM_PERMIT")
 PMPERMIT_MSG = {}
-SAVED = get_collection()
-
 
 
 pmCounter: Dict[int, int] = {}
@@ -130,10 +128,10 @@ async def get_id(message: Message):
 
 
 @kannax.on_cmd(
-    "setpmmsg",
+    "setpma",
     about={
-        "header": "Define uma mensagem de PM_Block",
-        "description": "Voçê pode mudar a mensagem padrão com esse comando",
+        "header": "Define uma animação para PM_Block",
+        "description": "Voçê pode mudar a animação padrão com esse comando",
         "flags": {"-r": "reseta para o padrão"},
     },
     allow_channels=False,
@@ -317,7 +315,6 @@ async def uninvitedPmHandler(message: Message):
                 del_in=5,
             )
     else:
-        #
         anim = get_media(anim)
         pmCounter.update({message.from_user.id: 1})
         PMPERMIT_MSG[message.from_user.id] = (
