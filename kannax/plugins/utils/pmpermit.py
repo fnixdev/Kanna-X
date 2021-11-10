@@ -331,10 +331,8 @@ async def uninvitedPmHandler(message: Message):
 async def get_media():
     _pmfindmedia = await SAVED_SETTINGS.find_one({"_id": "PM_MEDIA"})
     if _pmfindmedia is None:
-        anim = rand_array(PMGIF)
-    else:
-        anim = _pmfindmedia["data"]
-    return anim
+        return rand_array(PMGIF)
+    return _pmfindmedia["data"]
     
 
 @kannax.on_filters(
