@@ -141,6 +141,9 @@ async def ani_save_pm_media(message: Message):
     """set pm media"""
     query = message.input_str
     replied = message.reply_to_message
+    if "-r" in message.flags:
+        await SAVED_SETTINGS.find_one_and_delete({"_id": "PM_MEDIA"})
+        await message.edit("`Custom PM Media resetada`", del_in=3, log=True)
     if replied:
         file = await kannax.download_media(replied)
         iurl = upload_file(file)
