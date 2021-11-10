@@ -7,9 +7,10 @@
 import asyncio
 from typing import Dict
 from telegraph import upload_file
+import random
 
 from kannax import Config, Message, filters, get_collection, kannax
-from kannax.utils import SafeDict, rand_array
+from kannax.utils import SafeDict
 from kannax.utils.extras import reported_user_image
 
 CHANNEL = kannax.getCLogger(__name__)
@@ -333,7 +334,7 @@ async def uninvitedPmHandler(message: Message):
 async def get_media() -> str:
     _pmfindmedia = await SAVED_SETTINGS.find_one({"_id": "PM_MEDIA"})
     if _pmfindmedia is None:
-        return rand_array(PMGIF)
+        return random.choice(PMGIF)
     return _pmfindmedia["data"]
     
 
