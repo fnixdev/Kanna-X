@@ -316,7 +316,7 @@ async def uninvitedPmHandler(message: Message):
                 del_in=5,
             )
     else:
-        anim = get_media()
+        anim = await get_media()
         pmCounter.update({message.from_user.id: 1})
         PMPERMIT_MSG[message.from_user.id] = (
             await kannax.send_animation(
@@ -327,7 +327,7 @@ async def uninvitedPmHandler(message: Message):
         await CHANNEL.log(f"#NOVA_MENSAGEM\n{user_dict['mention']} enviou uma mensagem para você")
 
 
-def get_media() -> str:
+async def get_media() -> str:
     _pmfindmedia = await SAVED_SETTINGS.find_one({"_id": "PM_MEDIA"})
     if _pmfindmedia is None:
         return rand_array(PMGIF)
