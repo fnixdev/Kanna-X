@@ -142,9 +142,6 @@ async def ani_save_pm_media(message: Message):
     """set pm media"""
     query = message.input_str
     replied = message.reply_to_message
-    if "-r" in message.flags:
-        await SAVED_SETTINGS.delete_one({"_id": "PM_MEDIA"})
-        await message.edit("`Custom PM Media resetada`", del_in=3, log=True)
     if replied:
         file = await kannax.download_media(replied)
         iurl = upload_file(file)
@@ -160,6 +157,23 @@ async def ani_save_pm_media(message: Message):
         await message.edit("`Pm Media definida com sucesso!`")
     else:
         await message.err("Invalid Syntax")
+
+
+@kannax.on_cmd(
+    "delpma",
+    about={
+        "header": "Delete animation",
+        "description": "Voçê pode voltar para a animação padrão com esse comando",
+      },
+    allow_channels=False,
+)
+async def ani_del_pm_media(message: Message):
+    _findpma = await SAVED_SETTINGS.find_one({"_id": "PM_MEDIA"})
+    if _findpma is None:
+        await message.edit("`Você ainda não definiu uma animação para PM Block`")
+    else:
+        await SAVED_SETTINGS.delete_one({"_id": "PM_MEDIA"})
+        await message.edit("`Custom PM Media resetada`", del_in=3, log=True)
 
 
 @kannax.on_cmd(
