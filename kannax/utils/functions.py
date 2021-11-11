@@ -170,7 +170,3 @@ class AttributeDict(dict):
 
     def __setattr__(self, attr, value):
         self[attr] = value
-
-# capitalise
-async def capitaled(query: str):
-    query_split = query.split()
