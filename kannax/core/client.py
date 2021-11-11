@@ -21,7 +21,7 @@ from typing import List, Awaitable, Any, Optional, Union
 
 from pyrogram import idle
 
-from kannax import Config, logbot, logging
+from kannax import Config, logbot, logging,
 from kannax.utils import time_formatter
 from kannax.utils.exceptions import KannaXBotNotFound
 from kannax.plugins import get_all_plugins
@@ -210,7 +210,7 @@ class KannaX(_AbstractKannaX):
                 _LOG.info(_LOG_STR, f"Running Coroutine - {mode}")
                 self.loop.run_until_complete(coro)
             else:
-                _LOG.info(_LOG_STR, f"Idling USERGE-X - {mode}")
+                _LOG.info(_LOG_STR, f"KannaX - {mode}")
                 idle()
             self.loop.run_until_complete(_finalize())
         except (asyncio.exceptions.CancelledError, RuntimeError):
