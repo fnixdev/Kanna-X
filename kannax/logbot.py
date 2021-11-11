@@ -48,3 +48,4 @@ def del_last_msg() -> None:
 def end() -> None:
     """ terminar sessão de bot """
     _send_data("quit")
+    

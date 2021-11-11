@@ -21,7 +21,7 @@ from typing import List, Awaitable, Any, Optional, Union
 
 from pyrogram import idle
 
-from kannax import Config, logbot, logging, Message
+from kannax import Config, logbot, logging,
 from kannax.utils import time_formatter
 from kannax.utils.exceptions import KannaXBotNotFound
 from kannax.plugins import get_all_plugins
@@ -202,12 +202,7 @@ class KannaX(_AbstractKannaX):
         self.loop.run_until_complete(self.start())
         for task in self._tasks:
             running_tasks.append(self.loop.create_task(task()))
-        logbot.del_last_msg()
-        anim = ["https://telegra.ph/file/0d11986c41a219d011152.gif"]
-        msg_ = "`KannaX iniciado com sucesso !`"
-        await kannax.bot.send_animation(
-         message.chat.id, animation=anim, caption=msg_
-              )
+        logbot.edit_last_msg("KannaX foi iniciado com sucesso !")
         logbot.end()
         mode = "[DUAL]" if RawClient.DUAL_MODE else "[BOT]" if Config.BOT_TOKEN else "[USER]"
         try:
@@ -225,11 +220,3 @@ class KannaX(_AbstractKannaX):
             _LOG.info(_LOG_STR, "Loop Closed !")
             if _SEND_SIGNAL:
                 os.kill(os.getpid(), signal.SIGUSR1)
-
-async def _started(message: Message):
-    anim = ["https://telegra.ph/file/0d11986c41a219d011152.gif"]
-    msg_ = "`KannaX iniciado com sucesso !`"
-    started = await kannax.bot.send_animation(
-      message.chat.id, animation=anim, caption=msg_
-      )
-    return started
