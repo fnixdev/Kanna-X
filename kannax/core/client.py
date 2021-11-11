@@ -21,7 +21,7 @@ from typing import List, Awaitable, Any, Optional, Union
 
 from pyrogram import idle
 
-from kannax import Config, logbot, logging,
+from kannax import Config, logbot, logging, Message
 from kannax.utils import time_formatter
 from kannax.utils.exceptions import KannaXBotNotFound
 from kannax.plugins import get_all_plugins
