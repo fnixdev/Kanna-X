@@ -4,10 +4,7 @@
 #
 # Editado por fnixdev
 
-__all__ = ["send_msg", "reply_last_msg", "edit_last_msg", "del_last_msg", "end", "_started"]
-
-
-from kannax import kannax, Message
+__all__ = ["send_msg", "reply_last_msg", "edit_last_msg", "del_last_msg", "end"]
 
 
 def _log(func):
@@ -51,12 +48,3 @@ def del_last_msg() -> None:
 def end() -> None:
     """ terminar sessão de bot """
     _send_data("quit")
-
-
-async def _started(message: Message):
-    anim = ["https://telegra.ph/file/0d11986c41a219d011152.gif"]
-    msg_ = "`KannaX iniciado com sucesso !`"
-    started = await kannax.bot.send_animation(
-      message.chat.id, animation=anim, caption=msg_
-      )
-    return started

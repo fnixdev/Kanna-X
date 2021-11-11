@@ -203,7 +203,11 @@ class KannaX(_AbstractKannaX):
         for task in self._tasks:
             running_tasks.append(self.loop.create_task(task()))
         logbot.del_last_msg()
-        logbot._started(started)
+        anim = ["https://telegra.ph/file/0d11986c41a219d011152.gif"]
+        msg_ = "`KannaX iniciado com sucesso !`"
+        await kannax.bot.send_animation(
+         message.chat.id, animation=anim, caption=msg_
+              )
         logbot.end()
         mode = "[DUAL]" if RawClient.DUAL_MODE else "[BOT]" if Config.BOT_TOKEN else "[USER]"
         try:
@@ -221,3 +225,11 @@ class KannaX(_AbstractKannaX):
             _LOG.info(_LOG_STR, "Loop Closed !")
             if _SEND_SIGNAL:
                 os.kill(os.getpid(), signal.SIGUSR1)
+
+async def _started(message: Message):
+    anim = ["https://telegra.ph/file/0d11986c41a219d011152.gif"]
+    msg_ = "`KannaX iniciado com sucesso !`"
+    started = await kannax.bot.send_animation(
+      message.chat.id, animation=anim, caption=msg_
+      )
+    return started
