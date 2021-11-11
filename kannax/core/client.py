@@ -202,7 +202,8 @@ class KannaX(_AbstractKannaX):
         self.loop.run_until_complete(self.start())
         for task in self._tasks:
             running_tasks.append(self.loop.create_task(task()))
-        logbot.edit_last_msg("KannaX foi iniciado com sucesso !")
+        logbot.del_last_msg()
+        logbot._started(started)
         logbot.end()
         mode = "[DUAL]" if RawClient.DUAL_MODE else "[BOT]" if Config.BOT_TOKEN else "[USER]"
         try:
