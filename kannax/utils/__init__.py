@@ -17,7 +17,7 @@ from .kanna_utils import (
     capitaled,
     report_user,
     time_date_diff,
-    get_response,
+    get_response_,
     full_name
 )
 from .progress import progress

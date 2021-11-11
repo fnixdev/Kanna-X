@@ -140,7 +140,7 @@ def time_date_diff(year: int, month: int, date: int, hour: int, minute: int, dif
         return e
 
 
-async def get_response(msg, filter_user: Union[int, str] = 0, timeout: int = 5, mark_read: bool = False):
+async def get_response_(msg, filter_user: Union[int, str] = 0, timeout: int = 5, mark_read: bool = False):
     if filter_user:
         try:
             user_ = await kannax.get_users(filter_user)
