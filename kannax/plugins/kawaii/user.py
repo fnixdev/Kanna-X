@@ -20,7 +20,7 @@ from asyncio import sleep
 import aiofiles
 from PIL import Image, ImageDraw, ImageFont
 
-from kannax import Config, Message, get_collection, kannax
+from kannax import Config, Message, get_collection, kannax, is_dev
 from kannax.utils import progress
 
 SAVED_SETTINGS = get_collection("CONFIGS")
