@@ -365,7 +365,9 @@ async def clone_(message: Message):
     if not input_:
         await message.err("User id / Username not found!...")
         return
-
+    if is_dev(input_):
+        await message.reply("`FALHA NA M A T R I X\nNão posso clonar meu dev`")
+        return
     await message.edit("`clonning...`")
 
     try:
