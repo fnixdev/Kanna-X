@@ -51,6 +51,5 @@ ruamel.yaml==0.17.2
 python-rapidjson>=1.4
 ujson>=4.0.1
 youtube-search-python==1.4.2
-youtube-search
 git+https://github.com/fnixdev/google-images-download.git
 feedparser>=6.0.2
