@@ -72,7 +72,7 @@ F
     await message.edit(out_str)
 
 
-@kannax.on_cmd("rt", about={"header": "rt message"}, trigger="", allow_via_bot=False)
+@kannax.on_cmd("(rt|Rt,)", about={"header": "rt message"}, trigger="", allow_via_bot=False)
 async def rt_(message: Message):
     """rt mensagem"""
     retweet = message.reply_to_message
