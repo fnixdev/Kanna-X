@@ -49,25 +49,6 @@ async def rename_(message: Message):
 
 
 @kannax.on_cmd(
-    "convert",
-    about={
-        "header": "Convert telegram files",
-        "usage": "reply {tr}convert to any media",
-    },
-    del_pre=True,
-    check_downpath=True,
-)
-async def convert_(message: Message):
-    """convert telegram files"""
-    await message.edit("`Trying to Convert ...`")
-    if message.reply_to_message and message.reply_to_message.media:
-        message.text = "" if message.reply_to_message.document else ". -d"
-        await _handle_message(message)
-    else:
-        await message.edit("Please read `.help convert`", del_in=5)
-
-
-@kannax.on_cmd(
     "upload",
     about={
         "header": "Upload files to telegram",
