@@ -449,3 +449,19 @@ async def revert_(message: Message):
         await kannax.delete_profile_photos(photo.file_id)
         os.remove(PHOTO)
     await message.edit("```Profile is Successfully Reverted...```", del_in=3)
+
+
+@kannax.on_cmd(
+    "save",
+    about={
+        "header": "Salvar mensagens",
+        "description": "Encaminha uma mensagem para suas mensagens salvas",
+        "usage": "{tr}save (reply msg)",
+    },
+)
+async def save_(message: Message):
+    """save msg"""
+    if not message.reply_to_message:
+        return await message.err("`Você precisa responder a uma mensagem`", del_in=5)
+    await message.reply_to_message.forward("self")
+    await message.edit("`A mensagem foi salva`")
