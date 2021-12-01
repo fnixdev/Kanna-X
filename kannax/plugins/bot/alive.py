@@ -41,7 +41,7 @@ async def _init() -> None:
                 LOGGER.debug(b_rr)
 
 
-@kannax.on_cmd("alive", about={"header": "Just For Fun"}, allow_channels=False)
+@kannax.on_cmd("ialive", about={"header": "Just For Fun"}, allow_channels=False)
 async def alive_inline(message: Message):
     try:
         if message.client.is_bot:

@@ -1,11 +1,12 @@
+# new alive plugin for KannaX by @fnixdev
+
 from kannax import Message, get_collection, kannax, get_version
 from kannax.utils import rand_array
 from kannax.plugins.bot.alive import Bot_Alive 
 from kannax.versions import __python_version__
 from telegraph import upload_file
-from pyrogram.errors import MediaEmpty, WebpageCurlFailed
 
-SAVED = get_collection("TESTE_DB")
+SAVED = get_collection("ALIVE_DB")
 
 ALIVE_MSG = {}
 
@@ -22,11 +23,12 @@ async def _init():
 @kannax.on_cmd(
     "setamedia",
     about={
-        "header": "Define uma mídia para alive",
+        "header": "Set alive media",
+        "description": "Voçê pode definir uma mídia para aparecer em seu Alive",
     },
 )
 async def ani_save_media_alive(message: Message):
-    """Set Media DB"""
+    """set media alive"""
     query = message.input_str
     replied = message.reply_to_message
     if replied:
@@ -50,10 +52,11 @@ async def ani_save_media_alive(message: Message):
     "setamsg",
     about={
         "header": "Define uma mensagem para alive",
+        "description": "Voçê pode definir uma mensagem para aparecer em seu Alive",
     },
 )
-async def ani_save_media_alive(message: Message):
-    """Set alive msg"""
+async def save_msg_alive(message: Message):
+    """set alive msg"""
     query = message.input_str
     replied = message.reply_to_message.text
     if replied:
@@ -71,12 +74,13 @@ async def ani_save_media_alive(message: Message):
 
 
 @kannax.on_cmd(
-    "aliv",
+    "alive",
     about={
-        "header": "Alive Media Settings",
+        "header": "Alive apenas",
     },
 )
 async def view_del_ani(message: Message):
+    """new alive"""
     _findpma = await SAVED.find_one({"_id": "ALIVE_MEDIA"})
     _findamsg = await SAVED.find_one({"_id": "ALIVE_MSG"})
     if _findpma is None:
@@ -90,12 +94,14 @@ async def view_del_ani(message: Message):
     alive_msg = f"""
 {msg}
 
-   {mmsg}
+    {mmsg}
 
-▫️ Modo :  `{Bot_Alive._get_mode()}`
-▫️ Uptime  :  `{kannax.uptime}`
-▫️ Bot Version  :  `v{get_version()}`
-▫️ Python Version  :  `v{__python_version__}`
+• **Modo** :  `{Bot_Alive._get_mode()}`
+• **Uptime**  :  `{kannax.uptime}`
+• **Bot Version**  :  `v{get_version()}`
+• **Python Version**  :  `v{__python_version__}`
+
+    ✨ [Suporte](https://t.me/fnixsup) | 👾 [Repo](https://github.com/fnixdev/Kanna-X)
 """
     if media.endswith((".gif", ".mp4")):
         await message.client.send_animation(
@@ -107,17 +113,18 @@ async def view_del_ani(message: Message):
         await message.client.send_photo(
             chat_id=message.chat.id, photo=media, caption=alive_msg
         )
+    await message.delete()
 
 
 @kannax.on_cmd(
     "delamsg",
     about={
-        "header": "Delete mídia",
-        "description": "Voçê pode voltar para a animação padrão com esse comando",
+        "header": "Delete alive message",
+        "description": "Retorna a mensagem de Alive para o padrão",
       },
-    allow_channels=False,
 )
-async def ani_del_a_msg(message: Message):
+async def del_a_msg(message: Message):
+    """del msg alive"""
     _findamsg = await SAVED.find_one({"_id": "ALIVE_MSG"})
     if _findamsg is None:
         await message.edit("`Você ainda não definiu uma mensagem para Alive`")
