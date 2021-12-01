@@ -52,14 +52,14 @@ async def view_del_ani(message: Message):
     msg = "ᴏɪ ᴍᴇsᴛʀᴇ, ᴋᴀɴɴᴀx ɪ'ᴛs ᴀʟɪᴠᴇ"
     async for link in SAVED.find():
         media += f"{link['link']}"
-    if media.endswith(".gif", ".mp4"):
+    if media.endswith((".gif", ".mp4")):
         await message.client.send_animation(
             chat_id=message.chat.id,
-            animation=link
+            animation=media
         )
     else:
         await message.client.send_photo(
-            chat_id=message.chat.id, photo=link
+            chat_id=message.chat.id, photo=media
         )
 
 
