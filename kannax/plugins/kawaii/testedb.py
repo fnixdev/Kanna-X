@@ -1,5 +1,6 @@
 from kannax import Message, get_collection, kannax
 from telegraph import upload_file
+from pyrogram.errors import MediaEmpty, WebpageCurlFailed
 
 SAVED = get_collection("TESTE_DB")
 
