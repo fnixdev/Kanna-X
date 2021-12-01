@@ -85,7 +85,7 @@ async def view_del_ani(message: Message):
         mmsg = rand_array(FRASES)
     else:
         mmsg = _findamsg.get("data")
-    media = ""
+    media = _findpma.get("link")
     msg = "ᴏɪ ᴍᴇsᴛʀᴇ, ᴋᴀɴɴᴀx ɪ'ᴛs ᴀʟɪᴠᴇ"
     alive_msg = f"""
 {msg}
@@ -97,8 +97,6 @@ async def view_del_ani(message: Message):
 ▫️ Bot Version  :  `v{get_version()}`
 ▫️ Python Version  :  `v{__python_version__}`
 """
-    async for link in SAVED.find():
-        media += f"{link['link']}"
     if media.endswith((".gif", ".mp4")):
         await message.client.send_animation(
             chat_id=message.chat.id,
