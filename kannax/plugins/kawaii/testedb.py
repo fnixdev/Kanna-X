@@ -7,6 +7,7 @@ from pyrogram.errors import MediaEmpty, WebpageCurlFailed
 
 SAVED = get_collection("TESTE_DB")
 
+ALIVE_MSG = {}
 
 async def _init():
     global ALIVE_MEDIA, ALIVE_MSG  # pylint: disable=global-statement
@@ -15,7 +16,7 @@ async def _init():
         ALIVE_MEDIA = link["link"]
     _AliveMsg = await SAVED.find_one({"_id": "CUSTOM_MSG"})
     if _AliveMsg:
-        ALIVE_MSG = _AliveMsg.get("data")
+        ALIVE_MSG = _AliveMsg["data"]
 
 
 @kannax.on_cmd(
@@ -54,8 +55,8 @@ async def ani_save_media_alive(message: Message):
 async def ani_save_media_alive(message: Message):
     """Set alive msg"""
     query = message.input_str
-    replied = message.reply_to_message
-    if replied.text:
+    replied = message.reply_to_message.text
+    if replied:
         await SAVED.update_one(
             {"_id": "ALIVE_MSG"}, {"$set": {"data": replied}}, upsert=True
         )
