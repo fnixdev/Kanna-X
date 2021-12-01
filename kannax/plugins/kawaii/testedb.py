@@ -41,16 +41,15 @@ async def ani_save_media_alive(message: Message):
     "vtest",
     about={
         "header": "Alive Media Settings",
-        "flags": {"-d": "Delete test", "-v": "Ver test", "-a": "Send Animation"},
     },
 )
 async def view_del_ani(message: Message):
     """View or Delete Alive Media"""
     try:
-        await send_nekos(message, link)
+        await send_alive_(message, link)
     except (MediaEmpty, WebpageCurlFailed):
         link = download(link)
-        await send_nekos(message, link)
+        await send_alive_(message, link)
         os.remove(link)
     else:
         await message.err("`Alive Media não está definida.`")
@@ -78,8 +77,6 @@ async def send_alive_(message: Message, link: str):
     async for link in SAVED.find():
         media += f"{link['link']}"
     if media.endswith(".gif", ".mp4"):
-        #  Bots can't use "unsave=True"
-        bool_unsave = not message.client.is_bot
         await message.client.send_animation(
             chat_id=message.chat.id,
             animation=link
