@@ -46,23 +46,45 @@ async def ani_save_media_alive(message: Message):
 )
 async def view_del_ani(message: Message):
     """View or Delete Alive Media"""
-    if not message.flags:
-        await message.err("Flag Required")
-        return
+    try:
+        await send_nekos(message, link)
+    except (MediaEmpty, WebpageCurlFailed):
+        link = download(link)
+        await send_nekos(message, link)
+        os.remove(link)
+    else:
+        await message.err("`Alive Media não está definida.`")
+
+
+@kannax.on_cmd(
+    "deltest",
+    about={
+        "header": "Delete mídia",
+        "description": "Voçê pode voltar para a animação padrão com esse comando",
+      },
+    allow_channels=False,
+)
+async def ani_del_pm_media(message: Message):
+    _findpma = await SAVED_SETTINGS.find_one({"_id": "ALIVE_MEDIA"})
+    if _findpma is None:
+        await message.edit("`Você ainda não definiu uma mídia para Alive`")
+    else:
+        await SAVED.drop()
+        await message.edit("`Alive Media excluida`", del_in=3, log=True)
+
+async def send_alive_(message: Message, link: str):
     media = ""
     msg = "ᴏɪ ᴍᴇsᴛʀᴇ, ᴋᴀɴɴᴀx ɪ'ᴛs ᴀʟɪᴠᴇ"
     async for link in SAVED.find():
         media += f"{link['link']}"
-    if media:
-        if "-d" in message.flags:
-            await SAVED.drop()
-            await message.edit("`Alive Media excluída!`")
-        if "-v" in message.flags:
-            await message.edit(media)
-        if "-a" in message.flags:
-            await message.client.send_animation(
-                  chat_id=message.chat.id,
-                  animation=media,
-                  caption=msg)
+    if media.endswith(".gif", ".mp4"):
+        #  Bots can't use "unsave=True"
+        bool_unsave = not message.client.is_bot
+        await message.client.send_animation(
+            chat_id=message.chat.id,
+            animation=link
+        )
     else:
-        await message.err("`Alive Media não está definida.`")
+        await message.client.send_photo(
+            chat_id=message.chat.id, photo=link
+        )
