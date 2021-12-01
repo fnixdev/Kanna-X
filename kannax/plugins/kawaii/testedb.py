@@ -45,34 +45,9 @@ async def ani_save_media_alive(message: Message):
     },
 )
 async def view_del_ani(message: Message):
-    """View or Delete Alive Media"""
-    try:
-        await send_alive_(message, link)
-    except (MediaEmpty, WebpageCurlFailed):
-        link = download(link)
-        await send_alive_(message, link)
-        os.remove(link)
-    else:
-        await message.err("`Alive Media não está definida.`")
-
-
-@kannax.on_cmd(
-    "deltest",
-    about={
-        "header": "Delete mídia",
-        "description": "Voçê pode voltar para a animação padrão com esse comando",
-      },
-    allow_channels=False,
-)
-async def ani_del_pm_media(message: Message):
-    _findpma = await SAVED_SETTINGS.find_one({"_id": "ALIVE_MEDIA"})
+    _findpma = await SAVED.find_one({"_id": "ALIVE_MEDIA"})
     if _findpma is None:
-        await message.edit("`Você ainda não definiu uma mídia para Alive`")
-    else:
-        await SAVED.drop()
-        await message.edit("`Alive Media excluida`", del_in=3, log=True)
-
-async def send_alive_(message: Message, link: str):
+        return await message.err("`Alive Media não está definida.`")
     media = ""
     msg = "ᴏɪ ᴍᴇsᴛʀᴇ, ᴋᴀɴɴᴀx ɪ'ᴛs ᴀʟɪᴠᴇ"
     async for link in SAVED.find():
@@ -86,3 +61,20 @@ async def send_alive_(message: Message, link: str):
         await message.client.send_photo(
             chat_id=message.chat.id, photo=link
         )
+
+
+@kannax.on_cmd(
+    "deltest",
+    about={
+        "header": "Delete mídia",
+        "description": "Voçê pode voltar para a animação padrão com esse comando",
+      },
+    allow_channels=False,
+)
+async def ani_del_pm_media(message: Message):
+    _findpma = await SAVED.find_one({"_id": "ALIVE_MEDIA"})
+    if _findpma is None:
+        await message.edit("`Você ainda não definiu uma mídia para Alive`")
+    else:
+        await SAVED.drop()
+        await message.edit("`Alive Media excluida`", del_in=3, log=True)
