@@ -7,17 +7,21 @@ from pyrogram.errors import MediaEmpty, WebpageCurlFailed
 
 SAVED = get_collection("TESTE_DB")
 
+
 async def _init():
-    global ALIVE_MEDIA  # pylint: disable=global-statement
+    global ALIVE_MEDIA, ALIVE_MSG  # pylint: disable=global-statement
     link = await SAVED.find_one({"_id": "ALIVE_MEDIA"})
     if link:
         ALIVE_MEDIA = link["link"]
+    _AliveMsg = await SAVED.find_one({"_id": "CUSTOM_MSG"})
+    if _AliveMsg:
+        ALIVE_MSG = _AliveMsg.get("data")
 
 
 @kannax.on_cmd(
-    "settest",
+    "setamedia",
     about={
-        "header": "apenas teste",
+        "header": "Define uma mídia para alive",
     },
 )
 async def ani_save_media_alive(message: Message):
@@ -42,27 +46,55 @@ async def ani_save_media_alive(message: Message):
 
 
 @kannax.on_cmd(
-    "vtest",
+    "setamsg",
+    about={
+        "header": "Define uma mensagem para alive",
+    },
+)
+async def ani_save_media_alive(message: Message):
+    """Set alive msg"""
+    query = message.input_str
+    replied = message.reply_to_message
+    if replied.text:
+        await SAVED.update_one(
+            {"_id": "ALIVE_MSG"}, {"$set": {"data": replied}}, upsert=True
+        )
+        await message.edit("`Mensagem para alive definida com sucesso!`")
+    elif query:
+        await SAVED.update_one(
+                        {"_id": "ALIVE_MSG"}, {"$set": {"data": query}}, upsert=True
+        )
+        await message.edit("`Mensagem para alive definida com sucesso!`")
+    else:
+        await message.err("Invalid Syntax")
+
+
+@kannax.on_cmd(
+    "aliv",
     about={
         "header": "Alive Media Settings",
     },
 )
 async def view_del_ani(message: Message):
     _findpma = await SAVED.find_one({"_id": "ALIVE_MEDIA"})
+    _findamsg = await SAVED.find_one({"_id": "ALIVE_MSG"})
     if _findpma is None:
         return await message.err("`Alive Media não está definida.`")
-    rand = rand_array(FRASES)
+    if _findamsg is None:
+        mmsg = rand_array(FRASES)
+    else:
+        mmsg = _findamsg.get("data")
     media = ""
     msg = "ᴏɪ ᴍᴇsᴛʀᴇ, ᴋᴀɴɴᴀx ɪ'ᴛs ᴀʟɪᴠᴇ"
     alive_msg = f"""
 {msg}
 
-「 {rand} 」
+   {mmsg}
 
-▫️ ᴍᴏᴅᴏ :  {Bot_Alive._get_mode()}
-▫️ ᴜᴘᴛɪᴍᴇ  :  {kannax.uptime}
-▫️ ᴠᴇʀsɪᴏɴ  :  v{get_version()}
-▫️ ʙᴏᴛ ᴠᴇʀsɪᴏɴ  :  v{__python_version__}
+▫️ Modo :  `{Bot_Alive._get_mode()}`
+▫️ Uptime  :  `{kannax.uptime}`
+▫️ Bot Version  :  `v{get_version()}`
+▫️ Python Version  :  `v{__python_version__}`
 """
     async for link in SAVED.find():
         media += f"{link['link']}"
@@ -79,21 +111,21 @@ async def view_del_ani(message: Message):
 
 
 @kannax.on_cmd(
-    "deltest",
+    "delamsg",
     about={
         "header": "Delete mídia",
         "description": "Voçê pode voltar para a animação padrão com esse comando",
       },
     allow_channels=False,
 )
-async def ani_del_pm_media(message: Message):
-    _findpma = await SAVED.find_one({"_id": "ALIVE_MEDIA"})
-    if _findpma is None:
-        await message.edit("`Você ainda não definiu uma mídia para Alive`")
+async def ani_del_a_msg(message: Message):
+    _findamsg = await SAVED.find_one({"_id": "ALIVE_MSG"})
+    if _findamsg is None:
+        await message.edit("`Você ainda não definiu uma mensagem para Alive`")
     else:
-        await SAVED.drop()
-        await message.edit("`Alive Media excluida`", del_in=3, log=True)
-
+        await SAVED.find_one_and_delete({"_id": "ALIVE_MSG"})
+        await message.edit("`Alive msg excluida`", del_in=3, log=True)
+ 
 
 FRASES = (
     "ʟᴇᴍʙʀᴇ-sᴇ ᴅᴀ ʟɪᴄ̧ᴀ̃ᴏ ᴇ ɴᴀ̃ᴏ ᴅᴀ ᴅᴇᴄᴇᴘᴄ̧ᴀ̃ᴏ.",
