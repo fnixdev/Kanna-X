@@ -1,8 +1,10 @@
 # new alive plugin for KannaX by @fnixdev
 
+"""novo alive para kannax"""
+
 from kannax import Message, get_collection, kannax, get_version
 from kannax.utils import rand_array
-from kannax.plugins.bot.alive import Bot_Alive 
+from kannax.plugins.bot.ialive import Bot_Alive 
 from kannax.versions import __python_version__
 from telegraph import upload_file
 
@@ -38,12 +40,12 @@ async def ani_save_media_alive(message: Message):
         await SAVED.update_one(
             {"_id": "ALIVE_MEDIA"}, {"$set": {"link": media}}, upsert=True
         )
-        await message.edit("`Alive Media definida com sucesso!`")
+        await message.edit("`Alive Media definida com sucesso!`", del_in=5, log=True)
     elif query:
         await SAVED.update_one(
                         {"_id": "ALIVE_MEDIA"}, {"$set": {"link": query}}, upsert=True
         )
-        await message.edit("`Alive Media definida com sucesso!`")
+        await message.edit("`Alive Media definida com sucesso!`", del_in=5, log=True)
     else:
         await message.err("Invalid Syntax")
 
@@ -57,18 +59,14 @@ async def ani_save_media_alive(message: Message):
 )
 async def save_msg_alive(message: Message):
     """set alive msg"""
-    query = message.input_str
     replied = message.reply_to_message.text
+    if not replied:
+        return await message.edit("`Você precisa responder a uma mensagem pra salva-la`", del_in=5)
     if replied:
         await SAVED.update_one(
             {"_id": "ALIVE_MSG"}, {"$set": {"data": replied}}, upsert=True
         )
-        await message.edit("`Mensagem para alive definida com sucesso!`")
-    elif query:
-        await SAVED.update_one(
-                        {"_id": "ALIVE_MSG"}, {"$set": {"data": query}}, upsert=True
-        )
-        await message.edit("`Mensagem para alive definida com sucesso!`")
+        await message.edit("`Mensagem para alive definida com sucesso!`", del_in=5, log=True)
     else:
         await message.err("Invalid Syntax")
 
@@ -84,7 +82,7 @@ async def view_del_ani(message: Message):
     _findpma = await SAVED.find_one({"_id": "ALIVE_MEDIA"})
     _findamsg = await SAVED.find_one({"_id": "ALIVE_MSG"})
     if _findpma is None:
-        return await message.err("`Alive Media não está definida.`")
+        return await message.err("`Alive Media não está definida.`", del_in=5)
     if _findamsg is None:
         mmsg = rand_array(FRASES)
     else:
@@ -94,14 +92,14 @@ async def view_del_ani(message: Message):
     alive_msg = f"""
 {msg}
 
-    {mmsg}
+{mmsg}
 
 • **Modo** :  `{Bot_Alive._get_mode()}`
 • **Uptime**  :  `{kannax.uptime}`
 • **Bot Version**  :  `v{get_version()}`
 • **Python Version**  :  `v{__python_version__}`
 
-    ✨ [Suporte](https://t.me/fnixsup) | 👾 [Repo](https://github.com/fnixdev/Kanna-X)
+    ✨ [sᴜᴘᴏʀᴛᴇ ](https://t.me/fnixsup) | 👾 [ʀᴇᴘᴏ](https://github.com/fnixdev/Kanna-X)
 """
     if media.endswith((".gif", ".mp4")):
         await message.client.send_animation(
@@ -120,17 +118,17 @@ async def view_del_ani(message: Message):
     "delamsg",
     about={
         "header": "Delete alive message",
-        "description": "Retorna a mensagem de Alive para o padrão",
+        "description": "Retorna a mensagem de Alive「 para o padrão",
       },
 )
 async def del_a_msg(message: Message):
     """del msg alive"""
     _findamsg = await SAVED.find_one({"_id": "ALIVE_MSG"})
     if _findamsg is None:
-        await message.edit("`Você ainda não definiu uma mensagem para Alive`")
+        await message.edit("`Você ainda não definiu uma mensagem para Alive`", del_in=5)
     else:
         await SAVED.find_one_and_delete({"_id": "ALIVE_MSG"})
-        await message.edit("`Alive msg excluida`", del_in=3, log=True)
+        await message.edit("`Alive msg excluida`", del_in=5, log=True)
  
 
 FRASES = (

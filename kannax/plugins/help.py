@@ -25,7 +25,7 @@ from kannax.utils import get_file_id, get_response
 from kannax.utils import parse_buttons as pb
 from kannax.utils import rand_key
 
-from .bot.alive import Bot_Alive
+from .bot.ialive import Bot_Alive
 from .bot.utube_inline import (
     download_button,
     get_yt_video_id,

@@ -49,7 +49,7 @@ async def _init() -> None:
 
 
 @kannax.on_cmd(
-    "(a|approve)$",
+    "a",
     about={
         "header": "Permite alguem a enviar mensagens no privado",
         "usage": "{tr}a [username | userID]\nresponda {tr}a a uma mensagem"
@@ -85,7 +85,7 @@ async def allow(message: Message):
 
 
 @kannax.on_cmd(
-    "(da|disapprove)$",
+    "da",
     about={
         "header": "Activates guarding on inbox",
         "description": "Ones someone is allowed, "
