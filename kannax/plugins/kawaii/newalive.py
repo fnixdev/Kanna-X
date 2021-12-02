@@ -59,12 +59,13 @@ async def ani_save_media_alive(message: Message):
 )
 async def save_msg_alive(message: Message):
     """set alive msg"""
-    replied = message.reply_to_message.text
-    if not replied:
+    replied = message.reply_to_message
+    rep = replied.text
+    if not rep:
         return await message.edit("`Você precisa responder a uma mensagem pra salva-la`", del_in=5)
-    if replied:
+    if rep:
         await SAVED.update_one(
-            {"_id": "ALIVE_MSG"}, {"$set": {"data": replied}}, upsert=True
+            {"_id": "ALIVE_MSG"}, {"$set": {"data": rep}}, upsert=True
         )
         await message.edit("`Mensagem para alive definida com sucesso!`", del_in=5, log=True)
     else:
