@@ -61,7 +61,7 @@ async def save_msg_alive(message: Message):
     """set alive msg"""
     rep = message.input_or_reply_str
     if not rep:
-        return await message.edit("`Você precisa responder a uma mensagem pra salva-la`", del_in=5)
+        return await message.edit("`Você precisa digitar ou responder a uma mensagem pra salva-la`", del_in=6)
     if rep:
         await SAVED.update_one(
             {"_id": "ALIVE_MSG"}, {"$set": {"data": rep}}, upsert=True
