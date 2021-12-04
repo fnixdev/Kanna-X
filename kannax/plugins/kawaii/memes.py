@@ -560,10 +560,12 @@ async def kill_func(message):
 @kannax.on_cmd("sexo", about={"header": "sexoooooooooooo"})
 async def snake_(message: Message):
     """muito sexo"""
-    out_str = f"""
+    out = f"""
 
 HOLY SHIT!!
+"""
 
+    out2 = f"""
         IS THAT A 
 MOTHERFUCKING
 
@@ -573,7 +575,12 @@ MOTHERFUCKING
 
            REFERENCE???
 
+"""
+    out3 = f"""
 Perai...é aqui que estão falando de...
+"""
+
+    out4 = f"""
 KKKKKKKKKK
 KKKKKKKKKK
 KKKK
@@ -628,4 +635,10 @@ KKK        KKK
       KKK
 
 """
-    await message.edit(out_str)
+    await message.edit(out)
+    asyncio.sleep(3)
+    await message.edit(out2)
+    asyncio.sleep(3)
+    await message.edit(out3)
+    asyncio.sleep(3)
+    await message.edit(out4)
