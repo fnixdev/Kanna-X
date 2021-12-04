@@ -11,7 +11,7 @@ import wget
 import datetime
 import math
 from cowpy import cow
-from random imoort randint, choice
+from random import randint, choice
 
 from kannax import Message, kannax
 
