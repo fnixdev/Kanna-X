@@ -636,9 +636,9 @@ KKK        KKK
 
 """
     await message.edit(out)
-    asyncio.sleep(3)
+    await asyncio.sleep(3)
     await message.edit(out2)
-    asyncio.sleep(3)
+    await asyncio.sleep(3)
     await message.edit(out3)
-    asyncio.sleep(3)
+    await asyncio.sleep(3)
     await message.edit(out4)
