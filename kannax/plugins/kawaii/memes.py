@@ -554,3 +554,78 @@ async def kill_func(message):
     for i in range(10):
         await asyncio.sleep(0.6)
         await message.edit(animation_chars[i % 10], parse_mode="html")
+
+
+
+@kannax.on_cmd("sexo", about={"header": "sexoooooooooooo"})
+async def snake_(message: Message):
+    """muito sexo"""
+    out_str = f"""
+HOLY SHIT!!
+
+        IS THAT A 
+MOTHERFUCKING
+
+█▀▀ █▀▀ █─█ █▀▀█ 
+▀▀█ █▀▀ ▄▀▄ █──█ 
+▀▀▀ ▀▀▀ ▀─▀ ▀▀▀▀
+
+           REFERENCE???
+
+Perai...é aqui que estão falando de...
+
+
+KKKKKKKKKK
+KKKKKKKKKK
+KKKK
+KKKK
+KKKKKKKKKK
+KKKKKKKKKK
+      KKKK
+      KKKK
+KKKKKKKKKK
+KKKKKKKKKK
+
+KKKKKKKKKK
+KKKKKKKKKK
+KKKK
+KKKK
+KKKKKKKKKK
+KKKKKKKKKK
+KKKK
+KKKK
+KKKKKKKKKK
+KKKKKKKKKK
+
+KKKK      KKKK
+ KKKK    KKKK
+   KKKK KKKK
+    KKKKKK
+    KKKKKK
+    KKKKKK
+  KKKK   KKKK
+KKKK       KKKK
+
+KKKKKKKKKK
+KKKKKKKKKK
+KKK   KKKK
+KKK   KKKK
+KKK   KKKK
+KKKK  KKKK
+KKKKKKKKKK
+KKKKKKKKKK
+
+  KKKKKKKK
+KKKKKKKKKK
+KKK        KKK
+              KKK
+            KKK
+          KKK
+        KKK
+      KKK  
+      KKK   
+    
+      KKK
+      KKK
+"""
+    await message.edit(out_str)
