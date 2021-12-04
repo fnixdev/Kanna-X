@@ -10,20 +10,10 @@ import asyncio
 from pyrogram import Client
 from dotenv import load_dotenv
 
-if os.path.isfile("config.env"):
-    load_dotenv("config.env")
+API_KEY = int(input("Enter API_ID: "))
+API_HASH = input("Enter API_HASH: ")
+with Client(':memory:', api_id=API_KEY, api_hash=API_HASH) as app:
+	app.send_message(            
+	  "me", f"#KannaX #HU_STRING_SESSION\n\n```{await kannax.export_session_string()}```")
+	print("Pronto !, string de sessão foi enviada para mensagens salvas!")
 
-
-async def genStrSession() -> None:  # pylint: disable=missing-function-docstring
-    async with Client(
-            "KannaX",
-            api_id=int(os.environ.get("API_ID") or input("Insira Telegram APP ID: ")),
-            api_hash=os.environ.get("API_HASH") or input("Insira Telegram API HASH: ")
-    ) as kannax:
-        print("\nprocessando...")
-        await kannax.send_message(
-            "me", f"#KannaX #HU_STRING_SESSION\n\n```{await kannax.export_session_string()}```")
-        print("Pronto !, string de sessão foi enviada para mensagens salvas!")
-
-if __name__ == "__main__":
-    asyncio.get_event_loop().run_until_complete(genStrSession())
