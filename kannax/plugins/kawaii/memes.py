@@ -561,6 +561,7 @@ async def kill_func(message):
 async def snake_(message: Message):
     """muito sexo"""
     out_str = f"""
+
 HOLY SHIT!!
 
         IS THAT A 
@@ -573,16 +574,14 @@ MOTHERFUCKING
            REFERENCE???
 
 Perai...é aqui que estão falando de...
-
-
 KKKKKKKKKK
 KKKKKKKKKK
 KKKK
 KKKK
 KKKKKKKKKK
 KKKKKKKKKK
-      KKKK
-      KKKK
+               KKKK
+               KKKK
 KKKKKKKKKK
 KKKKKKKKKK
 
@@ -597,21 +596,21 @@ KKKK
 KKKKKKKKKK
 KKKKKKKKKK
 
-KKKK      KKKK
+KKKK       KKKK
  KKKK    KKKK
    KKKK KKKK
-    KKKKKK
-    KKKKKK
-    KKKKKK
-  KKKK   KKKK
-KKKK       KKKK
+      KKKKKK
+      KKKKKK
+      KKKKKK
+  KKKK     KKKK
+KKKK        KKKK
 
 KKKKKKKKKK
 KKKKKKKKKK
-KKK   KKKK
-KKK   KKKK
-KKK   KKKK
-KKKK  KKKK
+KKKK     KKKK
+KKKK     KKKK
+KKKK     KKKK
+KKKK     KKKK
 KKKKKKKKKK
 KKKKKKKKKK
 
@@ -627,5 +626,6 @@ KKK        KKK
     
       KKK
       KKK
+
 """
     await message.edit(out_str)
