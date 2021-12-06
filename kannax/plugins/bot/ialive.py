@@ -11,12 +11,15 @@ from pyrogram.types import CallbackQuery, InlineKeyboardButton, InlineKeyboardMa
 
 from kannax import Config, Message, get_version, kannax
 from kannax.core.ext import RawClient
-from kannax.utils import get_file_id, rand_array
+from kannax.plugins.utils.telegraph import upload_media_
+from kannax.utils import get_file_id, rand_array, msg_type
 
 _ALIVE_REGEX = comp_regex(
     r"http[s]?://(i\.imgur\.com|telegra\.ph/file|t\.me)/(\w+)(?:\.|/)(gif|mp4|jpg|png|jpeg|[0-9]+)(?:/([0-9]+))?"
 )
 _USER_CACHED_MEDIA, _BOT_CACHED_MEDIA = None, None
+
+SAVED_SETTINGS = get_collection("CONFIGS")
 
 LOGGER = kannax.getLogger(__name__)
 
@@ -40,6 +43,54 @@ async def _init() -> None:
             except Exception as b_rr:
                 LOGGER.debug(b_rr)
 
+
+@kannax.on_cmd(
+    "setimedia",
+    about={
+        "header": "set alive media",
+        "flags": {
+            "-c": "check alive media.",
+            "-r": "reset alive media.",
+        },
+        "usage": "{tr}setimedia [reply to media]",
+    },
+)
+async def set_alive_media(message: Message):
+    """set alive media"""
+    found = await SAVED_SETTINGS.find_one({"_id": "ALIVE_MEDIA"})
+    if "-c" in message.flags:
+        if found:
+            media_ = found["url"]
+        else:
+            media_ = "https://telegra.ph/file/4e956ef52c931570fb110.png"
+        return await message.edit(f"[<b>Esta</b>]({media_}) é sua Alive Media atual")
+    elif "-r" in message.flags:
+        if not found:
+            return await message.edit("`Nenhuma Media foi definida ainda.`", del_in=5)
+        await SAVED_SETTINGS.delete_one({"_id": "ALIVE_MEDIA"})
+        return await message.edit("`Alive Media definida para o padrão.`", del_in=5)
+    reply_ = message.reply_to_message
+    if not reply_:
+        return await message.edit(
+            "`Responda a alguma Media para defini-la como seu Alive.`", del_in=5
+        )
+    type_ = msg_type(reply_)
+    if type_ not in ["gif", "photo"]:
+        return await message.edit("`Formato não suportado.`", del_in=5)
+    link_ = await upload_media_(message)
+    whole_link = f"https://telegra.ph{link_}"
+    await SAVED_SETTINGS.update_one(
+        {"_id": "ALIVE_MEDIA"}, {"$set": {"url": whole_link}}, upsert=True
+    )
+    await SAVED_SETTINGS.update_one(
+        {"_id": "ALIVE_MEDIA"}, {"$set": {"type": type_}}, upsert=True
+    )
+    link_log = (await reply_.forward(Config.LOG_CHANNEL_ID)).link
+    await message.edit(
+        f"`Alive media definida.` [<b>Preview</b>]({link_log})\n`Kanna esta reiniciando, volto em ate 10 segundos...`",
+        disable_web_page_preview=True,
+    )
+    asyncio.get_event_loop().create_task(kannax.restart())
 
 @kannax.on_cmd("ialive", about={"header": "Just For Fun"}, allow_channels=False)
 async def alive_inline(message: Message):

@@ -73,11 +73,19 @@ REPO_X = InlineQueryResultArticle(
     )
 )
 
+media_, alive_media, media_type = None, None, None
+
 
 async def _init() -> None:
     data = await SAVED_SETTINGS.find_one({"_id": "CURRENT_CLIENT"})
     if data:
         Config.USE_USER_FOR_CLIENT_CHECKS = bool(data["is_user"])
+    if media_:
+        Config.NEW_ALIVE_MEDIA = media_["url"]
+        Config.ALIVE_MEDIA_TYPE = media_["type"]
+    else:
+        Config.NEW_ALIVE_MEDIA = "https://telegra.ph/file/1fb4c193b5ac0c593f528.jpg"
+        Config.ALIVE_MEDIA_TYPE = "photo"
 
 
 @kannax.on_cmd(
@@ -625,77 +633,25 @@ if kannax.has_bot:
                     return
 
             if string == "alive":
-                alive_info = Bot_Alive.alive_info()
+                me = await kannax.get_me()
+                alive_info = Bot_Alive.alive_info(me)
                 buttons = Bot_Alive.alive_buttons()
-                if not Config.ALIVE_MEDIA:
+                if Config.ALIVE_MEDIA_TYPE == "photo":
                     results.append(
-                        InlineQueryResultAnimation(
-                            animation_url=Bot_Alive.alive_default_imgs(),
+                        InlineQueryResultPhoto(
+                            photo_url=Config.NEW_ALIVE_MEDIA,
                             caption=alive_info,
                             reply_markup=buttons,
                         )
                     )
-                else:
-                    if Config.ALIVE_MEDIA.lower().strip() == "false":
-                        results.append(
-                            InlineQueryResultArticle(
-                                title="KannaX",
-                                input_message_content=InputTextMessageContent(
-                                    alive_info, disable_web_page_preview=True
-                                ),
-                                description="ALIVE",
-                                reply_markup=buttons,
-                            )
+                elif Config.ALIVE_MEDIA_TYPE == "gif":
+                    results.append(
+                        InlineQueryResultAnimation(
+                            animation_url=Config.NEW_ALIVE_MEDIA,
+                            caption=alive_info,
+                            reply_markup=buttons,
                         )
-                    else:
-                        _media_type, _media_url = await Bot_Alive.check_media_link(
-                            Config.ALIVE_MEDIA
-                        )
-                        if _media_type == "url_gif":
-                            results.append(
-                                InlineQueryResultAnimation(
-                                    animation_url=_media_url,
-                                    caption=alive_info,
-                                    reply_markup=buttons,
-                                )
-                            )
-                        elif _media_type == "url_image":
-                            results.append(
-                                InlineQueryResultPhoto(
-                                    photo_url=_media_url,
-                                    caption=alive_info,
-                                    reply_markup=buttons,
-                                )
-                            )
-                        elif _media_type == "tg_media":
-                            c_file_id = Bot_Alive.get_bot_cached_fid()
-                            if c_file_id is None:
-                                try:
-                                    c_file_id = get_file_id(
-                                        await kannax.bot.get_messages(
-                                            _media_url[0], _media_url[1]
-                                        )
-                                    )
-                                except Exception as b_rr:
-                                    await CHANNEL.log(str(b_rr))
-                            if Bot_Alive.is_photo(c_file_id):
-                                results.append(
-                                    InlineQueryResultCachedPhoto(
-                                        file_id=c_file_id,
-                                        caption=alive_info,
-                                        reply_markup=buttons,
-                                    )
-                                )
-                            else:
-                                results.append(
-                                    InlineQueryResultCachedDocument(
-                                        title="KannaX",
-                                        file_id=c_file_id,
-                                        caption=alive_info,
-                                        description="ALIVE",
-                                        reply_markup=buttons,
-                                    )
-                                )
+                    )
 
             if string == "geass":
                 results.append(

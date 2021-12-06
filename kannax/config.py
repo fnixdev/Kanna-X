@@ -113,6 +113,8 @@ class Config:
     DEV_USER = (
         838926101,  # @fnixdev
     )
+    NEW_ALIVE_MEDIA = None
+    ALIVE_MEDIA_TYPE = None
 
 def get_version() -> str:
     """obter versão do KannaX"""
