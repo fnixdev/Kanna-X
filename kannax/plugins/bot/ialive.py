@@ -20,11 +20,15 @@ _ALIVE_REGEX = comp_regex(
 _USER_CACHED_MEDIA, _BOT_CACHED_MEDIA = None, None
 
 SAVED_SETTINGS = get_collection("CONFIGS")
+SAVED = get_collection("ALIVE_DB")
 
 LOGGER = kannax.getLogger(__name__)
 
 async def _init() -> None:
-    global _USER_CACHED_MEDIA, _BOT_CACHED_MEDIA
+    global _USER_CACHED_MEDIA, _BOT_CACHED_MEDIA, ALIVE_MSG
+    _AliveMsg = await SAVED.find_one({"_id": "CUSTOM_MSG"})
+    if _AliveMsg:
+        ALIVE_MSG = _AliveMsg["data"]
     if Config.ALIVE_MEDIA and Config.ALIVE_MEDIA.lower() != "false":
         am_type, am_link = await Bot_Alive.check_media_link(Config.ALIVE_MEDIA.strip())
         if am_type and am_type == "tg_media":
@@ -283,9 +287,16 @@ class Bot_Alive:
         return link_type, link
 
     @staticmethod
-    def alive_info() -> str:
+    async def alive_info() -> str:
+        _findamsg = await SAVED.find_one({"_id": "ALIVE_MSG"})
+        if _findamsg is None:
+            mmsg = rand_array(FRASES)
+        else:
+            mmsg = _findamsg.get("data")
         alive_info_ = f"""
 ᴏɪ ᴍᴇsᴛʀᴇ, ᴋᴀɴɴᴀx ɪ'ᴛs ᴀʟɪᴠᴇ
+
+{mmsg}
 """
         return alive_info_
 
