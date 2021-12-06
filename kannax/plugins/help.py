@@ -645,7 +645,7 @@ if kannax.has_bot:
                             reply_markup=buttons,
                         )
                     )
-                elif Config.ALIVE_MEDIA_TYPE == "gif":
+                elif Config.ALIVE_MEDIA_TYPE == "gif" or "video":
                     results.append(
                         InlineQueryResultAnimation(
                             animation_url=Config.NEW_ALIVE_MEDIA,

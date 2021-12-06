@@ -81,7 +81,7 @@ async def set_alive_media(message: Message):
             "`Responda a alguma Media para defini-la como seu Alive.`", del_in=5
         )
     type_ = msg_type(reply_)
-    if type_ not in ["gif", "photo"]:
+    if type_ not in ["gif", "photo", "video"]:
         return await message.edit("`Formato não suportado.`", del_in=5)
     link_ = await upload_media_(message)
     whole_link = f"https://telegra.ph{link_}"
