@@ -80,6 +80,7 @@ async def _init() -> None:
     data = await SAVED_SETTINGS.find_one({"_id": "CURRENT_CLIENT"})
     if data:
         Config.USE_USER_FOR_CLIENT_CHECKS = bool(data["is_user"])
+    media_ = await SAVED_SETTINGS.find_one({"_id": "ALIVE_MEDIA"})
     if media_:
         Config.NEW_ALIVE_MEDIA = media_["url"]
         Config.ALIVE_MEDIA_TYPE = media_["type"]
