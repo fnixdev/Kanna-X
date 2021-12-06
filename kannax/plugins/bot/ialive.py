@@ -14,7 +14,7 @@ from kannax import Config, Message, get_version, kannax, get_collection
 from kannax.core.ext import RawClient
 from kannax.versions import __python_version__
 from kannax.plugins.utils.telegraph import upload_media_
-from kannax.utils import get_file_id, rand_array, msg_type
+from kannax.utils import get_file_id, rand_array
 
 _ALIVE_REGEX = comp_regex(
     r"http[s]?://(i\.imgur\.com|telegra\.ph/file|t\.me)/(\w+)(?:\.|/)(gif|mp4|jpg|png|jpeg|[0-9]+)(?:/([0-9]+))?"
@@ -80,7 +80,7 @@ async def set_alive_media(message: Message):
         return await message.edit(
             "`Responda a alguma Media para defini-la como seu Alive.`", del_in=5
         )
-    type_ = msg_type(reply_)
+    type_ = msg_type_alive(reply_)
     if type_ not in ["gif", "photo", "video"]:
         return await message.edit("`Formato não suportado.`", del_in=5)
     link_ = await upload_media_(message)
@@ -134,6 +134,24 @@ async def send_inline_alive(message: Message) -> None:
     await asyncio.sleep(200)
     await kannax.delete_messages(message.chat.id, i_res_id)
 
+def msg_type_alive(message):
+    type_ = "text"
+    if message.audio:
+        type_ = "audio"
+    elif message.animation:
+        type_ = "gif"
+    elif message.photo:
+        type_ = "photo"
+    elif message.sticker:
+        type_ = "sticker"
+    elif message.video:
+        type_ = "video"
+    elif message.document.file_name.endswith((".gif", ".mp4", "webm")):
+        type_ = "gif"
+    elif message.document.file_name.endswith((".jpeg", ".png", ".jpg", "webp")):
+        type_ = "photo"
+    return type_
+    
 
 if kannax.has_bot:
 
