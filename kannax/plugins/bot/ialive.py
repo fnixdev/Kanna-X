@@ -92,7 +92,7 @@ async def set_alive_media(message: Message):
         {"_id": "ALIVE_MEDIA"}, {"$set": {"type": type_}}, upsert=True
     )
     await message.edit(
-        f"`Alive media definida`\n`Kanna esta reiniciando, pode demorar ate 10 segundos...`"
+        f"`Alive media definid. O bot esta reiniciando aguarde 5 segundos...`"
     )
     asyncio.get_event_loop().create_task(kannax.restart())
 
