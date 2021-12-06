@@ -85,10 +85,8 @@ async def set_alive_media(message: Message):
     await SAVED_SETTINGS.update_one(
         {"_id": "ALIVE_MEDIA"}, {"$set": {"type": type_}}, upsert=True
     )
-    link_log = (await reply_.forward(Config.LOG_CHANNEL_ID)).link
     await message.edit(
-        f"`Alive media definida.` [<b>Preview</b>]({link_log})\n`Kanna esta reiniciando, volto em ate 10 segundos...`",
-        disable_web_page_preview=True,
+        f"`Alive media definida`\n`Kanna esta reiniciando, pode demorar ate 10 segundos...`"
     )
     asyncio.get_event_loop().create_task(kannax.restart())
 
