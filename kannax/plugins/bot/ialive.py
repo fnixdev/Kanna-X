@@ -288,7 +288,7 @@ class Bot_Alive:
 
     @staticmethod
     async def alive_info() -> str:
-        _findamsg = await SAVED.find_one({"_id": "ALIVE_MSG"})
+        _findamsg = SAVED.find_one({"_id": "ALIVE_MSG"})
         if _findamsg is None:
             mmsg = rand_array(FRASES)
         else:
