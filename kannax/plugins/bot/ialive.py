@@ -4,6 +4,7 @@ import asyncio
 from datetime import datetime
 from re import compile as comp_regex
 
+from pyrogram import __version__ as __pyro_version__
 from pyrogram import filters
 from pyrogram.errors import BadRequest, FloodWait, Forbidden, MediaEmpty
 from pyrogram.file_id import PHOTO_TYPES, FileId
@@ -218,6 +219,7 @@ if kannax.has_bot:
 ▫️ Uptime  :  {kannax.uptime}
 ▫️ Python  :  v{__python_version__}
 ▫️ Version  :  v{get_version()}
+▫️ Pyrogram  :  v{__pyro_version__}
 """, show_alert=True,
         )
         return status_alive_
