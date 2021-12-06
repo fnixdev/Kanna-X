@@ -4,6 +4,7 @@ import asyncio
 from datetime import datetime
 from re import compile as comp_regex
 
+from pyrogram import __version__ as __pyro_version__
 from pyrogram import filters
 from pyrogram.errors import BadRequest, FloodWait, Forbidden, MediaEmpty
 from pyrogram.file_id import PHOTO_TYPES, FileId
@@ -11,6 +12,7 @@ from pyrogram.types import CallbackQuery, InlineKeyboardButton, InlineKeyboardMa
 
 from kannax import Config, Message, get_version, kannax, get_collection
 from kannax.core.ext import RawClient
+from kaknax.versions import __python_version__
 from kannax.plugins.utils.telegraph import upload_media_
 from kannax.utils import get_file_id, rand_array, msg_type
 
@@ -212,7 +214,13 @@ if kannax.has_bot:
     async def status_alive_(_, c_q: CallbackQuery):
         c_q.from_user.id
         await c_q.answer(
-            f"▫️ ᴍᴏᴅᴏ :  {Bot_Alive._get_mode()}\n▫️ ᴠᴇʀsɪᴏɴ  :  v{get_version()}\n▫️ ᴜᴘᴛɪᴍᴇ  :  {kannax.uptime}\n\n{rand_array(FRASES)}",
+            f"""
+▫️ Modo :  {Bot_Alive._get_mode()}
+▫️ Uptime  :  {kannax.uptime}
+▫️ Python  :  v{__python_version__}
+▫️ Version  :  v{get_version()}
+▫️ Pyrogram  :  v{__pyro_version__}
+""",
             show_alert=True,
         )
         return status_alive_
