@@ -11,7 +11,7 @@ from pyrogram.types import CallbackQuery, InlineKeyboardButton, InlineKeyboardMa
 
 from kannax import Config, Message, get_version, kannax, get_collection
 from kannax.core.ext import RawClient
-from kaknax.versions import __python_version__
+from kannax.versions import __python_version__
 from kannax.plugins.utils.telegraph import upload_media_
 from kannax.utils import get_file_id, rand_array, msg_type
 
