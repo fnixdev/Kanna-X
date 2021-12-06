@@ -58,7 +58,7 @@ async def _init() -> None:
             "-c": "check alive media.",
             "-r": "reset alive media.",
         },
-        "usage": "{tr}setimedia [reply to media]",
+        "usage": "{tr}setimedia [reply media]",
     },
 )
 async def set_alive_media(message: Message):
@@ -92,7 +92,7 @@ async def set_alive_media(message: Message):
         {"_id": "ALIVE_MEDIA"}, {"$set": {"type": type_}}, upsert=True
     )
     await message.edit(
-        f"`Alive media definid. O bot esta reiniciando aguarde 5 segundos...`"
+        f"`Alive media definida. O bot esta reiniciando aguarde 5 segundos...`"
     )
     asyncio.get_event_loop().create_task(kannax.restart())
 
