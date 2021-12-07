@@ -127,8 +127,7 @@ async def gban_user(message: Message):
     found = await GBAN_USER_BASE.find_one({"user_id": user_id})
     if found:
         await message.edit(
-            "**#Already_GBanned**\n\nO usuário já existe na minha lista Gban.\n"
-            f"**Razão para GBan:** `{found['reason']}`",
+            "**#Already_GBanned**\n\nO usuário já existe na minha lista Gban.",
             del_in=5,
         )
         return
