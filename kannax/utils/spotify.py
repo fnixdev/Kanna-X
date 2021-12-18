@@ -19,7 +19,7 @@ async def now_playing():
             SPOTIFY_USERNAME, scope, SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET, redirect_uri)
         spotify = spotipy.Spotify(auth=token)
 
-    current_track = spotify.currently_playing()
+    current_track = spotify.current_user_playing_track()
     return current_track
 
 
