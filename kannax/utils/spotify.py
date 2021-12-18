@@ -8,7 +8,7 @@ SPOTIFY_USERNAME = Config.SPOTIFY_USERNAME
 SPOTIFY_CLIENT_ID = Config.SPOTIFY_CLIENT_ID
 SPOTIFY_CLIENT_SECRET = Config.SPOTIFY_CLIENT_SECRET
 
-redirect_uri = "http://localhost:8888/callback"
+redirect_uri = "http://localhost/callback"
 scope = 'user-read-currently-playing app-remote-control'
 
 async def now_playing():
