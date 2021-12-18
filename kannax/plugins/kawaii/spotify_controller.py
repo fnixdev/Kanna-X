@@ -4,7 +4,7 @@ from kannax.utils import spotify
 
 
 @kannax.on_cmd("np", about={"header": "now playing"})
-  async def np_(message: Message):
+async def np_(message: Message):
     current_track = await spotify.now_playing()
 
     if not current_track:
@@ -36,7 +36,7 @@ async def pause_(message: Message):
 
 
 @kannax.on_cmd("splay", about={"header": "spotify play"})
-  async def play_(message: Message):
+async def play_(message: Message):
     play = await spotify.play()
     if play:
         await message.edit("Spotify playback started")
