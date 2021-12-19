@@ -22,7 +22,7 @@ async def mods_(message: Message):
     page = 1
     start = (page - 1) * 3 + 1
     if " " in query:
-        query.replace(" ").replace("%20")
+        query.replace(" ", "%20")
     url = f"https://www.googleapis.com/customsearch/v1?key={r}&cx=25b3b50edb928435b&q={query}&start={start}"
     data = requests.get(url).json()
     search_items = data.get("items")
@@ -31,6 +31,6 @@ async def mods_(message: Message):
         desc = a.get("snippet")
         link = a.get("link")
         text = f"**• Titulo** `{title}`\n\n"
-        text += f"**• Desc:** `{desc}`"
+        text += f"**• Desc:** `{desc}`\n\n"
         text += f"**• Link:** {link}"
     await message.edit(text)
