@@ -1044,13 +1044,13 @@ if kannax.has_bot:
                 url = f"https://www.googleapis.com/customsearch/v1?key={r}&cx=25b3b50edb928435b&q={results}&start={start}"
                 data = requests.get(url).json()
                 search_items = data.get("items")
-                    for a in search_items:
-                        title = a.get("title")
-                        desc = a.get("snippet")
-                        link = a.get("link")
-                        text = f"**• Titulo** `{title}`\n\n"
-                        text += f"**• Desc:** `{desc}`"
-                        buttons = [
+                for a in search_items:
+                    title = a.get("title")
+                    desc = a.get("snippet")
+                    link = a.get("link")
+                    text = f"**• Titulo** `{title}`\n\n"
+                    text += f"**• Desc:** `{desc}`"
+                    buttons = [
                                             [
                                                 InlineKeyboardButton(
                                                     "Link", url=link),
