@@ -76,16 +76,6 @@ REPO_X = InlineQueryResultArticle(
     )
 )
 
-api1 = base64.b64decode("QUl6YVN5QXlEQnNZM1dSdEI1WVBDNmFCX3c4SkF5NlpkWE5jNkZV").decode(
-    "ascii"
-)
-api2 = base64.b64decode("QUl6YVN5QkYwenhMbFlsUE1wOXh3TVFxVktDUVJxOERnZHJMWHNn").decode(
-    "ascii"
-)
-api3 = base64.b64decode("QUl6YVN5RGRPS253blB3VklRX2xiSDVzWUU0Rm9YakFLSVFWMERR").decode(
-    "ascii"
-)
-
 media_, alive_media, media_type = None, None, None
 
 
@@ -1026,42 +1016,6 @@ if kannax.has_bot:
                                 f"`{styled_str}`"
                             ),
                             description=styled_str,
-                        )
-                    )
-                await inline_query.answer(
-                    results=results,
-                    cache_time=1,
-                    switch_pm_text="Comandos Disponiveis",
-                    switch_pm_parameter="inline",
-                )
-                return
-
-            if str_y[0].lower() == "mod" and len(str_y) == 2:
-                results = []
-                r = choice([api1, api2, api3])
-                page = 1
-                start = (page - 1) * 3 + 1
-                url = f"https://www.googleapis.com/customsearch/v1?key={r}&cx=25b3b50edb928435b&q={results}&start={start}"
-                data = requests.get(url).json()
-                search_items = data.get("items")
-                for a in search_items:
-                    title = a.get("title")
-                    desc = a.get("snippet")
-                    link = a.get("link")
-                    text = f"**• Titulo** `{title}`\n\n"
-                    text += f"**• Desc:** `{desc}`"
-                    buttons = [
-                                            [
-                                                InlineKeyboardButton(
-                                                    "Link", url=link),
-                                            ],
-                          ]
-                    results.append(
-                        InlineQueryResultArticle(
-                            title=title,
-                            description=desc,
-                            input_message_content=text,
-                            reply_markup=buttons,
                         )
                     )
                 await inline_query.answer(
