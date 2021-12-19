@@ -1,4 +1,4 @@
-;eval 
+
 import base64
 import requests
 import os
@@ -16,7 +16,7 @@ api3 = base64.b64decode("QUl6YVN5RGRPS253blB3VklRX2xiSDVzWUU0Rm9YakFLSVFWMERR").
 )
 
 @kannax.on_cmd("mod", about={"header": "search mods"})
-async def pause_(message: Message):
+async def mods_(message: Message):
     query = message.input_str
     r = choice([api1, api2, api3])
     page = 1
