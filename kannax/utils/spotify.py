@@ -1,6 +1,7 @@
 import spotipy
 import spotipy.util as util
 from spotipy import SpotifyException
+from spotipy.oauth2 import SpotifyOAuth
 
 from kannax import Config
 
@@ -30,7 +31,6 @@ async def pause():
         token = util.prompt_for_user_token(
             SPOTIFY_USERNAME, scope, SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET, redirect_uri)
         spotify = spotipy.Spotify(auth=token)
-
     try:
         spotify.pause_playback()
         return True
