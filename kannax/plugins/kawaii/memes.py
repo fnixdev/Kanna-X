@@ -89,7 +89,7 @@ async def rt_(message: Message):
 
 @kannax.on_cmd("f", about={"header": "f"})
 async def f_(message: Message):
-    paytext = message.reply_to_message
+    paytext = message.input_str[1]
     pay = "{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}".format(
         paytext * 8,
         paytext * 8,
