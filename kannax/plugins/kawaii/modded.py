@@ -30,6 +30,4 @@ async def mods_(message: Message):
         desc = a.get("snippet")
         link = a.get("link")
         text = f"**• Titulo** `{title}`\n\n"
-        text += f"**• Desc:** `{desc}`\n\n"
-        text += f"**• Link:** {link}"
-    await message.edit(text)
+        text += f"**• Desc:** `{desc}`\
