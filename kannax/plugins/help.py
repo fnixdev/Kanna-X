@@ -1060,7 +1060,7 @@ if kannax.has_bot:
                         InlineQueryResultArticle(
                             title=title,
                             description=desc,
-                            caption=text,
+                            text=text,
                             reply_markup=buttons,
                         )
                     )
