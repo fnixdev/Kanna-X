@@ -89,8 +89,9 @@ async def rt_(message: Message):
 
 @kannax.on_cmd("f", about={"header": "f"})
 async def f_(message: Message):
-    paytext = message.input_str[0]
-    if not paytext:
+    msg = message.input_str
+    paytext = msg[0]
+    if not msg:
         return await message.edit("`Eu preciso que você digite algo`")
     pay = "{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}".format(
         paytext * 8,
