@@ -20,10 +20,9 @@ async def mods_(message: Message):
     query = message.input_str
     r = choice([api1, api2, api3])
     page = 1
-    start = (page - 1) * 3 + 1
     if " " in query:
         query.replace(" ", "%20")
-    url = f"https://www.googleapis.com/customsearch/v1?key={r}&cx=25b3b50edb928435b&q={query}&start={start}"
+    url = f"https://www.googleapis.com/customsearch/v1?key={r}&cx=25b3b50edb928435b&q={query}&start={page}"
     data = requests.get(url).json()
     search_items = data.get("items")
     for a in search_items:
