@@ -1,4 +1,4 @@
-""" configurar gban """
+""" setup gban """
 
 import asyncio
 from typing import Union
@@ -13,7 +13,8 @@ from pyrogram.errors import (
 from spamwatch.types import Ban
 
 from kannax import Config, Message, filters, get_collection, pool, kannax
-from kannax.utils import get_response, mention_html, is_dev
+
+from kannax.utils import get_response, mention_html, full_name
 
 SAVED_SETTINGS = get_collection("CONFIGS")
 GBAN_USER_BASE = get_collection("GBAN_USER")
@@ -34,19 +35,19 @@ async def _init() -> None:
 @kannax.on_cmd(
     "antispam",
     about={
-        "header": "habilitar / desabilitar antispam",
-        "description": "Alternar API Auto Bans, baseado em Combot Cas Api",
+        "header": "enable / disable antispam",
+        "description": "Toggle API Auto Bans, based on Combot Cas Api",
     },
     allow_channels=False,
 )
 async def antispam_(message: Message):
-    """habilitar / desabilitar antispam"""
+    """enable / disable antispam"""
     if Config.ANTISPAM_SENTRY:
         Config.ANTISPAM_SENTRY = False
-        await message.edit("`antispam desativado !`", del_in=3)
+        await message.edit("`antispam disabled !`", del_in=3)
     else:
         Config.ANTISPAM_SENTRY = True
-        await message.edit("`antispam ativado !`", del_in=3)
+        await message.edit("`antispam enabled !`", del_in=3)
     await SAVED_SETTINGS.update_one(
         {"_id": "ANTISPAM_ENABLED"},
         {"$set": {"data": Config.ANTISPAM_SENTRY}},
@@ -57,19 +58,19 @@ async def antispam_(message: Message):
 @kannax.on_cmd(
     "spamprotection",
     about={
-        "header": "habilitar / desabilitar Proteção contra spam Intellivoid",
-        "description": "Alternar APIs Auto Bans, com base na API de proteção contra spam Intellivoid",
+        "header": "enable / disable Intellivoid spam protection",
+        "description": "Toggle API Auto Bans, based on Intellivoid spam protection api",
     },
     allow_channels=False,
 )
 async def spam_protect_(message: Message):
-    """habilitar / desabilitar Proteção contra spam Intellivoid"""
+    """enable / disable Intellivoid spam protection"""
     if Config.SPAM_PROTECTION:
         Config.SPAM_PROTECTION = False
-        await message.edit("`Proteção contra spam Intellivoid desativado !`", del_in=3)
+        await message.edit("`Intellivoid Spam Protection disabled !`", del_in=3)
     else:
         Config.SPAM_PROTECTION = True
-        await message.edit("`Proteção contra spam Intellivoid ativado !`", del_in=3)
+        await message.edit("`Intellivoid Spam Protection enabled !`", del_in=3)
     await SAVED_SETTINGS.update_one(
         {"_id": "SPAM_PROTECTION"},
         {"$set": {"data": Config.SPAM_PROTECTION}},
@@ -80,27 +81,24 @@ async def spam_protect_(message: Message):
 @kannax.on_cmd(
     "gban",
     about={
-        "header": "Banir um usuário globalmente",
-        "description": "Adiciona o usuário à sua lista GBan. "
-        "Bane um usuário globalmente banido se ele entrar ou enviar uma mensagem. "
-        "[NOTA: Funciona apenas em grupos em que você é administrador.]",
+        "header": "Globally Ban A User",
+        "description": "Adds User to your GBan List. "
+        "Bans a Globally Banned user if they join or message. "
+        "[NOTE: Works only in groups where you are admin.]",
         "examples": "{tr}gban [userid | reply] [reason for gban] (mandatory)",
     },
     allow_channels=False,
     allow_bots=False,
 )
 async def gban_user(message: Message):
-    """banir um usuário globalmente"""
+    """ban a user globally"""
     await message.edit("`GBanning...`")
     user_id, reason = message.extract_user_and_text
-    if is_dev(user_id):
-        await message.reply("`Lol ele é meu desenvolvedor porque iria bani-lo?.`")
-        return
     if not user_id:
         await message.edit(
-            "`nenhum user_id ou mensagem válida especificada,`"
-            "`não digite .help gban para mais informações. "
-            "`Porque ninguém vai te ajudar`(｡ŏ_ŏ) ⚠",
+            "`no valid user_id or message specified,`"
+            "`don't do .help gban for more info. "
+            "Coz no one's gonna help ya`(｡ŏ_ŏ) ⚠",
             del_in=0,
         )
         return
@@ -108,35 +106,36 @@ async def gban_user(message: Message):
     firstname = get_mem["fname"]
     if not reason:
         await message.edit(
-            f"**#Abortado**\n\n**Gbanning** of {mention_html(user_id, firstname)} "
-            "Abortado coz Nenhum motivo do gban fornecido pelo banner",
+            f"**#Aborted**\n\n**Gbanning** of {mention_html(user_id, firstname)} "
+            "Aborted coz No reason of gban provided by banner",
             del_in=5,
         )
         return
     user_id = get_mem["id"]
     if user_id == (await message.client.get_me()).id:
-        await message.edit(r"Lol. Por que eu vou banir a mim mesmo ¯\(°_o)/¯")
+        await message.edit(r"LoL. Why would I GBan myself ¯\(°_o)/¯")
         return
     if user_id in Config.SUDO_USERS:
         await message.edit(
-            "Esse usuário está na minha Lista de Sudo, portanto, não posso bani-lo.\n\n"
-            "**Tip:** Remova-os da Lista de Sudo e tente novamente. (¬_¬)",
+            "That user is in my Sudo List, Hence I can't ban him.\n\n"
+            "**Tip:** Remove them from Sudo List and try again. (¬_¬)",
             del_in=5,
         )
         return
     found = await GBAN_USER_BASE.find_one({"user_id": user_id})
     if found:
         await message.edit(
-            "**#Already_GBanned**\n\nO usuário já existe na minha lista Gban.",
+            "**#Already_GBanned**\n\nUser Already Exists in My Gban List.\n"
+            f"**Reason For GBan:** `{found['reason']}`",
             del_in=5,
         )
         return
     await message.edit(
         r"\\**#GBanned_User**//"
-        f"\n\n**Primeiro Nome:** {mention_html(user_id, firstname)}\n"
-        f"**User ID:** `{user_id}`\n**Razão:** `{reason}`"
+        f"\n\n**First Name:** {mention_html(user_id, firstname)}\n"
+        f"**User ID:** `{user_id}`\n**Reason:** `{reason}`"
     )
-    # TODO: podemos adicionar algo como "GBanned por {any_sudo_user_fname}"
+    # TODO: can we add something like "GBanned by {any_sudo_user_fname}"
     if message.client.is_bot:
         chats = [message.chat]
     else:
@@ -152,7 +151,7 @@ async def gban_user(message: Message):
                 f"**User ID:** `{user_id}`\n"
                 f"**Chat:** {chat.title}\n"
                 f"**Chat ID:** `{chat.id}`\n"
-                f"**Razão:** `{reason}`\n\n$GBAN #id{user_id}"
+                f"**Reason:** `{reason}`\n\n$GBAN #id{user_id}"
             )
         except (ChatAdminRequired, UserAdminInvalid, ChannelInvalid):
             pass
@@ -160,7 +159,7 @@ async def gban_user(message: Message):
         {
             "firstname": firstname,
             "user_id": user_id,
-            "razão": reason,
+            "reason": reason,
             "chat_ids": gbanned_chats,
         }
     )
@@ -173,15 +172,15 @@ async def gban_user(message: Message):
 @kannax.on_cmd(
     "ungban",
     about={
-        "header": "Desbanir um usuário globalmente",
-        "description": "Remove um usuário da sua lista Gban",
+        "header": "Globally Unban an User",
+        "description": "Removes an user from your Gban List",
         "examples": "{tr}ungban [userid | reply]",
     },
     allow_channels=False,
     allow_bots=False,
 )
 async def ungban_user(message: Message):
-    """desbane um usuário globalmente"""
+    """unban a user globally"""
     await message.edit("`UnGBanning...`")
     user_id, _ = message.extract_user_and_text
     if not user_id:
@@ -191,7 +190,7 @@ async def ungban_user(message: Message):
         get_mem = await message.client.get_user_dict(user_id)
     except PeerIdInvalid:
         await GBAN_USER_BASE.find_one_and_delete({"user_id": user_id})
-        deleted_user_ = f"\nRemovido [Deleted Account !](tg://openmessage?user_id={user_id}) com sucesso"
+        deleted_user_ = f"\nRemoved [Deleted Account !](tg://openmessage?user_id={user_id}) Successfully"
         return await message.edit(
             r"\\**#UnGbanned_User**//" + "\n" + deleted_user_, log=__name__
         )
@@ -199,7 +198,7 @@ async def ungban_user(message: Message):
     user_id = get_mem["id"]
     found = await GBAN_USER_BASE.find_one_and_delete({"user_id": user_id})
     if not found:
-        await message.err("Usuário não encontrado na minha lista Gban")
+        await message.err("User Not Found in My Gban List")
         return
     if "chat_ids" in found:
         for chat_id in found["chat_ids"]:
@@ -215,18 +214,122 @@ async def ungban_user(message: Message):
                 pass
     await message.edit(
         r"\\**#UnGbanned_User**//"
-        f"\n\n**Primeiro Nome:** {mention_html(user_id, firstname)}\n"
+        f"\n\n**First Name:** {mention_html(user_id, firstname)}\n"
         f"**User ID:** `{user_id}`"
     )
     LOG.info("UnGbanned %s", str(user_id))
 
 
 @kannax.on_cmd(
+    "gban_n",
+    about={
+        "header": "gban in all groups and channels",
+        "usage": "{tr}gban_n [reply to user]",
+    },
+    allow_channels=False,
+    allow_bots=False,
+)
+async def gban_new(message: Message):
+    """gban in all groups and channels"""
+    input_ = message.input_str
+    reply_ = message.reply_to_message
+    if not input_ and not reply_:
+        return await message.edit("`Input not found.`", del_in=5)
+    input_ = (input_).split(" ", 1)
+    if len(input_) == 2:
+        user_ = input_[0]
+        try:
+            user_ = await kannax.get_users(user_)
+            user_id = user_.id
+            user_n = full_name(user_)
+            reason_ = input_[1]
+        except BaseException:
+            if not reply_:
+                return await message.edit("`Provided user is not valid.`", del_in=5)
+            user_id = reply_.from_user.id
+            user_n = " ".join(
+                [reply_.from_user.first_name, reply_.from_user.last_name or ""]
+            )
+            reason_ = message.input_str
+    elif len(input_) == 1:
+        user_ = input_[0]
+        try:
+            user_ = await kannax.get_users(user_)
+            user_id = user_.id
+            user_n = full_name(user_)
+            reason_ = "Not specified"
+        except BaseException:
+            if not reply_:
+                return await message.edit("`Provided user is not valid.`", del_in=5)
+            user_id = reply_.from_user.id
+            user_n = " ".join(
+                [reply_.from_user.first_name, reply_.from_user.last_name or ""]
+            )
+            reason_ = message.input_str
+    await message.edit(f"GBanning user {mention_html(user_id, user_n)}...")
+    me_ = await kannax.get_me()
+    found = await GBAN_USER_BASE.find_one({"user_id": user_id})
+    if found:
+        gbanned_chats = found["chat_ids"]
+    else:
+        gbanned_chats = []
+    failed = ""
+    async for dia_ in kannax.iter_dialogs():
+        try:
+            chat_ = dia_.chat
+            try:
+                me_status = (await kannax.get_chat_member(chat_.id, me_.id)).status
+                user_status = (await kannax.get_chat_member(chat_.id, user_id)).status
+            except BaseException:
+                continue
+            status_ = ["administrator", "creator"]
+            if me_status not in status_ or user_status in status_:
+                continue
+            try:
+                await kannax.kick_chat_member(chat_.id, user_id)
+                gbanned_chats.append[chat_.id]
+            except BaseException:
+                failed += f"• {chat_.title} - {chat_.type}\n"
+        except BaseException:
+            failed += f"• {chat_.title} - {chat_.type}\n"
+    if found:
+        await GBAN_USER_BASE.update_one(
+            {"user_id": user_id}, {"$set": {"chat_ids": gbanned_chats}}, upsert=True
+        )
+    else:
+        await GBAN_USER_BASE.insert_one(
+            {
+                "firstname": user_n,
+                "user_id": user_id,
+                "reason": reason_,
+                "chat_ids": gbanned_chats,
+            }
+        )
+    out_ = (
+        "#GBANNED_USER\n\n"
+        f"<b>User:</b> {mention_html(user_id, user_n)}\n"
+        f"<b>User_ID:</b> `{user_id}` <b>Reason:</b> {reason_}\n"
+        f"<b>GBanned in:</b> {len(gbanned_chats)}\n"
+    )
+    if failed:
+        out_ += f"<b>Failed in:</b>\n{failed}"
+    await message.edit(out_)
+    await CHANNEL.log(
+        r"\\**#Antispam_Log**//"
+        f"\n**User:** {mention_html(user_id, firstname)}\n"
+        f"**User ID:** `{user_id}`\n"
+        f"**Chat:** {chat.title}\n"
+        f"**Chat ID:** `{chat.id}`\n"
+        f"**Reason:** `{reason}`\n\n$GBAN #id{user_id}"
+    )
+
+
+@kannax.on_cmd(
     "glist",
     about={
-        "header": "Obtenha uma lista de usuários Gbanned",
-        "description": "Obtenha uma lista atualizada de usuários banidos por você.",
-        "examples": "Lol. Basta digitar {tr}glist",
+        "header": "Get a List of Gbanned Users",
+        "description": "Get Up-to-date list of users Gbanned by you.",
+        "examples": "Lol. Just type {tr}glist",
     },
     allow_channels=False,
 )
@@ -255,20 +358,20 @@ async def list_gbanned(message: Message):
             )
 
     await message.edit_or_send_as_file(
-        f"**--Lista de usuários banidos globalmente--**\n\n{msg}" if msg else "`glist vazia!`"
+        f"**--Globally Banned Users List--**\n\n{msg}" if msg else "`glist empty!`"
     )
     if bad_users:
         await CHANNEL.log(
-            "**Esses usuários foram removidos da lista gban devido a alguns erros no motivo do gban!"
-            " você pode bani-los novamente manualmente**\n" + bad_users
+            "**These users are removed from gban list due to some errors in gban reason!"
+            " you can ban them again manually**\n" + bad_users
         )
 
 
 @kannax.on_cmd(
     "whitelist",
     about={
-        "header": "Coloque um usuário na whitelist",
-        "description": "Use whitelist para adicionar usuários para contornar banimentos de API",
+        "header": "Whitelist a User",
+        "description": "Use whitelist to add users to bypass API Bans",
         "useage": "{tr}whitelist [userid | reply to user]",
         "examples": "{tr}whitelist 5231147869",
     },
@@ -292,7 +395,7 @@ async def whitelist(message: Message):
         WHITELIST.insert_one({"firstname": firstname, "user_id": user_id}),
         message.edit(
             r"\\**#Whitelisted_User**//"
-            f"\n\n**Primeiro Nome:** {mention_html(user_id, firstname)}\n"
+            f"\n\n**First Name:** {mention_html(user_id, firstname)}\n"
             f"**User ID:** `{user_id}`"
         ),
         CHANNEL.log(
@@ -309,8 +412,8 @@ async def whitelist(message: Message):
 @kannax.on_cmd(
     "rmwhite",
     about={
-        "header": "Remove o usuario da Whitelist",
-        "description": "Use-o para remover usuários de WhiteList",
+        "header": "Removes a User from Whitelist",
+        "description": "Use it to remove users from WhiteList",
         "useage": "{tr}rmwhite [userid | reply to user]",
         "examples": "{tr}rmwhite 5231147869",
     },
@@ -318,7 +421,7 @@ async def whitelist(message: Message):
     allow_bots=False,
 )
 async def rmwhitelist(message: Message):
-    """remover um usuário da whitelist"""
+    """remove a user from whitelist"""
     user_id, _ = message.extract_user_and_text
     if not user_id:
         await message.err("user-id not found")
@@ -328,13 +431,13 @@ async def rmwhitelist(message: Message):
     user_id = get_mem["id"]
     found = await WHITELIST.find_one({"user_id": user_id})
     if not found:
-        await message.err("Usuário não encontrado em minha WhiteList")
+        await message.err("User Not Found in My WhiteList")
         return
     await asyncio.gather(
         WHITELIST.delete_one({"firstname": firstname, "user_id": user_id}),
         message.edit(
             r"\\**#Removed_Whitelisted_User**//"
-            f"\n\n**Primeiro Nome:** {mention_html(user_id, firstname)}\n"
+            f"\n\n**First Name:** {mention_html(user_id, firstname)}\n"
             f"**User ID:** `{user_id}`"
         ),
         CHANNEL.log(
@@ -351,9 +454,9 @@ async def rmwhitelist(message: Message):
 @kannax.on_cmd(
     "listwhite",
     about={
-        "header": "Obtenha uma lista de usuários permitidos",
-        "description": "Obtenha uma lista atualizada de usuários na Lista Branca por você.",
-        "examples": "Lol. Basta digitar {tr}listwhite",
+        "header": "Get a List of Whitelisted Users",
+        "description": "Get Up-to-date list of users WhiteListed by you.",
+        "examples": "Lol. Just type {tr}listwhite",
     },
     allow_channels=False,
 )
@@ -370,7 +473,7 @@ async def list_white(message: Message):
         )
 
     await message.edit_or_send_as_file(
-        f"**--Lista de usuários permitidos--**\n\n{msg}" if msg else "`whitelist vazia!`"
+        f"**--Whitelisted Users List--**\n\n{msg}" if msg else "`whitelist empty!`"
     )
 
 
@@ -396,18 +499,18 @@ async def gban_at_entry(message: Message):
                 message.client.kick_chat_member(chat_id, user_id),
                 message.reply(
                     r"\\**#𝑿_Antispam**//"
-                    "\n\nUsuário banido globalmente detectado neste bate-papo.\n\n"
+                    "\n\nGlobally Banned User Detected in this Chat.\n\n"
                     f"**User:** {mention_html(user_id, firstname)}\n"
-                    f"**ID:** `{user_id}`\n**Razão:** `{gbanned['reason']}`\n\n"
-                    "**Ação rápida:** Banido",
+                    f"**ID:** `{user_id}`\n**Reason:** `{gbanned['reason']}`\n\n"
+                    "**Quick Action:** Banned",
                     del_in=10,
                 ),
                 CHANNEL.log(
                     r"\\**#Antispam_Log**//"
                     "\n\n**GBanned User $SPOTTED**\n"
                     f"**User:** {mention_html(user_id, firstname)}\n"
-                    f"**ID:** `{user_id}`\n**Razão:** {gbanned['reason']}\n**Ação rápida:** "
-                    f"Banido em {message.chat.title}"
+                    f"**ID:** `{user_id}`\n**Reason:** {gbanned['reason']}\n**Quick Action:** "
+                    f"Banned in {message.chat.title}"
                 ),
                 GBAN_USER_BASE.update_one(
                     {"user_id": user_id, "firstname": firstname},
@@ -433,11 +536,11 @@ async def gban_at_entry(message: Message):
                         message.client.kick_chat_member(chat_id, user_id),
                         message.reply(
                             r"\\**#𝑿_Antispam**//"
-                            "\n\nUsuário banido globalmente detectado neste bate-papo.\n\n"
+                            "\n\nGlobally Banned User Detected in this Chat.\n\n"
                             "**$SENTRY CAS Federation Ban**\n"
                             f"**User:** {mention_html(user_id, firstname)}\n"
                             f"**ID:** `{user_id}`\n**Reason:** `{reason}`\n\n"
-                            "**Ação Rápida:** Banido",
+                            "**Quick Action:** Banned",
                             del_in=10,
                         ),
                         CHANNEL.log(
@@ -445,8 +548,8 @@ async def gban_at_entry(message: Message):
                             "\n\n**GBanned User $SPOTTED**\n"
                             "**$SENRTY #CAS BAN**"
                             f"\n**User:** {mention_html(user_id, firstname)}\n"
-                            f"**ID:** `{user_id}`\n**Razão:** `{reason}`\n**Ação Rápida:**"
-                            f" Banido em {message.chat.title}\n\n$AUTOBAN #id{user_id}"
+                            f"**ID:** `{user_id}`\n**Reason:** `{reason}`\n**Quick Action:**"
+                            f" Banned in {message.chat.title}\n\n$AUTOBAN #id{user_id}"
                         ),
                     )
         elif Config.SPAM_PROTECTION:
@@ -467,11 +570,11 @@ async def gban_at_entry(message: Message):
                         message.client.kick_chat_member(chat_id, user_id),
                         message.reply(
                             r"\\**#𝑿_Antispam**//"
-                            "\n\nUsuário banido globalmente detectado neste bate-papo.\n\n"
+                            "\n\nGlobally Banned User Detected in this Chat.\n\n"
                             "**$Intellivoid Spam Protection**"
                             f"\n**User:** {mention_html(user_id, firstname)}\n"
-                            f"**ID:** `{user_id}`\n**Razão:** `{reason}`\n\n"
-                            "**Ação Rápida:** Banido",
+                            f"**ID:** `{user_id}`\n**Reason:** `{reason}`\n\n"
+                            "**Quick Action:** Banned",
                             del_in=10,
                         ),
                         CHANNEL.log(
@@ -494,11 +597,11 @@ async def gban_at_entry(message: Message):
                         message.client.kick_chat_member(chat_id, user_id),
                         message.reply(
                             r"\\**#𝑿_Antispam**//"
-                            "\n\nUsuário banido globalmente detectado neste bate-papo.\n\n"
+                            "\n\nGlobally Banned User Detected in this Chat.\n\n"
                             "**$SENTRY SpamWatch Federation Ban**\n"
                             f"**User:** {mention_html(user_id, firstname)}\n"
-                            f"**ID:** `{user_id}`\n**Razão:** `{intruder.reason}`\n\n"
-                            "**Ação Rápida:** Banido",
+                            f"**ID:** `{user_id}`\n**Reason:** `{intruder.reason}`\n\n"
+                            "**Quick Action:** Banned",
                             del_in=10,
                         ),
                         CHANNEL.log(
@@ -507,7 +610,7 @@ async def gban_at_entry(message: Message):
                             "**$SENRTY #SPAMWATCH_API BAN**"
                             f"\n**User:** {mention_html(user_id, firstname)}\n"
                             f"**ID:** `{user_id}`\n**Reason:** `{intruder.reason}`\n"
-                            f"**Ação Rápida:** Banido em {message.chat.title}\n\n"
+                            f"**Quick Action:** Banned in {message.chat.title}\n\n"
                             f"$AUTOBAN #id{user_id}"
                         ),
                     )
