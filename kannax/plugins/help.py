@@ -68,9 +68,9 @@ REPO_X = InlineQueryResultArticle(
         [
             [
                 InlineKeyboardButton(
-                    "🔥 KannaX Repo", url="https://github.com/fnixdev/Kanna-X"),
+                    "✨ Repo", url="https://github.com/fnixdev/Kanna-X"),
                 InlineKeyboardButton(
-                    "🚀 Deploy Heroku", url="https://heroku.com/deploy?template=https://github.com/fnixdev/KannaX-Deploy"),
+                    "📦 Instalar", url="https://heroku.com/deploy?template=https://github.com/fnixdev/kxinstall"),
             ],
         ]
     )
@@ -790,9 +790,9 @@ if kannax.has_bot:
                 buttons = [
                     [
                         InlineKeyboardButton(
-                            "🔥 KannaX Repo", url="https://github.com/fnixdev/Kanna-X"),
+                            "✨ Repo", url="https://github.com/fnixdev/Kanna-X"),
                         InlineKeyboardButton(
-                            "🚀 Deploy Heroku", url="https://heroku.com/deploy?template=https://github.com/fnixdev/KannaX-Deploy"),
+                            "📦 Instalar", url="https://heroku.com/deploy?template=https://github.com/fnixdev/kxinstall"),
                     ],
                 ]
                 results.append(

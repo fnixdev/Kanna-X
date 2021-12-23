@@ -48,22 +48,22 @@ async def reverse_search(message: Message):
     if message.reply_to_message:
         try:
             media = await message.reply_to_message.download()
-            texto = await message.reply_text("Uploading it to Google.")
+            texto = await message.edit("Uploading it to Google.")
         except ValueError:
-            return await message.reply("ERROR: Message without media")
+            return await message.err("A mensagen não contém nenhum arquivo de midia.")
         if media.endswith((".jpg", ".gif", ".png", ".bmp", ".tif", ".webp")):
             try:
                 reverse = GRS(media)
             except BaseException as error:
-                return await texto.edit_text(f"ERROR: {error}")
-            text = "Resultados da pesauisa: "
+                return await texto.err(error)
+            text = "Resultados da pesquisa: "
             if reverse:
                 text += f"[{reverse[1]}]({reverse[0]})"
             else:
-                text += "\n\tLink has not found."
-            await texto.edit_text(text,parse_mode="md", disable_web_page_preview=True)
+                text += "\n\tLink não encontrado."
+            await texto.edit(text,parse_mode="md", disable_web_page_preview=True)
         else:
-            await texto.edit_text("Midia não suportada, tente novamente com outro arquivo")
+            await texto.edit("Arquivo não suportado.")
         os.remove(media)
     else:
         await message.reply("Por favor, responda a uma foto ou video para que eu possa pesquisar")
