@@ -64,10 +64,13 @@ if kannax.has_bot:
                     InlineKeyboardButton("Android 11", callback_data="flame11_gapps"),
                     InlineKeyboardButton("Android 12", callback_data="flame12_gapps"),
                 ],
+                [
+                    InlineKeyboardButton(text="⏪  VOLTAR", callback_data="back_gapps")],
+                            ]
             ]
             await kannax.bot.edit_inline_text(
                 callback_query.inline_message_id,
-                "[\u200c](https://i.imgur.com/BZBMrfn.jpg) **FlameGapps**",
+                "[\u200c](https://telegra.ph/file/c3cdea0642e1723f3304c.jpg) **FlameGapps**",
                 reply_markup=InlineKeyboardMarkup(buttons),
             )
         else:
@@ -233,7 +236,7 @@ if kannax.has_bot:
 
             buttons = [
                 [
-                    InlineKeyboardButton("Flame Gapps", callback_data="flame_menu"),
+                    InlineKeyboardButton("Flame Gapps", callback_data="flame_"),
                     InlineKeyboardButton("Weeb Gapps", callback_data="weeb_gapps"),
                 ],
                 [   
