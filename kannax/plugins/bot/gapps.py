@@ -65,8 +65,8 @@ if kannax.has_bot:
                     InlineKeyboardButton("Android 12", callback_data="flame12_gapps"),
                 ],
                 [
-                    InlineKeyboardButton(text="⏪  VOLTAR", callback_data="back_gapps")],
-                            ]
+                    InlineKeyboardButton(text="⏪  VOLTAR", callback_data="back_gapps")
+                ],
             ]
             await kannax.bot.edit_inline_text(
                 callback_query.inline_message_id,
