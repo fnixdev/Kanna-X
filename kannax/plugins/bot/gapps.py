@@ -236,7 +236,7 @@ if kannax.has_bot:
 
             buttons = [
                 [
-                    InlineKeyboardButton("Flame Gapps", callback_data="flame_"),
+                    InlineKeyboardButton("Flame Gapps", callback_data="flame_menu"),
                     InlineKeyboardButton("Weeb Gapps", callback_data="weeb_gapps"),
                 ],
                 [   
