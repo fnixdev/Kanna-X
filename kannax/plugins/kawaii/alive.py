@@ -6,7 +6,8 @@ from kannax import Message, get_collection, kannax, get_version
 from kannax.utils import rand_array
 from kannax.plugins.bot.ialive import Bot_Alive 
 from kannax.versions import __python_version__
-from telegraph import upload_file
+from kannax.plugins.utils.telegraph import upload_media_
+
 
 SAVED = get_collection("ALIVE_DB")
 
@@ -27,27 +28,28 @@ async def _init():
     about={
         "header": "Set alive media",
         "description": "Voçê pode definir uma mídia para aparecer em seu Alive",
+        "flags": {
+            "-r": "reset alive media.",
+        },
     },
 )
 async def ani_save_media_alive(message: Message):
     """set media alive"""
-    query = message.input_str
+    found = await SAVED.find_one({"_id": "ALIVE_MEDIA"})
+    if "-r" in message.flags:
+        if not found:
+            return await message.edit("`Nenhuma Media foi definida ainda.`", del_in=5)
+        await SAVED_SETTINGS.delete_one({"_id": "ALIVE_MEDIA"})
+        return await message.edit("`Alive Media restaurada para o padrão.`", del_in=5)
     replied = message.reply_to_message
-    if replied:
-        file = await kannax.download_media(replied)
-        iurl = upload_file(file)
-        media = f"https://telegra.ph{iurl[0]}"
-        await SAVED.update_one(
+    if not replied:
+        return await message.err("`Responda a uma foto/gif/video para definir uma Alive Media.`")
+    link_ = await upload_media_(message)
+    media = f"https://telegra.ph{link_}"
+    await SAVED.update_one(
             {"_id": "ALIVE_MEDIA"}, {"$set": {"link": media}}, upsert=True
         )
-        await message.edit("`Alive Media definida com sucesso!`", del_in=5, log=True)
-    elif query:
-        await SAVED.update_one(
-                        {"_id": "ALIVE_MEDIA"}, {"$set": {"link": query}}, upsert=True
-        )
-        await message.edit("`Alive Media definida com sucesso!`", del_in=5, log=True)
-    else:
-        await message.err("Invalid Syntax")
+    await message.edit("`Alive Media definida com sucesso!`", del_in=5, log=True)
 
 
 @kannax.on_cmd(
@@ -82,12 +84,13 @@ async def view_del_ani(message: Message):
     _findpma = await SAVED.find_one({"_id": "ALIVE_MEDIA"})
     _findamsg = await SAVED.find_one({"_id": "ALIVE_MSG"})
     if _findpma is None:
-        return await message.err("`Alive Media não está definida.`", del_in=5)
+        media = "https://telegra.ph/file/8bfc66ff423f8263f8ca4.png"
+    else:
+        media = _findpma.get("link")
     if _findamsg is None:
         mmsg = rand_array(FRASES)
     else:
         mmsg = _findamsg.get("data")
-    media = _findpma.get("link")
     msg = "ᴏɪ ᴍᴇsᴛʀᴇ, ᴋᴀɴɴᴀx ɪ'ᴛs ᴀʟɪᴠᴇ"
     alive_msg = f"""
 {msg}

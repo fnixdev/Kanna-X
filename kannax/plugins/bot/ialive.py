@@ -74,7 +74,7 @@ async def set_alive_media(message: Message):
         if not found:
             return await message.edit("`Nenhuma Media foi definida ainda.`", del_in=5)
         await SAVED_SETTINGS.delete_one({"_id": "ALIVE_MEDIA"})
-        return await message.edit("`Alive Media definida para o padrão.`", del_in=5)
+        return await message.edit("`Alive Media foi resetada para o padrão.`", del_in=5)
     reply_ = message.reply_to_message
     if not reply_:
         return await message.edit(
