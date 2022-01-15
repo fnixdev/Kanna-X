@@ -39,7 +39,7 @@ async def ani_save_media_alive(message: Message):
     if "-r" in message.flags:
         if not found:
             return await message.edit("`Nenhuma Media foi definida ainda.`", del_in=5)
-        await SAVED_SETTINGS.delete_one({"_id": "ALIVE_MEDIA"})
+        await SAVED.delete_one({"_id": "ALIVE_MEDIA"})
         return await message.edit("`Alive Media restaurada para o padrão.`", del_in=5)
     replied = message.reply_to_message
     if not replied:
