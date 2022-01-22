@@ -3,7 +3,7 @@ from pyrogram.errors import YouBlockedUser
 
 from kannax import Config, Message, kannax
 from kannax.utils.kanna_utils import full_name
-from kannax.utils.kanna_utils import get_response as gr
+from kannax.utils.kanna_utils import get_response_ as gr
 
 
 @kannax.on_cmd(
