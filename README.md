@@ -26,6 +26,7 @@
     Sim! você ouviu direito.
 /**
 ```
+
 ## Requisitos 
 * Python 3.8 ou Superior
 * Telegram [API Keys](https://my.telegram.org/apps)
@@ -37,15 +38,7 @@
 - Antes de tudo leia o [TUTORIAL](https://fnixdev.github.io/Kanna/)
 
 ### Heroku
-[​![Deploy](https://www.herokucdn.com/deploy/button.svg)​](https://heroku.com/deploy?template=https://github.com/fnixdev/KannaInstall)
-
-### Railway
-
-* Sua conta GitHub deve ter 30 dias ou mais para implantar aplicativos no Railway.
-* Após o deploy, toda vez que você precisa adicionar novas vars, **VOCÊ DEVE EXCLUIR SEU DEPLOY ANTIGO PRIMEIRO**. Ou então, sua Sessin String do Telegram será revogada devido à duplicação causada pelas implantações paralelas temporárias de Railway e você precisa regenerar a sequência de sessão.​
-
-[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/new/template?template=https%3A%2F%2Fgithub.com%2Ffnixdev%2FRDeploy&envs=API_ID%2CAPI_HASH%2CDATABASE_URL%2CHU_STRING_SESSION%2CBOT_TOKEN%2COWNER_ID%2CLOG_CHANNEL_ID%2CCMD_TRIGGER&API_IDDesc=Telegram+api_id&API_HASHDesc=Telegram+api_hash&DATABASE_URLDesc=Get+it+from+cloud.mongodb.com&HU_STRING_SESSIONDesc=Telegram+string+session&BOT_TOKENDesc=Telegram+bot+token%2C+get+it+with+the+help+of+%40BotFather&OWNER_IDDesc=Your+user+ID&LOG_CHANNEL_IDDesc=Channel+for+userbot+to+log&CMD_TRIGGERDesc=Command+trigger+to+execute+userbot+command&CMD_TRIGGERDefault=.)
-
+[​![Deploy](https://www.herokucdn.com/deploy/button.svg)​](https://heroku.com/deploy?template=https://github.com/fnixdev/deploy-x)
 
 ## String Session
 

@@ -18,7 +18,8 @@ from .kanna_utils import (
     time_date_diff,
     get_response_,
     full_name,
-    msg_type
+    msg_type,
+    extract_id
 )
 from .progress import progress
 from .sys_tools import SafeDict, get_import_path, secure_text, terminate

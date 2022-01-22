@@ -832,7 +832,6 @@ if kannax.has_bot:
                         InlineKeyboardButton(
                             "Moedas Internacionais", callback_data="moeda_internacionais"),
                         InlineKeyboardButton(
-                            "Crypto Moedas", callback_data="crypto_moedas"),
                     ],
                 ]
                 results.append(

@@ -61,7 +61,7 @@ async def ani_save_media_alive(message: Message):
 )
 async def save_msg_alive(message: Message):
     """set alive msg"""
-    rep = message.input_or_reply_str
+    rep = message.input_or_reply_raw
     if not rep:
         return await message.edit("`Você precisa digitar ou responder a uma mensagem pra salva-la`", del_in=6)
     if rep:

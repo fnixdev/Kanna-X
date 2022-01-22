@@ -191,7 +191,7 @@ class KannaX(_AbstractKannaX):
 
         async def _shutdown(_sig: signal.Signals) -> None:
             global _SEND_SIGNAL  # pylint: disable=global-statement
-            _LOG.info(_LOG_STR, f"Received Stop Signal [{_sig.name}], Desligandi KannaX ...")
+            _LOG.info(_LOG_STR, f"Received Stop Signal [{_sig.name}], Desligando KannaX ...")
             await _finalize()
             if _sig == _sig.SIGUSR1:
                 _SEND_SIGNAL = True

@@ -189,3 +189,17 @@ def msg_type(message):
     elif message.video:
         type_ = "video"
     return type_
+
+def extract_id(mention):
+    if str(mention).isdigit():
+        return "Input is not a mention but an ID..."
+    elif mention.startswith("@"):
+        return "Input is not a mention but a username..."
+    try:
+        men = mention.html
+    except:
+        return "Input is not a mention."
+    filter = re.search(r"\d+", men)
+    if filter: 
+        return filter.group(0)
+    return "ID not found."

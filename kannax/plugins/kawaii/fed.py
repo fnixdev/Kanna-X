@@ -1,12 +1,9 @@
-# made by @Kakashi_HTK(tg)/@ashwinstr(gh)
-# ported for KannaX
-
-
+from pyrogram import filters
 from pyrogram.errors import YouBlockedUser
 
 from kannax import Config, Message, kannax
-from kannax.utils import full_name
-from kannax.utils import get_response as gr
+from kannax.kanna_utils import full_name
+from kannax.kanna_utils import get_response as gr
 
 
 @kannax.on_cmd(
@@ -27,23 +24,23 @@ async def f_stat(message: Message):
         get_u = await kannax.get_users(user_)
         user_name = full_name(get_u)
         user_id = get_u.id
+        await message.edit(
+            f"Fetching fstat of user <a href='tg://user?id={user_id}'><b>{user_name}</b></a>..."
+        )
     except BaseException:
         await message.edit(
             f"Fetching fstat of user <b>{user_}</b>...\nWARNING: User not found in your database, checking Rose's database."
         )
         user_name = user_
         user_id = user_
-    await message.edit(
-        f"Fetching fstat of user <a href='tg://user?id={user_id}'><b>{user_name}</b></a>..."
-    )
     bot_ = "MissRose_bot"
     try:
-        query_ = await kannax.send_message(bot_, f"!fstat {user_id}")
+        async with kannax.conversation(bot_) as conv:
+            await conv.send_message(f"!fstat {user_id}")
+            response = await conv.get_response(mark_read=True, filters=filters.edited)
     except YouBlockedUser:
         await message.err("Unblock @missrose_bot first...", del_in=5)
         return
-    try:
-        response = await gr(query_, timeout=4, mark_read=True)
     except Exception as e:
         return await message.edit(f"<b>ERROR:</b> `{e}`")
     fail = "Could not find a user"
@@ -55,7 +52,6 @@ async def f_stat(message: Message):
         )
     else:
         await message.edit(resp, parse_mode="html")
-
 
 
 @kannax.on_cmd(

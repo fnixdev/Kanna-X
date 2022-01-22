@@ -15,13 +15,50 @@ from pyrogram import filters
 from pyrogram.errors import FloodWait, PeerIdInvalid, UserBannedInChannel
 
 from kannax import Config, Message, get_collection, kannax
-from kannax.utils import report_user
+from kannax.kanna_utils import extract_id, report_user
+from kannax.plugins.tools.sudo import SAVED_SETTINGS
 
 FBAN_LOG_CHANNEL = os.environ.get("FBAN_LOG_CHANNEL")
 
-
+SAVED_SETTINGS = get_collection("CONFIGS")
 FED_LIST = get_collection("FED_LIST")
 CHANNEL = kannax.getCLogger(__name__)
+
+
+async def _init() -> None:
+    f_t = await SAVED_SETTINGS.find_one({"_id": "FBAN_TAG"})
+    if f_t:
+        Config.FBAN_TAG = f_t["data"]
+
+
+@kannax.on_cmd(
+    "fban_tag",
+    about={
+        "header": "enable / disable fbanner's tag",
+        "flags": {
+            "-c": "check",
+        },
+        "usage": "{tr}fban_tag",
+    },
+)
+async def fban_sudo_tags(message: Message):
+    """enable / disable fbanner's tag"""
+    if not hasattr(Config, "FBAN_TAG"):
+        setattr(Config, "FBAN_TAG", False)
+    if "-c" in message.flags:
+        if Config.FBAN_TAG:
+            return await message.edit("`Fban tags are on.`", del_in=5)
+        else:
+            return await message.edit("`Fban tags are off.`", del_in=5)
+    if Config.FBAN_TAG:
+        Config.FBAN_TAG = False
+        await message.edit("`Fban tags disabled.`", del_in=5)
+    else:
+        Config.FBAN_TAG = True
+        await message.edit("`Fban tags enabled.`", del_in=5)
+    await SAVED_SETTINGS.update_one(
+        {"_id": "FBAN_TAG"}, {"$set": {"data": Config.FBAN_TAG}}, upsert=True
+    )
 
 
 @kannax.on_cmd(
@@ -104,15 +141,25 @@ async def delfed_(message: Message):
 )
 async def fban_(message: Message):
     """Bans a user from connected Feds."""
-    message.flags
     fban_arg = ["❯", "❯❯", "❯❯❯", "❯❯❯ <b>FBanned {}</b>"]
     PROOF_CHANNEL = FBAN_LOG_CHANNEL if FBAN_LOG_CHANNEL else Config.LOG_CHANNEL_ID
     input = message.filtered_input_str
     await message.edit(fban_arg[0])
+    sudo_ = False
+    if (
+        message.from_user.id in Config.SUDO_USERS
+        or message.from_user.id in Config.TRUSTED_SUDO_USERS
+    ):
+        sudo_ = True
     if not message.reply_to_message:
-        user = input.split()[0]
-        reason = input.split()[1:]
-        reason = " ".join(reason)
+        split_ = input.split(" ", 1)
+        user = split_[0]
+        if not user.isdigit() and not user.startswith("@"):
+            user = extract_id(message.text)
+        if len(split_) == 2:
+            reason = split_[1]
+        else:
+            reason = "not specified"
     else:
         user = message.reply_to_message.from_user.id
         reason = input
@@ -125,6 +172,7 @@ async def fban_(message: Message):
         pass
     if (
         user in Config.SUDO_USERS
+        or user in Config.TRUSTED_SUDO_USERS
         or user in Config.OWNER_ID
         or user == (await message.client.get_me()).id
     ):
@@ -139,8 +187,23 @@ async def fban_(message: Message):
             user = user_.id
         except (PeerIdInvalid, IndexError):
             d_err = f"Failed to detect user **{user}**, fban might not work..."
-            await message.edit(d_err, del_in=7)
+            await message.edit(f"{d_err}\nType `y` to ontinue.")
             await CHANNEL.log(d_err)
+            try:
+                async with kannax.conversation(message.chat.id) as conv:
+                    response = await conv.get_response(
+                        mark_read=True, filters=(filters.user([message.from_user.id]))
+                    )
+            except BaseException:
+                return await message.edit(
+                    f"`Fban terminated...\nReason: Response timeout.`"
+                )
+            if response.text == "y":
+                pass
+            else:
+                return await message.edit(
+                    f"`Fban terminated...\nReason: User didn't continue.`"
+                )
         if (
             user in Config.SUDO_USERS
             or user in Config.OWNER_ID
@@ -167,6 +230,7 @@ async def fban_(message: Message):
             await kannax.send_message(
                 chat_id,
                 f"/fban {user} {reason}",
+                disable_web_page_preview=True,
             )
         except UserBannedInChannel:
             pass
@@ -202,8 +266,10 @@ async def fban_(message: Message):
         status = f"Success! Fbanned in `{total}` feds."
     msg_ = (
         fban_arg[3].format(u_link)
-        + f"\n**ID:** <code>{u_id}</code>\n**Reason:** {reason}\n**Status:** {status}"
+        + f"\n**ID:** <code>{u_id}</code>\n**Reason:** {reason}\n**Status:** {status}\n"
     )
+    if sudo_:
+        msg_ += f"**By:** {message.from_user.mention}"
     await message.edit(msg_)
     await kannax.send_message(int(PROOF_CHANNEL), msg_)
 
@@ -244,6 +310,12 @@ async def fban_p(message: Message):
             del_in=5,
         )
         return
+    sudo_ = False
+    if (
+        message.from_user.id in Config.SUDO_USERS
+        or message.from_user.id in Config.TRUSTED_SUDO_USERS
+    ):
+        sudo_ = True
     if "-r" in message.flags:
         link_ = message.filtered_input_str
         link_split = link_.split()
@@ -291,6 +363,7 @@ async def fban_p(message: Message):
     fps = True
     if (
         user in Config.SUDO_USERS
+        or user in Config.TRUSTED_SUDO_USERS
         or user in Config.OWNER_ID
         or user == (await message.client.get_me()).id
     ):
@@ -301,9 +374,10 @@ async def fban_p(message: Message):
                 del_in=5,
             )
             return
-        user = input.split()[0]
-        reason = input.split()[1:]
-        reason = " ".join(reason)
+        split_ = input.split(" ", 1)
+        user = split_[0]
+        if not user.isdigit() and not user.startswith("@"):
+            user = extract_id(message.text)
         try:
             user_ = await kannax.get_users(user)
             user = user_.id
@@ -311,6 +385,10 @@ async def fban_p(message: Message):
             d_err = f"Failed to detect user **{user}**, fban might not work..."
             await message.edit(d_err, del_in=5)
             await CHANNEL.log(d_err)
+        try:
+            reason = split_[1]
+        except BaseException:
+            reason = "not specified"
         if (
             user in Config.SUDO_USERS
             or user in Config.OWNER_ID
@@ -346,7 +424,7 @@ async def fban_p(message: Message):
             msg_id=proof,
             reason=reason,
         )
-        reported = "</b>and <b>reported "
+        reported = "</b> and <b>reported "
     else:
         reported = ""
     async for data in FED_LIST.find():
@@ -397,8 +475,10 @@ async def fban_p(message: Message):
                 status += f"\n• {i}"
     msg_ = (
         fban_arg[3].format(reported, u_link)
-        + f"\n**ID:** <code>{u_id}</code>\n**Reason:** {reason}\n**Status:** {status}"
+        + f"\n**ID:** <code>{u_id}</code>\n**Reason:** {reason}\n**Status:** {status}\n"
     )
+    if sudo_:
+        msg_ += f"**By:** {message.from_user.mention}"
     await message.edit(msg_, disable_web_page_preview=True)
     await kannax.send_message(
         int(FBAN_LOG_CHANNEL), msg_, disable_web_page_preview=True
@@ -489,7 +569,7 @@ async def unfban_(message: Message):
     if message.reply_to_message:
         reason = input
     else:
-        reason = input[1:]
+        reason = input.split(" ", 1)[1]
     PROOF_CHANNEL = FBAN_LOG_CHANNEL if FBAN_LOG_CHANNEL else Config.LOG_CHANNEL_ID
     error_msg = "Provide a User ID or reply to a User"
     if user is None:
