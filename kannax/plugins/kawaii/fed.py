@@ -2,8 +2,8 @@ from pyrogram import filters
 from pyrogram.errors import YouBlockedUser
 
 from kannax import Config, Message, kannax
-from kannax.kanna_utils import full_name
-from kannax.kanna_utils import get_response as gr
+from kannax.utils.kanna_utils import full_name
+from kannax.utils.kanna_utils import get_response as gr
 
 
 @kannax.on_cmd(
