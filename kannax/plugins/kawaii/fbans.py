@@ -15,7 +15,7 @@ from pyrogram import filters
 from pyrogram.errors import FloodWait, PeerIdInvalid, UserBannedInChannel
 
 from kannax import Config, Message, get_collection, kannax
-from kannax.kanna_utils import extract_id, report_user
+from kannax.utils.kanna_utils import extract_id, report_user
 from kannax.plugins.tools.sudo import SAVED_SETTINGS
 
 FBAN_LOG_CHANNEL = os.environ.get("FBAN_LOG_CHANNEL")
