@@ -72,7 +72,7 @@ async def save_msg_alive(message: Message):
         )
         await message.edit("`Mensagem para alive definida com sucesso!`", del_in=5, log=True)
     except Exception as e:
-        await message.err(f"Invalid Syntax\n\n`{e}"`)
+        await message.err(f"Invalid Syntax\n\n`{e}`")
 
 
 @kannax.on_cmd(
