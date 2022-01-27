@@ -67,7 +67,6 @@ async def save_msg_alive(message: Message):
     if len(rep) > 1024:
         await message.edit("`A mensagem que você quer setar ultrapassa os limites de caracteres. Diminua e tente novamente.`")
         return
-    if rep:
     await SAVED.update_one(
         {"_id": "ALIVE_MSG"}, {"$set": {"data": rep}}, upsert=True
     )
