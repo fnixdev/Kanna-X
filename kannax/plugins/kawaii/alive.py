@@ -64,13 +64,16 @@ async def save_msg_alive(message: Message):
     rep = message.input_or_reply_raw
     if not rep:
         return await message.edit("`Você precisa digitar ou responder a uma mensagem pra salva-la`", del_in=6)
-    if len(rep) > 1024:
-        await message.edit("`A mensagem que você quer setar ultrapassa os limites de caracteres. Diminua e tente novamente.`")
-        return
-    await SAVED.update_one(
-        {"_id": "ALIVE_MSG"}, {"$set": {"data": rep}}, upsert=True
-    )
-    await message.edit("`Mensagem para alive definida com sucesso!`", del_in=5, log=True)
+    if len(rep) > 850:
+        return await message.edit("`Essa mensagem é muito longa, o limite é de 500 caracteres.`", del_in=5)
+    try:
+        await SAVED.update_one(
+            {"_id": "ALIVE_MSG"}, {"$set": {"data": rep}}, upsert=True
+        )
+        await message.edit("`Mensagem para alive definida com sucesso!`", del_in=5, log=True)
+    except Exception as e:
+        await message.err(f"Invalid Syntax\n\n`{e}"`)
+
 
 @kannax.on_cmd(
     "alive",
