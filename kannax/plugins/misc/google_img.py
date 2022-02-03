@@ -19,7 +19,7 @@ from pyrogram.types import InputMediaDocument, InputMediaPhoto
 from kannax import Config, Message, pool, kannax
 from kannax.utils import sublists
 
-from .uploads import doc_upload, photo_upload
+from .upload import doc_upload, photo_upload
 
 
 class Colors:
