@@ -537,12 +537,12 @@ async def unmute_usr(message: Message):
             "{tr}zombies -c [remover contas excluídas do grupo]",
         ],
     },
-    allow_channels=False,
+    allow_channels=True,
     allow_bots=False,
     allow_private=False,
 )
 async def zombie_clean(message: Message):
-    """remove deleted accounts from tg group"""
+    """remover contas excluídas do grupo tg"""
     chat_id = message.chat.id
     flags = message.flags
     rm_delaccs = "-c" in flags
@@ -558,7 +558,7 @@ async def zombie_clean(message: Message):
         del_users = 0
         del_admins = 0
         del_total = 0
-        del_stats = r"`Zero zombie accounts found in this chat... WOOHOO group is clean.. \^o^/`"
+        del_stats = r"`0 contas zombie encontradas no chat... WOOHOO grupo limpo.. \^o^/`"
         if can_clean:
             await message.edit("`Espere!! limpando contas de zumbis deste bate-papo..`")
             async for member in message.client.iter_chat_members(chat_id):
@@ -577,7 +577,7 @@ async def zombie_clean(message: Message):
             if del_admins > 0:
                 del_stats = f"`👻 Foi encontrado` **{del_total}** `zumbis..`\
                 \n`🗑 Removidos` **{del_users}** `zumbis..`\
-                \n🛡 **{del_admins}** `deleted admin accounts are skipped!!`"
+                \n🛡 **{del_admins}** `contas de admins excluídas são ignoradas!!`"
             else:
                 del_stats = f"`👻 Foi encontrado` **{del_total}** `zumbis..`\
                 \n`🗑 Removidos` **{del_users}** `zumbis..`"
@@ -591,11 +591,11 @@ async def zombie_clean(message: Message):
             )
         else:
             await message.edit(
-                r"`i don't have proper permission to do that! (* ￣︿￣)`", del_in=5
+                r"`Eu não tenho permissão adequada para fazer isso! (* ￣︿￣)`", del_in=5
             )
     else:
         del_users = 0
-        del_stats = r"`Zero zombie accounts found in this chat... WOOHOO group is clean.. \^o^/`"
+        del_stats = r"`0 contas zumbis encontradas neste chat... Grupo WOOHOO está limpo.. \^o^/`"
         await message.edit("`🔎 Procurando contas de zumbis neste bate-papo..`")
         async for member in message.client.iter_chat_members(chat_id):
             if member.user.is_deleted:
@@ -603,7 +603,7 @@ async def zombie_clean(message: Message):
         if del_users > 0:
             del_stats = f"`Encontrado` **{del_users}** `contas zumbis neste chat.`"
             await message.edit(
-                f"🕵️‍♂️ {del_stats} you can clean them using `{Config.CMD_TRIGGER}zombies -c`",
+                f"🕵️‍♂️ {del_stats} você pode limpá-los usando `{Config.CMD_TRIGGER}zombies -c`",
                 del_in=5,
             )
             await CHANNEL.log(
@@ -616,7 +616,7 @@ async def zombie_clean(message: Message):
             await CHANNEL.log(
                 "#ZOMBIE_CHECK\n\n"
                 f"CHAT: `{message.chat.title}` (`{chat_id}`)\n"
-                r"ZOMBIE COUNT: `WOOHOO group is clean.. \^o^/`"
+                r"ZOMBIE COUNT: `WOOHOO grupo está limpo.. \^o^/`"
             )
 
 
