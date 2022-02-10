@@ -131,15 +131,6 @@ async def Hmm_(message: Message):
         await message.try_to_edit(Hmm)
 
 
-@kannax.on_cmd("aa", about={"header": "aaaaaaaa"}, allow_via_bot=False)
-async def aaa_(message: Message):
-    """"""
-    aa = "aa "
-    for _ in range(4):
-        aa = aa[:-1] + "aaaa"
-        await message.try_to_edit(aa)
-
-
 @kannax.on_cmd("(oof)$", about={"header": "ooooooof"}, trigger="", allow_via_bot=False)
 async def oof_(message: Message):
     """oof"""
@@ -250,39 +241,6 @@ async def loll(message: Message):
 ┗━━━┛╰━━━━╯┗━━━┛
     """
     await message.edit(out_str)
-
-
-@kannax.on_cmd("(k|K)$", about={"header": "KKKKKKKKKKKKKKKKKKKK"}, trigger="", allow_via_bot=False)
-async def kkk_(message: Message):
-    """KK"""
-    K = "K "
-    for _ in range(4):
-        K = K[:-1] + "KKKKKKKKKKK"
-        await message.try_to_edit(K)
-
-
-@kannax.on_cmd("(bd)$", about={"header": "bom diaaa"}, trigger="", allow_via_bot=False)
-async def bd_(message: Message):
-    """bd"""
-    await message.edit("bom diaaa")
-
-
-@kannax.on_cmd("(BD)$", about={"header": "Bom Diaaa"}, trigger="", allow_via_bot=False)
-async def BD_(message: Message):
-    """BD"""
-    await message.edit("Bom Diaaa")
-
-
-@kannax.on_cmd("(bn)$", about={"header": "boa noitee"}, trigger="", allow_via_bot=False)
-async def bn_(message: Message):
-    """bn"""
-    await message.edit("boa noitee")
-
-
-@kannax.on_cmd("(BN)$", about={"header": "Boa Noitee"}, trigger="", allow_via_bot=False)
-async def BN_(message: Message):
-    """BN"""
-    await message.edit("Boa Noitee")
 
 
 @kannax.on_cmd("(hmm)$", about={"header": "hmmmmm"}, trigger="", allow_via_bot=False)
