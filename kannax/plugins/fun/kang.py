@@ -106,7 +106,7 @@ async def kang_(message: Message):
         packnick = f"{custom_packnick} Vol.{pack}"
         cmd = "/newpack"
         if resize:
-            media = resize_media(media, is_video)
+            media = await resize_media(media, is_video)
         if is_anim:
             packname += "_anim"
             packnick += " (Animated)"
