@@ -16,7 +16,7 @@ from pyrogram.raw.functions.messages import GetStickerSet
 from pyrogram.raw.types import InputStickerSetShortName
 
 from kannax import Config, Message, kannax
-from kannax.utils import get_response, media_to_image
+from kannax.utils import get_response, media_to_image, runcmd
 
 
 @kannax.on_cmd(
