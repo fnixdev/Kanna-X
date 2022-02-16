@@ -41,13 +41,13 @@ async def media_to_image(message):
     )
     dls_loc = os.path.join(Config.DOWN_PATH, os.path.basename(dls))
     if replied.sticker and replied.sticker.file_name.endswith(".tgs"):
-        await message.edit("Converting Animated Sticker To Image...")
+        await message.edit("`Converting Animated Sticker To Image...`")
         png_file = os.path.join(Config.DOWN_PATH, "image.png")
         cmd = f"lottie_convert.py --frame 0 -if lottie -of png {dls_loc} {png_file}"
         stdout, stderr = (await runcmd(cmd))[:2]
         os.remove(dls_loc)
         if not os.path.lexists(png_file):
-            await message.err("This sticker is Gey, Task Failed Successfully ≧ω≦")
+            await message.err("`This sticker is Gey, Task Failed Successfully ≧ω≦`")
             raise Exception(stdout + stderr)
         dls_loc = png_file
     elif replied.sticker and replied.sticker.file_name.endswith(".webp"):
@@ -63,7 +63,7 @@ async def media_to_image(message):
         await take_screen_shot(dls_loc, 0, jpg_file)
         os.remove(dls_loc)
         if not os.path.lexists(jpg_file):
-            await message.err("This Gif is Gey (｡ì _ í｡), Task Failed Successfully !")
+            await message.err("`This Gif is Gey (｡ì _ í｡), Task Failed Successfully !`")
             return
         dls_loc = jpg_file
     elif replied.animation or replied.video:
@@ -72,7 +72,7 @@ async def media_to_image(message):
         await take_screen_shot(dls_loc, 0, jpg_file)
         os.remove(dls_loc)
         if not os.path.lexists(jpg_file):
-            await message.err("This Gif is Gey (｡ì _ í｡), Task Failed Successfully !")
+            await message.err("`This Gif is Gey (｡ì _ í｡), Task Failed Successfully !`")
             return
         dls_loc = jpg_file
     elif replied.audio:

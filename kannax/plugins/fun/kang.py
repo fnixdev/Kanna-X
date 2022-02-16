@@ -365,13 +365,14 @@ async def sticker_search(message: Message):
 )
 async def img(message: Message):
     if not message.reply_to_message:
-        await message.edit("Responda a uma mídia...", del_in=5)
+        await message.edit("`Responda a uma mídia ou documento...`", del_in=5)
         return
     reply_to = message.reply_to_message.message_id
-    await message.edit("Convertendo...", del_in=5)
+    await message.edit("`Convertendo...`", del_in=5)
     file_name = "kanna_convert.jpg"
     down_file = os.path.join(Config.DOWN_PATH, file_name)
     if os.path.isfile(down_file):
         os.remove(down_file)
     image = await media_to_image(message)
     await message.reply_photo(image, reply_to_message_id=reply_to)
+    os.remove(image)
