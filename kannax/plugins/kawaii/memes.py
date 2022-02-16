@@ -91,7 +91,7 @@ async def rt_(message: Message):
 async def f_(message: Message):
     msg = message.input_str
     paytext = msg[0]
-    if not msg:
+    if not paytext:
         return await message.edit("`Eu preciso que você digite algo`")
     pay = "{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}".format(
         paytext * 8,
@@ -120,33 +120,6 @@ async def iam_(message: Message):
     user_ = await kannax.get_users(reply_.from_user.id)
     msg_ = f"🌈 {user_.mention} `é {random.choice(range(0,100))}% gay!`"
     await message.edit(msg_)
-
-
-@kannax.on_cmd("(Hmm)$", about={"header": "Hmmmmm"}, trigger="", allow_via_bot=False)
-async def Hmm_(message: Message):
-    """Hmm"""
-    Hmm = "Hm "
-    for _ in range(4):
-        Hmm = Hmm[:-1] + "mm"
-        await message.try_to_edit(Hmm)
-
-
-@kannax.on_cmd("aa", about={"header": "aaaaaaaa"}, allow_via_bot=False)
-async def aaa_(message: Message):
-    """"""
-    aa = "aa "
-    for _ in range(4):
-        aa = aa[:-1] + "aaaa"
-        await message.try_to_edit(aa)
-
-
-@kannax.on_cmd("(oof)$", about={"header": "ooooooof"}, trigger="", allow_via_bot=False)
-async def oof_(message: Message):
-    """oof"""
-    Hmm = "ooo "
-    for _ in range(15):
-        Hmm = Hmm[:-1] + "ooof"
-        await message.try_to_edit(Hmm)
 
 
 @kannax.on_cmd("snake", about={"header": "sneeeeak"})
@@ -252,39 +225,6 @@ async def loll(message: Message):
     await message.edit(out_str)
 
 
-@kannax.on_cmd("(k|K)$", about={"header": "KKKKKKKKKKKKKKKKKKKK"}, trigger="", allow_via_bot=False)
-async def kkk_(message: Message):
-    """KK"""
-    K = "K "
-    for _ in range(4):
-        K = K[:-1] + "KKKKKKKKKKK"
-        await message.try_to_edit(K)
-
-
-@kannax.on_cmd("(bd)$", about={"header": "bom diaaa"}, trigger="", allow_via_bot=False)
-async def bd_(message: Message):
-    """bd"""
-    await message.edit("bom diaaa")
-
-
-@kannax.on_cmd("(BD)$", about={"header": "Bom Diaaa"}, trigger="", allow_via_bot=False)
-async def BD_(message: Message):
-    """BD"""
-    await message.edit("Bom Diaaa")
-
-
-@kannax.on_cmd("(bn)$", about={"header": "boa noitee"}, trigger="", allow_via_bot=False)
-async def bn_(message: Message):
-    """bn"""
-    await message.edit("boa noitee")
-
-
-@kannax.on_cmd("(BN)$", about={"header": "Boa Noitee"}, trigger="", allow_via_bot=False)
-async def BN_(message: Message):
-    """BN"""
-    await message.edit("Boa Noitee")
-
-
 @kannax.on_cmd("(hmm)$", about={"header": "hmmmmm"}, trigger="", allow_via_bot=False)
 async def hmm_(message: Message):
     """hmm"""
@@ -350,38 +290,6 @@ async def cowsay_(message: Message):
     cheese = cow.get_cow(arg)
     cheese = cheese()
     await message.edit(f"`{cheese.milk(text).replace('`', '´')}`")
-
-
-@kannax.on_cmd(
-    "coinflip",
-    about={"header": "Flip a coin !!",
-           "usage": "{tr}coinflip [heads | tails]"},
-)
-async def coin_(message: Message):
-    """coin"""
-    r = choice(["heads", "tails"])
-    input_str = message.input_str
-    if not input_str:
-        return
-    input_str = input_str.lower()
-    if r == "heads":
-        if input_str == "heads":
-            await message.edit("The coin landed on: **Heads**.\nYou were correct.")
-        elif input_str == "tails":
-            await message.edit(
-                "The coin landed on: **Heads**.\nYou weren't correct, try again ..."
-            )
-        else:
-            await message.edit("The coin landed on: **Heads**.")
-    elif r == "tails":
-        if input_str == "tails":
-            await message.edit("The coin landed on: **Tails**.\nYou were correct.")
-        elif input_str == "heads":
-            await message.edit(
-                "The coin landed on: **Tails**.\nYou weren't correct, try again ..."
-            )
-        else:
-            await message.edit("The coin landed on: **Tails**.")
 
 
 @kannax.on_cmd(
@@ -525,7 +433,7 @@ async def hack_func(message: Message):
         "`hacking....60% completed\nmore data found im target device\npreparing to download data\n process started with status 7y75hsgdt365ege56es \n status changed to up`",
         "`hacking....73% completed\n downloading data from device\n process completed with status 884hfhjh\nDownloading-0.1.tar.gz (9.3 kB)\nCollecting Data Packageseeing target\n lding chat tg-bot bruteforce finished\n creating pdf of chat`",
         "`hacking...88% completed\nall data from telegram private server downloaded\nterminal download sucessfull--with status jh3233fdg66y yr4vv.irh\n data collected from tg-bot\nTERMINAL:\n Bruteforce-Telegram-0.1.tar.gz (1.3)downloaded`",
-        "`100%\n█████████HACKED███████████ `\n\n\n  TERMINAL:\nDownloading Bruteforce-Telegram-0.1.tar.gz (9.3 kB)\nCollecting Data Package\n  Downloading Telegram-Data-Sniffer-7.1.1-py2.py3-none-any.whl (82 kB)\nBuilding wheel for Tg-Bruteforcing (setup.py): finished with status 'done'\nCreated wheel for telegram: filename=Telegram-Data-Sniffer-0.0.1-py3-none-any.whl size=1306 sha256=cb224caad7fe01a6649188c62303cd4697c1869fa12d280570bb6ac6a88e6b7e\n  Stored in directory: `",
+        "`100%\n█████████HACKED███████████ `\n\n\n  `TERMINAL:\nDownloading Bruteforce-Telegram-0.1.tar.gz (9.3 kB)\nCollecting Data Package\n  Downloading Telegram-Data-Sniffer-7.1.1-py2.py3-none-any.whl (82 kB)\nBuilding wheel for Tg-Bruteforcing (setup.py): finished with status 'done'\nCreated wheel for telegram: filename=Telegram-Data-Sniffer-0.0.1-py3-none-any.whl size=1306 sha256=cb224caad7fe01a6649188c62303cd4697c1869fa12d280570bb6ac6a88e6b7e\n  Stored in directory: `",
         "`User Data Upload Completed: Target's User Data Stored `",
         "`at downloads/victim/telegram-authuser.data.sql`",
     ]

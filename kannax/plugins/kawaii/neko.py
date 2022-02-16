@@ -1,4 +1,5 @@
 import httpx
+import requests
 from kannax import Message, kannax
 import re
 
@@ -11,20 +12,13 @@ import re
     },
 )
 async def random_neko(message: Message):
-    while True:
+    try:
+        r = requests.get("https://nekos.life/api/neko").json()
+        neko = r["neko"]
         await message.delete()
-        reply = message.reply_to_message
-        reply_id = reply.message_id if reply else None
-        try:
-            async with httpx.AsyncClient() as client:
-                r = await client.get("https://nekos.life/")
-            midia = re.findall(
-                r"<meta property=\"og:image\" content=\"(.*)\"/>", r.text)[0]
-            return await message.client.send_photo(
-                chat_id=message.chat.id, photo=midia, reply_to_message_id=reply_id)
-        except:
-            pass
-
+        await message.reply_photo(neko)
+    except Exception as e:
+        await message.err(e)
 
 @kannax.on_cmd(
     "cat",
