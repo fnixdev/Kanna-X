@@ -47,6 +47,7 @@ async def kang_(message: Message):
     is_anim = False
     is_video = False
     resize = False
+    resize_vid = False
     if replied and replied.media:
         if replied.photo:
             resize = True
@@ -56,11 +57,16 @@ async def kang_(message: Message):
             is_anim = True
         elif (replied.document and "video" in replied.document.mime_type
                 and replied.document.file_size <= 10485760):
-            resize = True
+            resize_vid = True
             is_video = True
+            obj = replied.document.thumbs[0]
+            w_ = obj["width"]
+            h_ = obj["height"]
         elif replied.animation:
-            resize = True
+            resize_vid = True
             is_video = True
+            w_ = replied.animation.width
+            h_ = replied.animation.height
         elif replied.sticker:
             if not replied.sticker.file_name:
                 await message.edit("`O sticker não tem nome!`")
@@ -105,6 +111,8 @@ async def kang_(message: Message):
         custom_packnick = Config.CUSTOM_PACK_NAME or f"{u_name}'s kang pack"
         packnick = f"{custom_packnick} Vol.{pack}"
         cmd = "/newpack"
+        if resize_vid:
+            media = await resize_video(media, is_video, w_, h_)
         if resize:
             media = await resize_media(media, is_video)
         if is_anim:
@@ -272,6 +280,17 @@ async def sticker_pack_info_(message: Message):
         f"**Emojis no pacote:**\n{' '.join(pack_emojis)}"
     )
     await message.edit(out_str)
+
+async def resize_video(media: str, video: bool, w: int, h: int) -> str:
+    """ Resize the given media to 512x512 """
+    w, h = (-1, 512) if h > w else (512, -1)
+    if video:
+        resized_video = f"{media}.webm"
+        cmd = f"ffmpeg -i {media} -ss 00:00:00 -to 00:00:03 -map 0:v" + \
+            f" -c:v libvpx-vp9 -vf scale={w}:{h},fps=fps=30 {resized_video}"
+        await runcmd(cmd)
+        os.remove(media)
+        return resized_video
 
 
 async def resize_media(media: str, video: bool) -> str:
