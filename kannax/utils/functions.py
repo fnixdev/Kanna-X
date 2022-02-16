@@ -57,6 +57,15 @@ async def media_to_image(message):
             await message.err("```Sticker not found...```")
             return
         dls_loc = stkr_file
+    elif replied.sticker and replied.sticker.file_name.endswith(".webm"):
+        await message.edit("`Converting Media To Image ...`")
+        jpg_file = os.path.join(Config.DOWN_PATH, "image.jpg")
+        await take_screen_shot(dls_loc, 0, jpg_file)
+        os.remove(dls_loc)
+        if not os.path.lexists(jpg_file):
+            await message.err("This Gif is Gey (｡ì _ í｡), Task Failed Successfully !")
+            return
+        dls_loc = jpg_file
     elif replied.animation or replied.video:
         await message.edit("`Converting Media To Image ...`")
         jpg_file = os.path.join(Config.DOWN_PATH, "image.jpg")
