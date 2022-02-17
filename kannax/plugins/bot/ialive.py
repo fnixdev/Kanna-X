@@ -134,6 +134,79 @@ async def send_inline_alive(message: Message) -> None:
     await asyncio.sleep(200)
     await kannax.delete_messages(message.chat.id, i_res_id)
 
+
+async def send_alive_message(message: Message) -> None:
+    global _USER_CACHED_MEDIA, _BOT_CACHED_MEDIA
+    chat_id = message.chat.id
+    client = message.client
+    caption = Bot_Alive.alive_info()
+    if client.is_bot:
+        reply_markup = Bot_Alive.alive_buttons()
+        file_id = _BOT_CACHED_MEDIA
+    else:
+        reply_markup = None
+        file_id = _USER_CACHED_MEDIA
+        caption += (
+            f"\n⚡️  <a href={Config.UPSTREAM_REPO}><b>ʀᴇᴘᴏꜱɪᴛᴏʀɪᴏ</b></a>"
+            "    <code>|</code>    "
+            "👥  <a href='https://t.me/fnixdev'><b>ꜱᴜᴘᴏʀᴛᴇ</b></a>"
+        )
+    if not Config.ALIVE_MEDIA:
+        await client.send_animation(
+            chat_id,
+            animation=Bot_Alive.alive_default_imgs(),
+            caption=caption,
+            reply_markup=reply_markup,
+        )
+        return
+    url_ = Config.ALIVE_MEDIA.strip()
+    if url_.lower() == "false":
+        await client.send_message(
+            chat_id,
+            caption=caption,
+            reply_markup=reply_markup,
+            disable_web_page_preview=True,
+        )
+    else:
+        type_, media_ = await Bot_Alive.check_media_link(Config.ALIVE_MEDIA)
+        if type_ == "url_gif":
+            await client.send_animation(
+                chat_id,
+                animation=url_,
+                caption=caption,
+                reply_markup=reply_markup,
+            )
+        elif type_ == "url_image":
+            await client.send_photo(
+                chat_id,
+                photo=url_,
+                caption=caption,
+                reply_markup=reply_markup,
+            )
+        elif type_ == "tg_media":
+            try:
+                await client.send_cached_media(
+                    chat_id,
+                    file_id=file_id,
+                    caption=caption,
+                    reply_markup=reply_markup,
+                )
+            except MediaEmpty:
+                if not message.client.is_bot:
+                    try:
+                        refeshed_f_id = get_file_id(
+                            await kannax.get_messages(media_[0], media_[1])
+                        )
+                        await kannax.send_cached_media(
+                            chat_id,
+                            file_id=refeshed_f_id,
+                            caption=caption,
+                        )
+                    except Exception as u_err:
+                        LOGGER.error(u_err)
+                    else:
+                        _USER_CACHED_MEDIA = refeshed_f_id
+
 def msg_type_alive(message):
     type_ = "text"
     if message.audio:
