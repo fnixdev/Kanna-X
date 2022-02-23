@@ -85,8 +85,8 @@ async def kang_(message: Message):
         try:
           media = await kannax.download_media(message=replied, file_name=Config.DOWN_PATH)
           await message.edit(f"`{random.choice(KANGING_STR)}`")
-        except ValueError:
-          await message.edit("`Não consegui roubar isso.`")
+        except Exception as e:
+          await message.edit(e)
     else:
         await message.edit("`Eu não posso roubar isso...`")
         return
