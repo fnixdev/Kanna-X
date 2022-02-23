@@ -1,24 +1,18 @@
 """Fun plugin"""
 
 import asyncio
-from datetime import datetime
-from re import compile as comp_regex
 
 from pyrogram import __version__ as __pyro_version__
 from pyrogram import filters
-from pyrogram.errors import BadRequest, FloodWait, Forbidden, MediaEmpty
-from pyrogram.file_id import PHOTO_TYPES, FileId
+from pyrogram.errors import BadRequest, Forbidden
 from pyrogram.types import CallbackQuery, InlineKeyboardButton, InlineKeyboardMarkup
 
 from kannax import Config, Message, get_version, kannax, get_collection
 from kannax.core.ext import RawClient
 from kannax.versions import __python_version__
 from kannax.plugins.utils.telegraph import upload_media_
-from kannax.utils import get_file_id, rand_array
+from kannax.utils import rand_array
 
-_ALIVE_REGEX = comp_regex(
-    r"http[s]?://(i\.imgur\.com|telegra\.ph/file|t\.me)/(\w+)(?:\.|/)(gif|mp4|jpg|png|jpeg|[0-9]+)(?:/([0-9]+))?"
-)
 
 SAVED_SETTINGS = get_collection("CONFIGS")
 SAVED = get_collection("ALIVE_DB")
