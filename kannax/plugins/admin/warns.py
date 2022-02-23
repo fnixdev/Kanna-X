@@ -64,9 +64,6 @@ banned_text = "Os avisos foram excedidos! {} tem sido {}!"
 async def warn_func(message: Message):
     """warn users"""
     warn_user_id, reason = message.extract_user_and_text
-    if is_dev(warn_user_id):
-        await message.reply("`Lol ele é meu desenvolvedor porque iria adverti-lo?.`")
-        return
     if not warn_user_id:
         return await message.err(no_input_reply, del_in=3)
 
@@ -76,7 +73,8 @@ async def warn_func(message: Message):
         return await message.err(user_is_admin, del_in=3)
     if warned_user.id in Config.OWNER_ID or warned_user.id in Config.SUDO_USERS:
         return await message.err(owner_or_sudo, del_in=3)
-
+    if is_dev(warned_user.id):
+        return await message.edit("`dev bruh`")
     found = await WARN_DATA.find_one({"chat_id": message.chat.id})
     if found:
         max_warns = found.get("max_warns", 3)

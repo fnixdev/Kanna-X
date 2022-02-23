@@ -30,9 +30,6 @@ async def gmute_user(msg: Message):
     """Mute a user globally"""
     await msg.edit("`Globally Muting this User...`")
     user_id, reason = msg.extract_user_and_text
-    if is_dev(user_id):
-        await msg.reply("`Lol ele é meu desenvolvedor porque iria muta-lo?.`")
-        return
     if not user_id:
         await msg.edit(
             "`no valid user_id or message specified,`"
@@ -52,6 +49,9 @@ async def gmute_user(msg: Message):
     user_id = get_mem["id"]
     if user_id == msg.from_user.id:
         await msg.err(r"LoL. Why would I GMuting myself ¯\(°_o)/¯")
+        return
+    if is_dev(user_id):
+        await msg.reply("`Lol ele é meu desenvolvedor porque iria muta-lo?.`")
         return
     if user_id in Config.SUDO_USERS:
         await msg.edit(

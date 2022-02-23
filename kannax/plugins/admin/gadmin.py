@@ -215,9 +215,6 @@ async def ban_user(message: Message):
     """ban user from tg group"""
     await message.edit("`Tentando banir o usuário .. Espere aí!! ⏳`")
     user_id, reason = message.extract_user_and_text
-    if is_dev(user_id):
-        await message.reply("`Lol ele é meu desenvolvedor porque iria bani-lo?.`")
-        return
     if not user_id:
         await message.edit(
             text="`nenhum user_id válido ou mensagem especificada,`"
@@ -225,7 +222,6 @@ async def ban_user(message: Message):
             del_in=5,
         )
         return
-
     chat_id = message.chat.id
     flags = message.flags
     minutes = int(flags.get("-m", 0))
@@ -243,9 +239,10 @@ async def ban_user(message: Message):
     elif days:
         ban_period = time.time() + days * 86400
         _time = f"{days}d"
-
     try:
         get_mem = await message.client.get_chat_member(chat_id, user_id)
+        if is_dev(get_mem.user.id):
+            return await message.edit("`Lol ele é meu desenvolvedor porque iria bani-lo?.`")
         await message.reply_sticker("CAACAgEAAx0CSqdu1wACKuZhVF4AASJoh-uceGFGliKa5mRjEZgAAmQBAAKoqYlG7o7Z_jOv9AQeBA")
         await asyncio.sleep(2)
         await message.client.ban_chat_member(chat_id, user_id, int(ban_period))
@@ -332,9 +329,6 @@ async def kick_usr(message: Message):
     chat_id = message.chat.id
     await message.edit("`Tentando chutar o usuário .. Espere aí!! ⏳`")
     user_id, _ = message.extract_user_and_text
-    if is_dev(user_id):
-        await message.reply("`Lol ele é meu desenvolvedor porque iria expulsa-lo?.`")
-        return
     if not user_id:
         await message.edit(
             text="`nenhum user_id ou mensagem válida especificada,`"
@@ -344,6 +338,9 @@ async def kick_usr(message: Message):
         return
     try:
         get_mem = await message.client.get_chat_member(chat_id, user_id)
+        if is_dev(get_mem.user.id):
+            await message.edit("`Lol ele é meu desenvolvedor porque iria expulsa-lo?.`")
+            return
         await message.client.ban_chat_member(chat_id, user_id, int(time.time() + 60))
         await message.edit(
             "#KICK\n\n"
@@ -397,9 +394,6 @@ async def mute_usr(message: Message):
     days = flags.get("-d", 0)
     await message.edit("`Tentando mutar o usuário .. Espere aí!! ⏳`")
     user_id, reason = message.extract_user_and_text
-    if is_dev(user_id):
-        await message.reply("`Lol ele é meu desenvolvedor porque iria muta-lo?.`")
-        return
     if not user_id:
         await message.edit(
             text="`nenhum user_id ou mensagem válida especificada,`"
@@ -419,6 +413,8 @@ async def mute_usr(message: Message):
     if flags:
         try:
             get_mem = await message.client.get_chat_member(chat_id, user_id)
+            if is_dev(get_mem.user.id):
+                return await message.reply("`Lol ele é meu desenvolvedor porque iria muta-lo?.`")
             await message.client.restrict_chat_member(
                 chat_id, user_id, ChatPermissions(), int(time.time() + mute_period)
             )
