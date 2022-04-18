@@ -7,7 +7,7 @@ import os
 import speedtest
 import wget
 
-from kannax import Message, kannax
+from kannax import Message, kannax, pool
 from kannax.utils import humanbytes
 
 CHANNEL = kannax.getCLogger(__name__)
