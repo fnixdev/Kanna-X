@@ -23,7 +23,6 @@ async def speedtst(message: Message):
         test.download()
         await message.try_to_edit("`Fazendo teste de upload . . .`")
         test.upload()
-        test.results.share()
         result = test.results.dict()
     except Exception as e:
         await message.err(text=e)
