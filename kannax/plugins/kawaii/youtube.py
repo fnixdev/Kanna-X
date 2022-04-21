@@ -1,169 +1,137 @@
-# modulo feito por @yusukesy | tg @NoteZV
+# Plugin ytdl for KannaX by @fnixdev
+#
+# for kangs check #tags
 
-import json
+from __future__ import unicode_literals
+
 import os
-import time
+import json
 
-import requests
-from pytube import YouTube
-from youtubesearchpython import Search, SearchVideos
+from yt_dlp import YoutubeDL
+from youtubesearchpython import SearchVideos
+from wget import download
 
-from kannax import Message, kannax
+from kannax import kannax, Config, Message
+from ..bot.utube_inline import BASE_YT_URL, get_yt_video_id
 
+LOGGER = kannax.getLogger(__name__)
 
-def search_music(query):
-    search = Search(query, limit=1)
-    return search.result()["result"]
+# retunr regex link or get link with query
+async def get_link(query):
+    vid_id = get_yt_video_id(query)
+    link = f"{BASE_YT_URL}{vid_id}"
+    if vid_id is None:
+        try:
+            res_ = SearchVideos(query, offset=1, mode="json", max_results=1)
+            link = json.loads(res_.result())["search_result"][0]["link"]
+            id_ = link = json.loads(res_.result())["search_result"][0]["id"]
+            return link, id_
+        except Exception as e:
+            LOGGER.exception(e)
+            return e
+    else:
+        return link, vid_id
 
-
-def search_video(query):
-    search = SearchVideos(query, offset=1, mode="json", max_results=1)
-    print(str(search.result()))
-    return json.loads(search.result())["search_result"]
-
-
-def get_link(result) -> str:
-    return result[0]["link"]
-
-
-def get_filename(result) -> str:
-    title_ = str(result[0]["title"]).replace("/", "")
-    title = title_.replace(" ", "_")
-    return title + ".mp3", title + ".mp4"
-
-
-def get_duration(result):
-    duration = result[0]["duration"]
-    secmul, dur, dur_arr = 1, 0, duration.split(":")
-    for i in range(len(dur_arr) - 1, -1, -1):
-        dur += int(dur_arr[i]) * secmul
-        secmul *= 60
-    return duration, dur
-
-
-def get_thumb(result):
-    thumbnail = result[0]["thumbnails"][0]["url"]
-    title = str(result[0]["title"]).replace("/", "")
-    thumb_name = f"{title}.jpg"
-    thumb = requests.get(thumbnail, allow_redirects=True)
-    open(os.path.join("./kannax/xcache/", thumb_name), "wb").write(thumb.content)
-    return thumb_name
-
-
-def down_song(link, filename):
-    YouTube(link).streams.filter(only_audio=True)[0].download(
-        "./kannax/xcache/", filename=filename
-    )
-
-
-def down_video(link, filename):
-    YouTube(link).streams.get_highest_resolution().download(
-        "./kannax/xcache/", filename=filename
-    )
+# yt-dl args - extract video info
+async def extract_inf(link, opts_):
+    with YoutubeDL(opts_) as ydl:
+        infoo = ydl.extract_info(link, False)
+        ydl.process_info(infoo)
+        duration_ = infoo["duration"]
+        title_ = infoo["title"]
+        channel_ = infoo["channel"]
+        views_ = infoo["view_count"]
+        capt_ = f"<a href={link}><b>{title_}</b></a>\n❯ Duração: {duration_}\n❯ Views: {views_}\n❯ Canal: {channel_}"
+        return capt_, title_, duration_
 
 
 @kannax.on_cmd(
     "song",
     about={
         "header": "Music Downloader",
-        "description": "Baixe músicas usando o pytube. ;-;",
-        "usage": "{tr}song [nome - cantor / reply msg / link]",
-    },
-)
-async def song(message: Message):
-    music = message.input_or_reply_str
-    if not music:
-        await message.edit("`Vou baixar o vento?!`")
-        time.sleep(2)
-        await message.delete()
-        return
-    await message.edit("`Processando...`")
-    result = search_music(music)
-    if result is None:
-        await message.edit("`Não foi possível encontrar a música.`")
-        time.sleep(2)
-        await message.delete()
-        return
-    link = get_link(result)
-    duration, dur = get_duration(result)
-    filename, m = get_filename(result)
-    thumb = get_thumb(result)
-    try:
-        down_song(link, filename)
-    except Exception as e:
-        await message.edit("`Não foi possível baixar a música.`")
-        print(str(e))
-        time.sleep(2)
-        await message.delete()
+        "description": "Baixe músicas usando o yt_dlp",
+        'options': {'-f': 'para baixar em formato flac'},
+        'examples': ['{tr}song link',
+                     '{tr}song nome da musica',
+                     '{tr}song -f nome da musica']
+        }
+    )
+async def song_(message: Message):
+    chat_id = message.chat.id
+    query = message.input_str
+    if not query:
+        return await message.edit("`Vou baixar o vento?!`", del_in=5)
+    await message.edit("`Aguarde ...`")
+    if query.startswith("-f"):
+        format_ = "flac/best"
+        fid = "flac"
     else:
-        if os.path.exists(f"./kannax/xcache/{thumb}"):
-            caption = f"""
-**Título:** __[{result[0]['title']}]({link})__
-**Duração:** __{duration}__
-**Views:** __{result[0]['viewCount']["text"]}__
-"""
-            try:
-                await message.reply_audio(
-                    audio=f"./kannax/xcache/{filename}",
-                    caption=caption,
-                    title=result[0]["title"],
-                    thumb=f"./kannax/xcache/{thumb}",
-                    duration=dur,
-                )
-            except Exception as e:
-                await message.edit("`Não foi possível enviar a música.`")
-                print(str(e))
-                time.sleep(2)
-                await message.delete()
-            finally:
-                await message.delete()
-                os.remove(f"./kannax/xcache/{filename}")
-                os.remove(f"./kannax/xcache/{thumb}")
+        format_ = "bestaudio/best"
+        fid = "mp3"
+    aud_opts = {
+        "outtmpl": os.path.join(Config.DOWN_PATH, "%(title)s.%(ext)s"),
+        "logger": LOGGER,
+        "writethumbnail": True,
+        "prefer_ffmpeg": True,
+        'format': format_,
+        "geo_bypass": True,
+        "nocheckcertificate": True,
+        "postprocessors": [
+                {
+                     'key': 'FFmpegExtractAudio',
+                     'preferredcodec': fid,
+                     'preferredquality': '320',
+                 },
+            {"key": "EmbedThumbnail"},
+            {"key": "FFmpegMetadata"},
+        ],
+        "quiet": True,
+    }
+    query_ = query.strip("-f")
+    link, vid_id = await get_link(query_)
+    await message.edit("`Processando o audio ...`")
+    thumb_ = download(f"https://i.ytimg.com/vi/{vid_id}/maxresdefault.jpg", Config.DOWN_PATH)
+    capt_, title_, duration_ = await extract_inf(link, aud_opts)
+    capt_ += f"\n❯ Formato: {fid}"
+    await message.delete()
+    await message.client.send_audio(chat_id, audio=f"{Config.DOWN_PATH}{title_}.{fid}", caption=capt_, thumb=thumb_, duration=duration_)
+    os.remove(f"{Config.DOWN_PATH}{title_}.{fid}")
+    os.remove(f"{Config.DOWN_PATH}maxresdefault.jpg")
 
 
 @kannax.on_cmd(
     "video",
     about={
         "header": "Video Downloader",
-        "description": "Baixe vídeos usando o pytube. ;-;",
-        "usage": "{tr}video [nome / reply msg / link]",
-    },
-)
-async def video(message: Message):
-    video = message.input_or_reply_str
-    if not video:
-        await message.edit("`Vou baixar o vento?!`")
-        time.sleep(2)
-        await message.delete()
-        return
-    await message.edit("`Processando...`")
-    result = search_video(video)
-    if result is None:
-        await message.edit("`Não foi possível encontrar o vídeo.`")
-        time.sleep(2)
-        await message.delete()
-        return
-    link = get_link(result)
-    m, filename = get_filename(result)
-    try:
-        down_video(link, filename)
-    except Exception as e:
-        await message.edit("`Não foi possível baixar o video.`")
-        time.sleep(2)
-        await message.delete()
-        print(str(e))
-    else:
-        caption = f"**Título ➠** __[{result[0]['title']}]({link})__\n**Canal ➠** __{result[0]['channel']}__"
-        try:
-            await message.reply_video(
-                video=f"./kannax/xcache/{filename}",
-                caption=caption,
-            )
-        except Exception as e:
-            await message.reply("`Não foi possível enviar o vídeo.`")
-            print(str(e))
-            time.sleep(2)
-            await message.delete()
-        finally:
-            await message.delete()
-            os.remove(f"./kannax/xcache/{filename}")
+        "description": "Baixe videos usando o yt_dlp",
+        'examples': ['{tr}video link',
+                     '{tr}video nome do video',]
+        }
+    )
+async def vid_(message: Message):
+    chat_id = message.chat.id
+    query = message.input_str
+    if not query:
+        return await message.edit("`Vou baixar o vento?!`", del_in=5)
+    await message.edit("`Aguarde ...`")
+    vid_opts = {
+        "outtmpl": os.path.join(Config.DOWN_PATH, "%(title)s.%(ext)s"),
+        'logger': LOGGER,
+        'writethumbnail': False,
+        'prefer_ffmpeg': True,
+        'format': 'bestvideo+bestaudio/best',
+        'postprocessors': [
+                {
+                    'key': 'FFmpegMetadata'
+                }
+            ],
+        "quiet": True,
+    }
+    link, vid_id = await get_link(query)
+    thumb_ = download(f"https://i.ytimg.com/vi/{vid_id}/maxresdefault.jpg", Config.DOWN_PATH)
+    await message.edit("`Processando o video ...`")
+    capt_, title_, duration_ = await extract_inf(link, vid_opts)
+    await message.delete()
+    await message.client.send_video(chat_id, video=f"{Config.DOWN_PATH}{title_}.webm", caption=capt_, thumb=thumb_, duration=duration_)
+    os.remove(f"{Config.DOWN_PATH}{title_}.webm")
+    os.remove(f"{Config.DOWN_PATH}maxresdefault.jpg")
