@@ -51,6 +51,7 @@ git+https://github.com/Nekos-life/Async-nekos.life-wrapper
 ruamel.yaml==0.17.2
 python-rapidjson>=1.4
 ujson>=4.0.1
+yt_dlp
 youtube-search-python==1.4.2
 git+https://github.com/Joeclinton1/google-images-download@patch-1
 feedparser>=6.0.2
