@@ -41,7 +41,7 @@ async def get_link(query):
 async def extract_inf(link, opts_):
     with YoutubeDL(opts_) as ydl:
         infoo = ydl.extract_info(link, False)
-        filename_ = ydl.prepare_filename(infoo)
+        filename_ = ydl.download(link)
         ydl.process_info(infoo)
         duration_ = infoo["duration"]
         title_ = infoo["title"].replace("/", "_")
@@ -195,6 +195,6 @@ async def vid_(message: Message):
     await message.edit("`Processando o video ...`")
     capt_, filename_, duration_ = await extract_inf(link, vid_opts)
     await message.delete()
-    await message.client.send_video(chat_id, video=filename_, caption=capt_, thumb=thumb_, duration=duration_)
+    await message.client.send_video(chat_id, video=Path(filename_), caption=capt_, thumb=thumb_, duration=duration_)
     os.remove(filename_)
     os.remove(f"{Config.DOWN_PATH}maxresdefault.jpg")
