@@ -16,22 +16,15 @@ from time import time
 from math import floor
 
 import wget
-
+import yt_dlp as ytdl
 from yt_dlp import YoutubeDL
+
 
 from kannax import kannax, Message, Config, pool
 from kannax.utils import time_formatter, humanbytes
 from .upload import upload
 
 LOGGER = kannax.getLogger(__name__)
-
-
-reqd_module = os.environ.get("YOUTUBE_DL_PATH", "youtube_dl")
-try:
-    ytdl = importlib.import_module(reqd_module)
-except ModuleNotFoundError:
-    LOGGER.info("please fix your requirements.txt file")
-    raise
 
 
 @kannax.on_cmd("ytinfo", about={'header': "Get info from ytdl",
