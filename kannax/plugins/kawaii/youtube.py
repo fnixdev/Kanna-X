@@ -5,14 +5,19 @@
 from __future__ import unicode_literals
 
 import os
+import glob
 import json
 
+from pathlib import Path
 from yt_dlp import YoutubeDL
 from youtubesearchpython import SearchVideos
 from wget import download
 
 from kannax import kannax, Config, Message
 from ..bot.utube_inline import BASE_YT_URL, get_yt_video_id
+from ..misc.utube import _mp3Dl
+from ..misc.upload import upload
+
 
 LOGGER = kannax.getLogger(__name__)
 
@@ -46,6 +51,62 @@ async def extract_inf(link, opts_):
         return capt_, filename_, duration_,
 
 
+@kannax.on_cmd(
+    "som",
+    about={
+        "header": "Music Downloader",
+        "description": "Baixe músicas usando o yt_dlp",
+        'options': {'-f': 'para baixar em formato flac'},
+        'examples': ['{tr}song link',
+                     '{tr}song nome da musica',
+                     '{tr}song -f nome da musica']
+        }
+    )
+async def song_(message: Message):
+    chat_id = message.chat.id
+    query = message.input_str
+    if not query:
+        return await message.edit("`Vou baixar o vento?!`", del_in=5)
+    await message.edit("`Aguarde ...`")
+    link, vid_id = await get_link(query)
+    somg = await _mp3Dl(link)
+    if somg == 0:
+        _fpath = ''
+        for _path in glob.glob(os.path.join(Config.DOWN_PATH, '*')):
+            if not _path.lower().endswith((".jpg", ".png", ".webp")):
+                _fpath = _path
+        if not _fpath:
+            await message.err("nothing found !")
+            return
+        await upload(message, Path(_fpath))
+    else:
+        await message.edit(str(somg))
+
+
+def _mp3Dl(url):
+    _opts = {'outtmpl': os.path.join(Config.DOWN_PATH, '%(title)s.%(ext)s'),
+             'logger': LOGGER,
+             'writethumbnail': True,
+             'prefer_ffmpeg': True,
+             'format': 'bestaudio/best',
+             'postprocessors': [
+                 {
+                     'key': 'FFmpegExtractAudio',
+                     'preferredcodec': 'mp3',
+                     'preferredquality': '320',
+                 },
+                 # {'key': 'EmbedThumbnail'},  ERROR: Conversion failed!
+                 {'key': 'FFmpegMetadata'}]}
+    try:
+        x = YoutubeDL(_opts)
+        dloader = x.download(url)
+    except Exception as y_e:  # pylint: disable=broad-except
+        LOGGER.exception(y_e)
+        return y_e
+    else:
+        return dloader
+
+"""
 @kannax.on_cmd(
     "song",
     about={
@@ -99,7 +160,7 @@ async def song_(message: Message):
     await message.client.send_audio(chat_id, audio=aud_file, caption=capt_, thumb=thumb_, duration=duration_)
     os.remove(aud_file)
     os.remove(f"{Config.DOWN_PATH}maxresdefault.jpg")
-
+"""
 
 @kannax.on_cmd(
     "video",
