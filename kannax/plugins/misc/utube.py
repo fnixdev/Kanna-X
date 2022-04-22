@@ -16,15 +16,20 @@ from time import time
 from math import floor
 
 import wget
-import yt_dlp as ytdl
-from yt_dlp import YoutubeDL
-
 
 from kannax import kannax, Message, Config, pool
 from kannax.utils import time_formatter, humanbytes
 from .upload import upload
 
 LOGGER = kannax.getLogger(__name__)
+
+
+reqd_module = os.environ.get("YOUTUBE_DL_PATH", "youtube_dl")
+try:
+    ytdl = importlib.import_module(reqd_module)
+except ModuleNotFoundError:
+    LOGGER.info("please fix your requirements.txt file")
+    raise
 
 
 @kannax.on_cmd("ytinfo", about={'header': "Get info from ytdl",
@@ -202,7 +207,7 @@ def _tubeDl(url: list, prog, starttime, uid=None):
     _quality = {'format': 'bestvideo+bestaudio/best' if not uid else str(uid)}
     _opts.update(_quality)
     try:
-        x = YoutubeDL(_opts)
+        x = ytdl.YoutubeDL(_opts)
         x.add_progress_hook(prog)
         dloader = x.download(url)
     except Exception as y_e:  # pylint: disable=broad-except
@@ -228,7 +233,7 @@ def _mp3Dl(url, prog, starttime):
                  # {'key': 'EmbedThumbnail'},  ERROR: Conversion failed!
                  {'key': 'FFmpegMetadata'}]}
     try:
-        x = YoutubeDL(_opts)
+        x = ytdl.YoutubeDL(_opts)
         x.add_progress_hook(prog)
         dloader = x.download(url)
     except Exception as y_e:  # pylint: disable=broad-except
