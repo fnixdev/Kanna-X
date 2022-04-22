@@ -19,7 +19,7 @@ from ..bot.utube_inline import BASE_YT_URL, get_yt_video_id
 LOGGER = kannax.getLogger(__name__)
 
 @kannax.on_cmd(
-    "som",
+    "song",
     about={
         "header": "Music Downloader",
         "description": "Baixe músicas usando o yt_dlp",
@@ -35,6 +35,7 @@ async def song_(message: Message):
         return await message.edit("`Vou baixar o vento?!`", del_in=5)
     await message.edit("`Aguarde ...`")
     link = await get_link(query)
+    await message.edit("`Processando o audio ...`")
     aud_opts = {
         "outtmpl": os.path.join(Config.DOWN_PATH, "%(title)s.%(ext)s"),
         "logger": LOGGER,
@@ -63,6 +64,7 @@ async def song_(message: Message):
         if not _fpath:
             await message.err("nothing found !")
             return
+        await message.delete()
         await message.reply_audio(audio=Path(_fpath), caption=capt_, duration=duration_)
         os.remove(Path(_fpath))
     else:
