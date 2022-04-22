@@ -69,7 +69,7 @@ async def song_(message: Message):
         return await message.edit("`Vou baixar o vento?!`", del_in=5)
     await message.edit("`Aguarde ...`")
     link, vid_id = await get_link(query)
-    somg = await _mp3Dl(link)
+    somg = _mp3Dl(link)
     if somg == 0:
         _fpath = ''
         for _path in glob.glob(os.path.join(Config.DOWN_PATH, '*')):
