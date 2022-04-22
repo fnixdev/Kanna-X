@@ -121,13 +121,12 @@ async def get_link(query):
         try:
             res_ = SearchVideos(query, offset=1, mode="json", max_results=1)
             link = json.loads(res_.result())["search_result"][0]["link"]
-            id_ = link = json.loads(res_.result())["search_result"][0]["id"]
-            return link, id_
+            return link
         except Exception as e:
             LOGGER.exception(e)
             return e
     else:
-        return link, vid_id
+        return link
 
 
 def extract_inf(url, _opts):
