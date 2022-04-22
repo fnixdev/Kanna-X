@@ -78,7 +78,7 @@ async def song_(message: Message):
         if not _fpath:
             await message.err("nothing found !")
             return
-        await upload(message, Path(_fpath))
+        await message.reply_audio(audio=Path(_fpath))
     else:
         await message.edit(str(somg))
 
