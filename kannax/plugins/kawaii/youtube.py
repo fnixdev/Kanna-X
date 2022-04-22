@@ -48,7 +48,7 @@ async def extract_inf(link, opts_):
         channel_ = infoo["channel"]
         views_ = infoo["view_count"]
         capt_ = f"<a href={link}><b>{title_}</b></a>\n❯ Duração: {duration_}\n❯ Views: {views_}\n❯ Canal: {channel_}"
-        return capt_, filename_, duration_,
+        return capt_, filename_, duration_
 
 
 @kannax.on_cmd(
@@ -69,7 +69,7 @@ async def song_(message: Message):
         return await message.edit("`Vou baixar o vento?!`", del_in=5)
     await message.edit("`Aguarde ...`")
     link, vid_id = await get_link(query)
-    somg = _mp3Dl(link)
+    somg, capt_, duration_ = _mp3Dl(link)
     if somg == 0:
         _fpath = ''
         for _path in glob.glob(os.path.join(Config.DOWN_PATH, '*')):
@@ -78,7 +78,7 @@ async def song_(message: Message):
         if not _fpath:
             await message.err("nothing found !")
             return
-        await message.reply_audio(audio=Path(_fpath))
+        await message.reply_audio(audio=Path(_fpath), caption=capt_, duration=duration_)
     else:
         await message.edit(str(somg))
 
@@ -99,12 +99,19 @@ def _mp3Dl(url):
                  {'key': 'FFmpegMetadata'}]}
     try:
         x = YoutubeDL(_opts)
+        infoo = x.extract_info(url, False)
+        x.process_info(infoo)
+        duration_ = infoo["duration"]
+        title_ = infoo["title"].replace("/", "_")
+        channel_ = infoo["channel"]
+        views_ = infoo["view_count"]
+        capt_ = f"<a href={url}><b>{title_}</b></a>\n❯ Duração: {duration_}\n❯ Views: {views_}\n❯ Canal: {channel_}"
         dloader = x.download(url)
     except Exception as y_e:  # pylint: disable=broad-except
         LOGGER.exception(y_e)
         return y_e
     else:
-        return dloader
+        return dloader, capt_, duration_
 
 """
 @kannax.on_cmd(
