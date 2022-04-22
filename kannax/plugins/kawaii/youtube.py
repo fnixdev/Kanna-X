@@ -95,7 +95,7 @@ async def song_(message: Message):
     capt_, filename_, duration_ = await extract_inf(link, aud_opts)
     capt_ += f"\n❯ Formato: {fid}"
     await message.delete()
-    aud_file = filename_.replace("webm", f".{fid}")
+    aud_file = filename_.replace("webm", fid)
     await message.client.send_audio(chat_id, audio=aud_file, caption=capt_, thumb=thumb_, duration=duration_)
     os.remove(aud_file)
     os.remove(f"{Config.DOWN_PATH}maxresdefault.jpg")
