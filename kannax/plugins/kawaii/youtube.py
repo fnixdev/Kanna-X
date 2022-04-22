@@ -36,13 +36,14 @@ async def get_link(query):
 async def extract_inf(link, opts_):
     with YoutubeDL(opts_) as ydl:
         infoo = ydl.extract_info(link, False)
+        filename_ = ydl.prepare_filename(infoo)
         ydl.process_info(infoo)
         duration_ = infoo["duration"]
-        title_ = infoo["title"]
+        title_ = infoo["title"].replace("/", "_")
         channel_ = infoo["channel"]
         views_ = infoo["view_count"]
         capt_ = f"<a href={link}><b>{title_}</b></a>\n❯ Duração: {duration_}\n❯ Views: {views_}\n❯ Canal: {channel_}"
-        return capt_, title_, duration_
+        return capt_, filename_, duration_,
 
 
 @kannax.on_cmd(
@@ -91,11 +92,12 @@ async def song_(message: Message):
     link, vid_id = await get_link(query_)
     await message.edit("`Processando o audio ...`")
     thumb_ = download(f"https://i.ytimg.com/vi/{vid_id}/maxresdefault.jpg", Config.DOWN_PATH)
-    capt_, title_, duration_ = await extract_inf(link, aud_opts)
+    capt_, filename_, duration_ = await extract_inf(link, aud_opts)
     capt_ += f"\n❯ Formato: {fid}"
     await message.delete()
-    await message.client.send_audio(chat_id, audio=f"{Config.DOWN_PATH}{title_}.{fid}", caption=capt_, thumb=thumb_, duration=duration_)
-    os.remove(f"{Config.DOWN_PATH}{title_}.{fid}")
+    aud_file = filename_.replace("webm", f".{fid}")
+    await message.client.send_audio(chat_id, audio=aud_file, caption=capt_, thumb=thumb_, duration=duration_)
+    os.remove(aud_file)
     os.remove(f"{Config.DOWN_PATH}maxresdefault.jpg")
 
 
@@ -130,8 +132,8 @@ async def vid_(message: Message):
     link, vid_id = await get_link(query)
     thumb_ = download(f"https://i.ytimg.com/vi/{vid_id}/maxresdefault.jpg", Config.DOWN_PATH)
     await message.edit("`Processando o video ...`")
-    capt_, title_, duration_ = await extract_inf(link, vid_opts)
+    capt_, filename_, duration_ = await extract_inf(link, vid_opts)
     await message.delete()
-    await message.client.send_video(chat_id, video=f"{Config.DOWN_PATH}{title_}.webm", caption=capt_, thumb=thumb_, duration=duration_)
-    os.remove(f"{Config.DOWN_PATH}{title_}.webm")
+    await message.client.send_video(chat_id, video=filename_, caption=capt_, thumb=thumb_, duration=duration_)
+    os.remove(filename_)
     os.remove(f"{Config.DOWN_PATH}maxresdefault.jpg")
