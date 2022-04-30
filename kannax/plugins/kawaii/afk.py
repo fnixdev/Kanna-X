@@ -7,24 +7,31 @@ from random import choice, randint
 
 from kannax import Config, Message, filters, get_collection, kannax
 from kannax.utils import time_formatter
+from kannax.plugins.utils.telegraph import upload_media_
+
 
 CHANNEL = kannax.getCLogger(__name__)
-SAVED_SETTINGS = get_collection("CONFIGS")
+SAVED_SETTINGS = get_collection("AFK_DATA")
 AFK_COLLECTION = get_collection("AFK")
+
 
 IS_AFK = False
 IS_AFK_FILTER = filters.create(lambda _, __, ___: bool(IS_AFK))
 REASON = ""
+TIPO = ""
+LINK = ""
 TIME = 0.0
 USERS = {}
 
 
 async def _init() -> None:
-    global IS_AFK, REASON, TIME  # pylint: disable=global-statement
+    global IS_AFK, REASON, TIME, TIPO, LINK  # pylint: disable=global-statement
     data = await SAVED_SETTINGS.find_one({"_id": "AFK"})
     if data:
         IS_AFK = data["on"]
         REASON = data["data"]
+        TIPO = data["tipo"]
+        LINK = data["link"]
         TIME = data["time"] if "time" in data else 0
     async for _user in AFK_COLLECTION.find():
         USERS.update(
@@ -43,19 +50,28 @@ async def _init() -> None:
 )
 async def active_afk(message: Message) -> None:
     """liga ou desliga o modo ausente"""
-    global REASON, IS_AFK, TIME  # pylint: disable=global-statement
+    global REASON, IS_AFK, TIME, TIPO, LINK  # pylint: disable=global-statement
     IS_AFK = True
     TIME = time.time()
     REASON = message.input_str
-    going_sleep = rand_array(GOING_SLEEP)
+    if message.reply_to_message:
+        try:
+            link_ = await upload_media_(message)
+            media = f"https://telegra.ph{link_}"
+            LINK = media
+            TIPO = link_type(LINK)
+        except Exception:
+            TIPO = "text"
+    else:
+        TIPO = "text"
     await asyncio.gather(
         CHANNEL.log(f"Ficando ausente.\n <i>{REASON}</i>"),
         message.edit(
-            f"<a href={going_sleep}>\u200c</a>🥱 Ficando ausente, ate mais tarde.", del_in=0),
+            f"🥱 Ficando ausente, ate mais tarde.", del_in=5),
         AFK_COLLECTION.drop(),
         SAVED_SETTINGS.update_one(
             {"_id": "AFK"},
-            {"$set": {"on": True, "data": REASON, "time": TIME}},
+            {"$set": {"on": True, "data": REASON, "time": TIME, "tipo": TIPO, "link": LINK}},
             upsert=True,
         ),
     )
@@ -66,6 +82,7 @@ async def active_afk(message: Message) -> None:
     & ~filters.me
     & ~filters.bot
     & ~filters.user(Config.TG_IDS)
+    & ~filters.edited
     & (
         filters.mentioned
         | (
@@ -88,7 +105,6 @@ async def handle_afk_incomming(message: Message) -> None:
     user_dict = await message.client.get_user_dict(user_id)
     afk_time = time_formatter(round(time.time() - TIME))
     coro_list = []
-    sleeping = rand_array(AFK_SLEEPING)
     if user_id in USERS:
         if not (USERS[user_id][0] + USERS[user_id][1]) % randint(2, 4):
             if REASON:
@@ -98,7 +114,12 @@ async def handle_afk_incomming(message: Message) -> None:
                 )
             else:
                 out_str = choice(AFK_REASONS)
-            await message.reply(out_str)
+            if TIPO == "anim":
+                await message.reply_video(LINK, caption=out_str)
+            elif TIPO == "photo":
+                await message.reply_photo(LINK, caption=out_str)
+            else:
+                await message.reply(out_str)
         if chat.type == "private":
             USERS[user_id][0] += 1
         else:
@@ -112,7 +133,12 @@ async def handle_afk_incomming(message: Message) -> None:
         else:
             afkout = rand_array(AFK_REASONS)
             out_str = f"<i>{afkout}</i>"
-        await message.reply(out_str)
+        if TIPO == "anim":
+            await message.reply_video(LINK, caption=out_str)
+        elif TIPO == "photo":
+            await message.reply_photo(LINK, caption=out_str)
+        else:
+            await message.reply(out_str)
         if chat.type == "private":
             USERS[user_id] = [1, 0, user_dict["mention"]]
         else:
@@ -198,26 +224,16 @@ async def handle_afk_outgoing(message: Message) -> None:
     )
     await asyncio.gather(*coro_list)
 
-AFK_SLEEPING = [
-    "https://telegra.ph/file/ef265a6287049e9bf6824.gif",
-    "https://telegra.ph/file/5d60fe4c8750dabb9eb3e.gif",
-    "https://telegra.ph/file/64bbf555fe9cf1c94b46d.gif",
-    "https://telegra.ph/file/d15a273f85da98cd3e074.gif",
-    "https://telegra.ph/file/b80236c923f175916caf9.gif",
-    "https://telegra.ph/file/b480496461fbff8b59b11.gif",
-    "https://telegra.ph/file/b71b6ef1ced2a6f84aead.gif",
-    "https://telegra.ph/file/68c4d082e5ff249d635a4.gif",
-    "https://telegra.ph/file/a7fd2e42e75057fffc832.gif",
-]
 
-GOING_SLEEP = [
-    "https://telegra.ph/file/8fd25eec31f120d6bbd58.gif",
-    "https://telegra.ph/file/9de3192c439caf5d15818.gif",
-    "https://telegra.ph/file/34fa0a6c2d5482fc2c6f8.gif",
-    "https://telegra.ph/file/9feae7b9f33439f81f47e.gif",
-    "https://telegra.ph/file/56ff50fadae0f00101b2c.gif",
-    "https://telegra.ph/file/a3e14355fae9a44c7e91f.gif",
-]
+def link_type(link):
+    if link.endswith((".gif", ".mp4", "webm")):
+        type_ = "anim"
+    elif link.endswith((".jpeg", ".png", ".jpg", "webp")):
+        type_ = "photo"
+    else:
+        type_ = "text"
+    return type_
+
 
 AFK_REASONS = (
     "Agora estou ocupado. Por favor, fale em uma bolsa e quando eu voltar você pode apenas me dar a bolsa!",
