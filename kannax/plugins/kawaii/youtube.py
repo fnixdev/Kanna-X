@@ -7,26 +7,29 @@ from __future__ import unicode_literals
 import os
 import glob
 import json
+import tempfile
 
 from pathlib import Path
 from yt_dlp import YoutubeDL
 from youtubesearchpython import SearchVideos
 
-from kannax import kannax, Config, Message
+from kannax import kannax, Message
 from ..bot.utube_inline import BASE_YT_URL, get_yt_video_id
 
 
 LOGGER = kannax.getLogger(__name__)
+
+with tempfile.TemporaryDirectory() as tempdir:
+    path_ = os.path.join(tempdir, "ytdl")
+
 
 @kannax.on_cmd(
     "song",
     about={
         "header": "Music Downloader",
         "description": "Baixe músicas usando o yt_dlp",
-        'options': {'-f': 'para baixar em formato flac'},
         'examples': ['{tr}song link',
-                     '{tr}song nome da musica',
-                     '{tr}song -f nome da musica']
+                     '{tr}song nome da musica',]
         }
     )
 async def song_(message: Message):
@@ -37,7 +40,7 @@ async def song_(message: Message):
     link = await get_link(query)
     await message.edit("`Processando o audio ...`")
     aud_opts = {
-        "outtmpl": os.path.join(Config.DOWN_PATH, "%(title)s.%(ext)s"),
+        "outtmpl": os.path.join(path_, "%(title)s.%(ext)s"),
         "logger": LOGGER,
         "writethumbnail": True,
         "prefer_ffmpeg": True,
@@ -58,7 +61,7 @@ async def song_(message: Message):
     filename_, capt_, duration_ = extract_inf(link, aud_opts)
     if filename_ == 0:
         _fpath = ''
-        for _path in glob.glob(os.path.join(Config.DOWN_PATH, '*')):
+        for _path in glob.glob(os.path.join(path_, '*')):
             if not _path.lower().endswith((".jpg", ".png", ".webp")):
                 _fpath = _path
         if not _fpath:
@@ -86,7 +89,7 @@ async def vid_(message: Message):
         return await message.edit("`Vou baixar o vento?!`", del_in=5)
     await message.edit("`Aguarde ...`")
     vid_opts = {
-        "outtmpl": os.path.join(Config.DOWN_PATH, "%(title)s.%(ext)s"),
+        "outtmpl": os.path.join(path_, "%(title)s.%(ext)s"),
         'logger': LOGGER,
         'writethumbnail': False,
         'prefer_ffmpeg': True,
@@ -103,7 +106,7 @@ async def vid_(message: Message):
     filename_, capt_, duration_ = extract_inf(link, vid_opts)
     if filename_ == 0:
         _fpath = ''
-        for _path in glob.glob(os.path.join(Config.DOWN_PATH, '*')):
+        for _path in glob.glob(os.path.join(path_, '*')):
             if not _path.lower().endswith((".jpg", ".png", ".webp")):
                 _fpath = _path
         if not _fpath:
